@@ -1,0 +1,40 @@
+﻿@model IEnumerable<BrandModel>
+
+<form method="get" asp-controller="Brand" asp-action="Index" onsubmit="return checkSelection()">
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li>
+                <label class="checkbox-default" for="@($"checkbox-{item.Slug}")">
+                    <input asp-route-Slug="@item.Slug" type="checkbox" id="@($"checkbox-{item.Slug}")" name="slugs" value="@item.Slug" />
+                    <span>@item.Name</span>
+                </label>
+            </li>
+        }
+    </ul>
+    <button style="margin-top:14px; background-color:#b19361; border: 0;" type="submit" class="btn btn-primary">LỌC</button>
+    <button style="margin-top:14px; background-color:#b19361; border: 0;" type="button" class="btn btn-primary" onclick="clearFilters()">HỦY LỌC</button>
+</form>
+
+<script>
+    function clearFilters() {
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+        window.location.href = '@Url.Action("IndexFashion", "Product")';
+    }
+
+    function checkSelection() {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        let checked = false;
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                checked = true;
+            }
+        });
+
+        if (!checked) {
+            alert("Bạn chưa chọn thương hiệu");
+            return false; 
+        }
+        return true; 
+    }
+</script>

@@ -1,0 +1,36 @@
+﻿@if (TempData["success"] != null)
+{
+    <div class="alert alert-success notification" id="success-message">
+        @TempData["success"]
+    </div>
+}
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-danger notification" id="error-message">
+        @TempData["error"]
+    </div>
+}
+
+<script>
+    // Hàm ẩn thông báo sau một khoảng thời gian
+    function hideNotification(id, delay) {
+        setTimeout(function () {
+            var element = document.getElementById(id);
+            if (element) {
+                element.style.opacity = 0;
+                setTimeout(function () {
+                    element.style.display = 'none';
+                }, 600);
+            }
+        }, delay);
+    }
+    hideNotification('success-message', 2000);
+    hideNotification('error-message', 2000);
+</script>
+
+<style>
+    /* Hiệu ứng mờ dần cho thông báo */
+    .notification {
+        transition: opacity 0.6s ease-out;
+    }
+</style>

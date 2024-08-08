@@ -1,0 +1,26 @@
+﻿@model IEnumerable<ProductModel>
+<div class="menu">
+    <h3>DANH MỤC</h3>
+    <hr class="highlight">
+    <ul class="menu-list">
+        @foreach (var product in Model.DistinctBy(p => p.Cate))  // Giả sử có thư viện để DistinctBy
+        {
+            <li>
+                <a asp-action="IndexWithCate" asp-controller="Product" asp-route-cate="@product.Cate">@product.Cate</a>
+            </li>
+        }
+    </ul>
+</div>
+
+<!-- Start Single Sidebar Widget -->
+<div class="sidebar-single-widget">
+    <h6 class="sidebar-title">Thương hiệu</h6>
+    <div class="sidebar-content">
+        <div class="filter-type-select">
+            <ul>
+                <vc:brands></vc:brands>
+            </ul>
+        </div>
+    </div>
+</div>
+

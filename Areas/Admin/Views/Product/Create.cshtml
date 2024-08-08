@@ -1,0 +1,133 @@
+﻿@model ProductModel
+@{
+    ViewData["title"] = "Create Product";
+}
+<div class="container-fluid">
+<h3 class="page-title">Thêm Sản Phẩm</h3>
+<div class="form-wrapper">
+<div class="form-container col-md-9" >
+    <form asp-action="Create" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label for="Name">Tên sản phẩm</label>
+            <input asp-for="Name" class="form-control" id="Name" />
+            <span asp-validation-for="Name" class="text-danger" />
+        </div>
+        <div class="form-group">
+            <label for="Price">Giá</label>
+            <input asp-for="Price" class="form-control" id="Price" />
+            <span asp-validation-for="Price" class="text-danger" />
+        </div>
+        <div class="form-group">
+            <label for="Description">Mô tả</label>
+            <textarea asp-for="Description" class="form-control" id="Description"></textarea>
+            <span asp-validation-for="Description" class="text-danger" />
+        </div>
+
+        <div class="form-group">
+            <label for="CategoryId">Phân loại</label>
+            <select asp-for="CategoryId" class="form-control" id="CategoryId" asp-items="ViewBag.Categories">
+                <option value="">--Chọn Phân Loại--</option>
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger" />
+        </div>
+        <div class="form-group">
+            <label for="BrandId">Thương hiệu</label>
+            <select asp-for="BrandId" class="form-control" id="BrandId" asp-items="ViewBag.Brands">
+                <option value="">--Chọn Thương Hiệu--</option>
+            </select>
+            <span asp-validation-for="BrandId" class="text-danger" />
+        </div>
+        <div class="form-group">
+            <label>Hình ảnh</label>
+            <input asp-for="ImageUpLoad" type="file" class="form-control-file" id="ImageUpLoad" />
+            <span asp-validation-for="ImageUpLoad" class="text-danger" />
+                <img id="imgpreview" class="pt-2" />
+        </div>
+        <div class="form-group">
+            <label for="Size">Size (ví dụ X, XL, XXL; 40, 41, 42)</label>
+            <input asp-for="Size" class="form-control" id="Size" />
+            <span asp-validation-for="Size" class="text-danger" />
+        </div>
+        <div class="form-group">
+            <label for="Color">Màu (ví dụ: Đỏ, Đen; Xanh, Vàng)</label>
+            <input asp-for="Color" class="form-control" id="Color" />
+            <span asp-validation-for="Color" class="text-danger" />
+        </div>
+        <div class="form-group">
+            <label for="StockQuantity">Tồn kho</label>
+            <input asp-for="StockQuantity" type="number" class="form-control" id="StockQuantity" />
+            <span asp-validation-for="StockQuantity" class="text-danger" />
+        </div>
+        <div class="form-group">
+            <label for="Dimensions">Kích thước (Ví dụ: 30x30x30 cm)</label>
+            <input asp-for="Dimensions" class="form-control" id="Dimensions" />
+            <span asp-validation-for="Dimensions" class="text-danger" />
+        </div>
+        <div class="form-group">
+            <label for="Weight">Trọng lượng (Ví dụ: 2.5 kg)</label>
+            <input asp-for="Weight" class="form-control" id="Weight" />
+            <span asp-validation-for="Weight" class="text-danger" />
+        </div>
+        <div class="form-group">
+            <label for="Material">Chất liệu</label>
+            <input asp-for="Material" class="form-control" id="Material" />
+            <span asp-validation-for="Material" class="text-danger" />
+        </div>
+        <div class="form-group">
+            <label for="Specifications">Thông số KT</label>
+            <textarea asp-for="Specifications" class="form-control" id="Specifications"></textarea>
+            <span asp-validation-for="Specifications" class="text-danger" />
+        </div>
+            <div class="form-group">
+                <label for="Express">Hỏa tốc</label>
+                <div class="form-check">
+                    <input asp-for="Express" type="checkbox" class="form-check-input" id="Express" />
+                    <label class="form-check-label" for="Express">Có</label>
+                </div>
+                <span asp-validation-for="Express" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label for="Save">Tiết kiệm</label>
+                <div class="form-check">
+                    <input asp-for="Save" type="checkbox" class="form-check-input" id="Save" />
+                    <label class="form-check-label" for="Save">Có</label>
+                </div>
+                <span asp-validation-for="Save" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label for="Fast">Nhanh</label>
+                <div class="form-check">
+                    <input asp-for="Fast" type="checkbox" class="form-check-input" id="Fast" />
+                    <label class="form-check-label" for="Fast">Có</label>
+                </div>
+                <span asp-validation-for="Fast" class="text-danger" />
+            </div>
+
+        <div class="form-group">
+            <label for="Cate">Danh mục</label>
+            <input asp-for="Cate" class="form-control" id="Cate" />
+            <span asp-validation-for="Cate" class="text-danger" />
+        </div>
+        <button type="submit" class="btn btn-primary">Lưu</button>
+    </form>
+    <a asp-action="Index" class="btn btn-secondary mt-3">Trở về DS Sản Phẩm</a>
+    </div>
+</div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+    <script>
+        $("#ImageUpLoad").change(function() {
+            
+            readURL(this);
+        })
+    </script>
+    <script>
+        CKEDITOR.replace('Description');
+        CKEDITOR.replace('Specifications');
+    </script>
+}

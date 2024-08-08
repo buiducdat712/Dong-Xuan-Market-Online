@@ -1,0 +1,84 @@
+﻿@model IEnumerable<OrderModel>
+@{
+    ViewData["title"] = "Product Order List";
+    Paginate pager = new Paginate();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+<div class="container-fluid">
+    <div class="table-responsive">
+        <h3 class="my-4">Danh Sách Đơn Hàng</h3>
+        <table class="table table-bordered table-striped">
+
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Order Code</th>
+                    <th scope="col">Tên người đặt</th>
+                    <th scope="col">Ngày Order</th>
+                    <th scope="col">Order Status</th>
+                    <th scope="col">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.OrderCode</td>
+                        <td>@item.UserName</td>
+                        <td>@item.CreatedDate</td>
+                        <td>
+                            @if (item.Status == 1)
+                            {
+                                <p>Đơn hàng mới</p>
+                            }
+                            else
+                            {
+                                <p>Đã xử lý</p>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="ViewOrder" asp-controller="Order" asp-route-ordercode="@item.OrderCode" class="btn btn-sm btn-warning">Xem Đơn</a>
+                            <button class="btn btn-sm btn-danger delete-order" data-ordercode="@item.OrderCode">Xóa</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<partial name="_paging" model="@pager" />
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.delete-order').forEach(button => {
+            button.addEventListener('click', function () {
+                const orderCode = this.getAttribute('data-ordercode');
+                if (confirm('Are you sure you want to delete this order?')) {
+                    fetch(`/Admin/Order/DeleteOrder?ordercode=${orderCode}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert(data.message);
+                                location.reload(); // Refresh the page to reflect changes
+                            } else {
+                                alert(data.message);
+                            }
+                        })
+                        .catch(error => {
+                            alert('An error occurred: ' + error.message);
+                        });
+                }
+            });
+        });
+    });
+</script>

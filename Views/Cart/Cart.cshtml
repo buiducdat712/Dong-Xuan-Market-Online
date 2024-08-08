@@ -1,0 +1,144 @@
+﻿@using Dong_Xuan_Market_Online.Models.ViewModels
+@model CartItemViewModel
+
+@{
+    ViewData["Title"] = "Cart";
+}
+<!-- ...:::: Start Breadcrumb Section:::... -->
+<div class="breadcrumb-section breadcrumb-bg-color--golden">
+    <div class="breadcrumb-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="breadcrumb-title">Giỏ Hàng</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ...:::: End Breadcrumb Section:::... -->
+<!-- ...:::: Start Cart Section:::... -->
+<div class="cart-section">
+    <!-- Start Cart Table -->
+    <div class="cart-table-wrapper" data-aos="fade-up" data-aos-delay="0">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="table_desc">
+                        <div class="table_page table-responsive">
+                            <form asp-controller="Cart" asp-action="Update" method="post">
+                                <table>
+                                    <!-- Start Cart Table Head -->
+                                    <thead>
+                                        <tr>
+                                            <th class="product_remove">Xóa bỏ</th>
+                                            <th class="product_thumb">Hình ảnh</th>
+                                            <th class="product_name">Sản phẩm </th>
+                                            <th class="product-price">Giá bán </th>
+                                            <th class="product_quantity">Số lượng</th>
+                                            <th class="product_total">Tổng cộng</th>
+                                        </tr>
+                                    </thead> <!-- End Cart Table Head -->
+                                    <tbody>
+                                        <!-- Start Cart Single Item-->
+                                        @if (Model.CartItems.Count > 0)
+                                        {
+                                            foreach (var item in Model.CartItems)
+                                            {
+                                                <tr>
+                                                    <td class="product_remove">
+                                                        <a asp-controller="Cart" asp-action="Remove" asp-route-Id="@item.ProductId"><i class="fa fa-trash-o"></i></a>
+                                                    </td>
+                                                    <td class="product_thumb">
+                                                        <a href="product-details-default.html">
+                                                            <img src="~/assets/images/product/@item.Image" alt="">
+                                                        </a>
+                                                    </td>
+                                                    <td class="product_name">
+                                                        <a href="product-details-default.html">
+                                                            @item.ProductName
+                                                        </a>
+                                                    </td>
+                                                    <td class="product-price">@String.Format("{0:#,##0} VNĐ", item.Price)</td>
+                                                    <td class="product_quantity">
+                                                        <label>Số lượng</label>
+                                                        <input name="Quantities[@item.ProductId]" value="@item.Quantity" type="number" min="1">
+                                                    </td>
+                                                    <td class="product_total">
+                                                        @String.Format("{0:#,##0} VNĐ", item.Quantity * item.Price)
+                                                    </td>
+                                                </tr> <!-- End Cart Single Item-->
+                                            }
+                                        }
+                                        else
+                                        {
+                                        <td colspan="6">
+                                            <h3>Giỏ hàng của bạn trống</h3>
+                                        </td>
+                                        }
+                                    </tbody>
+                                </table>
+                                <div class="cart_submit">
+                                    <button class="btn btn-md btn-golden" type="submit">Cập nhật giỏ hàng</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End Cart Table -->
+    <!-- Start Coupon Start -->
+    <div class="coupon_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <div class="coupon_code left" data-aos="fade-up" data-aos-delay="200">
+                        <h3>Phiếu mua hàng</h3>
+                        <div class="coupon_inner">
+                            <p>Nhập mã phiếu giảm giá của bạn nếu bạn có.</p>
+                            <input class="mb-2" placeholder="Mã giảm giá" type="text">
+                            <button type="submit" class="btn btn-md btn-golden">Áp dụng phiếu giảm giá</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="coupon_code right" data-aos="fade-up" data-aos-delay="400">
+                        <h3>Tổng số trong giỏ hàng</h3>
+                        <div class="coupon_inner">
+                            <div class="cart_subtotal">
+                                <p>Tạm Tính</p>
+                                @String.Format("{0:#,##0} VNĐ", Model.GrandTotal)
+                            </div>
+                            <div class="cart_subtotal ">
+                                <p>Phí Ship</p>
+                                <p class="cart_amount">0 VNĐ</p>
+                            </div>
+                            <div class="cart_subtotal ">
+                                <p>Giảm giá</p>
+                                <p class="cart_amount">0 VNĐ</p>
+                            </div>
+                            <a></a>
+
+                            <div class="cart_subtotal">
+                                <p>Tổng cộng</p>
+                                 @String.Format("{0:#,##0} VNĐ", Model.GrandTotal)
+                            </div>
+                            @if(User.Identity?.IsAuthenticated ?? false){
+                                <div class="checkout_btn">
+                                    <a asp-action="Checkout" asp-controller="Checkout" class="btn btn-md btn-golden">Checkout</a>
+                                </div>
+                            }
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End Coupon Start -->
+</div> <!-- ...:::: End Cart Section:::... -->
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Dong Xuan Market Online.props" />
+</Project>

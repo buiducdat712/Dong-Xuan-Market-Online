@@ -1,0 +1,58 @@
+﻿@model IEnumerable<BrandModel>
+@{
+    ViewData["title"] = "Brand List";
+    Paginate pager = new Paginate();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+<div class="container-fluid">
+    <div class="table-responsive">
+        <h3 class="my-4">Danh Sách Thương Hiệu</h3>
+        <a asp-action="Create" asp-controller="Brand" class="btn btn-primary mb-3">Thêm thương hiệu</a>
+        <table class="table table-bordered table-striped">
+
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Tên thương hiệu</th>
+                    <th scope="col">Mô tả</th>
+                    <th scope="col">Slug</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Logo</th>
+                    <th scope="col">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td class="truncate-text">@Html.Raw(@item.Description.Substring(0, Math.Min(20, item.Description.Length)))</td>
+                        <td>@item.Slug</td>
+                        <td>
+                            @if (item.Status == 1)
+                            {
+                                <p>Hiển thị</p>
+                            }
+                            else
+                            {
+                                <p>Ẩn</p>
+                            }
+                        </td>
+                        <td><img src="~/assets/images/brand-logo/@item.Cate" class="img-thumbnail" width="100" /></td>
+                        <td>
+                            <a asp-action="Edit" asp-controller="Brand" asp-route-Id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
+                            <a asp-action="Delete" asp-controller="Brand" asp-route-Id="@item.Id" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa Thương Hiệu @item.Name?');">Xóa</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<partial name="_paging" model="@pager" />

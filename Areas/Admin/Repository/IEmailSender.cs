@@ -1,0 +1,7 @@
+﻿namespace Dong_Xuan_Market_Online.Areas.Admin.Repository
+{
+    public interface IEmailSender
+    {
+        Task SendEmailAsync(string email, string subject, string message);
+    }
+}

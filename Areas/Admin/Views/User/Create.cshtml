@@ -1,0 +1,58 @@
+﻿@model AppUserModel
+@{
+    ViewData["title"] = "Create User";
+}
+<div class="container-fluid">
+<h3 class="page-title">Thêm Người Dùng</h3>
+    <div class="form-container col-md-9">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label for="Name">Tên</label>
+                <input asp-for="UserName" required class="form-control" id="Name" />
+                <span asp-validation-for="UserName" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label for="Email">Email</label>
+                <input asp-for="Email" required class="form-control" id="Email"></input>
+                <span asp-validation-for="Email" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label for="PhoneNumber">Số điện thoại</label>
+                <input asp-for="PhoneNumber" required class="form-control" id="PhoneNumber"></input>
+                <span asp-validation-for="PhoneNumber" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label for="Password">Mật khẩu</label>
+                <input asp-for="PasswordHash" required class="form-control" id="PasswordHash"></input>
+                <span asp-validation-for="PasswordHash" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <label for="Roles">Roles</label>
+                <select asp-for="RoleId" class="form-control" asp-items="ViewBag.Roles">
+
+                </select>
+                <span asp-validation-for="RoleId" class="text-danger"></span>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Lưu</button>
+        </form>
+        <a asp-action="Index" class="btn btn-secondary mt-3">Trở về DS người dùng</a>
+    </div>
+</div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $("#ImageUpLoad").change(function () {
+
+            readURL(this);
+        })
+    </script>
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('Description');
+    </script>
+}

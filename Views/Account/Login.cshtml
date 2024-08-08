@@ -1,0 +1,54 @@
+﻿@model LoginViewModel
+@{
+    ViewData["Title"] = "Dangnhap";
+}
+<!-- ...:::: Start Breadcrumb Section:::... -->
+<div class="breadcrumb-section breadcrumb-bg-color--golden">
+    <div class="breadcrumb-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="breadcrumb-title">ĐĂNG NHẬP</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- ...:::: End Breadcrumb Section:::... -->
+<!-- ...:::: Start Customer Login Section :::... -->
+<div class="customer-login">
+    <div class="container">
+        <div class="row">
+            <!--login area start-->
+            <div class="col-sm-12 col-sm-offset-1">
+                <div class="account_form" data-aos="fade-up" data-aos-delay="0">
+                    <h3>ĐĂNG NHẬP</h3>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <form asp-action="Login" asp-controller="Account">
+                        <div class="form-group">
+                            <label for="Name">Tài khoản</label>
+                            <input asp-for="UserName" class="form-control" />
+                            <span asp-validation-for="UserName" class="text-danger" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Name">Mật khẩu</label>
+                            <input asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger" />
+                        </div>
+                        <div class="login_submit">
+                            <button class="btn btn-md btn-black-default-hover mb-4" type="submit">Đăng nhập</button>
+                            <label class="checkbox-default mb-4" for="offer">
+                                <input type="checkbox" id="offer">
+                                <span>Nhớ tôi</span>
+                            </label>
+                            <a href="#">Lost your password?</a>
+                            <a asp-action="Register" asp-controller="Account">Bạn chưa có tài khoản? Tạo tài khoản tại đây</a>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--login area start-->
+            
+        </div>
+    </div>
+</div> <!-- ...:::: End Customer Login Section :::... -->

@@ -1,0 +1,59 @@
+﻿@model IEnumerable<CategoryModel>
+
+<style>
+    .company-logo-single-item .image img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover; /* Đảm bảo ảnh bao phủ toàn bộ khu vực mà không bị méo */
+    }
+
+    .company-logo-single-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .company-logo-single-item span {
+        margin-top: 10px;
+    }
+</style>
+
+<!-- Slider main container -->
+<div class="swiper-container company-logo-slider">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+        @foreach (var item in Model)
+        {
+            <!-- Xác định action và controller dựa trên category -->
+            
+                var actionName = "Index";
+                var controllerName = "Product";
+                
+                switch (item.Slug)
+                {
+                case "thoi-trang":
+                        actionName = "IndexFashion";
+                        break;
+                case "do-gia-dung":
+                        actionName = "IndexHouse";
+                        break;
+                case "do-dien-tu":
+                        actionName = "IndexDevice";
+                        break;
+                }
+            
+            
+            <!-- Bắt đầu mục logo công ty -->
+            <div class="company-logo-single-item swiper-slide">
+                <a asp-action="@actionName" asp-controller="@controllerName">
+                    <div class="image">
+                        <img class="img-fluid" src="~/assets/images/company-logo/@item.Cate" alt="@item.Name">
+                    </div>
+                    <span>@item.Name</span>
+                </a>
+            </div>
+            <!-- Kết thúc mục logo công ty -->
+        }
+    </div>
+</div>
