@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Dong_Xuan_Market_Online.Models.OrderDetails>
+@{
+    ViewData["Title"] = "Product Order Details";
+    decimal total = 0;
+    decimal subtotal = 0;
+}
+<div class="container-fluid">
+<h3 class="my-4">Danh Sách Đơn Hàng</h3>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Order Code</th>
+                        <th scope="col">Tên người đặt</th>
+                        <th scope="col">ProductId</th>
+                        <th scope="col">Tên sản phẩm</th>
+                        <th scope="col">Số lượng</th>
+                        <th scope="col">Đơn giá</th>
+                        <th scope="col">Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        subtotal = item.Quantity * item.Price;
+                        total += subtotal;
+                        <tr>
+                            <input type="hidden" asp-for="@item.OrderCode" class="getId" />
+                            <td>@item.OrderCode</td>
+                            <td>@item.UserName</td>
+                            <td>@item.ProductId</td>
+                            <td>@item.Product.Name</td>
+                            <td>@item.Quantity</td>
+                            <td>@String.Format("{0:N0} VNĐ", item.Price)</td>
+                            <td>@String.Format("{0:N0} VNĐ", subtotal)</td>
+                        </tr>
+                    }
+                    <tr class="font-weight-bold">
+                        <th colspan="6" class="text-right">Tổng cộng:</th>
+                        <td>@String.Format("{0:N0} VNĐ", total)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="select-update-order">Cập nhật trạng thái đơn hàng:</label>
+            <select class="form-control select-update-order">
+                <option value="1">Đơn hàng mới</option>
+                <option value="0">Đã xử lý</option>
+            </select>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.select-update-order').change(function () {
+                var status = $(this).val();
+                var ordercode = $('.getId').val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("UpdateOrder")",
+                    data: { status: status, ordercode: ordercode },
+
+                    success: function (result) {
+                        if (result.success) {
+                            Swal.fire("Cập nhật đơn hàng thành công");
+                        } else {
+                            Swal.fire("Cập nhật đơn hàng thất bại: " + result.message);
+                        }
+                    },
+                    error: function () {
+                        Swal.fire("Đã xảy ra lỗi khi cập nhật đơn hàng");
+                    }
+                });
+            });
+        });
+    </script>
+}

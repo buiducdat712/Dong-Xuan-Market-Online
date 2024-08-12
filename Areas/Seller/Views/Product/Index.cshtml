@@ -60,9 +60,14 @@
                         <td>@item.Fast</td>
                         <td>@item.Cate</td>
                         <td>
-                            <a asp-action="Edit" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
-                            <a asp-action="Delete" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm @item.Name?');">Xóa</a>
+                            <a asp-action="Edit" asp-controller="Product" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
+
+                            <form asp-action="Delete" asp-controller="Product" asp-route-id="@item.Id" method="post" style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm @item.Name?');">Xóa</button>
+                            </form>
                         </td>
+
                     </tr>
                 }
             </tbody>

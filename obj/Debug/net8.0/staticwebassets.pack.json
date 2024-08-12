@@ -153,6 +153,10 @@
       "PackagePath": "staticwebassets\\assets\\images\\about\\img-about.jpg"
     },
     {
+      "Id": "D:\\DAT\\TaskWebThuongMai\\Dong Xuan Market Online\\wwwroot\\assets\\images\\banner\\Cho-Dem-Dong-Xuan-e1508152299678.png",
+      "PackagePath": "staticwebassets\\assets\\images\\banner\\Cho-Dem-Dong-Xuan-e1508152299678.png"
+    },
+    {
       "Id": "D:\\DAT\\TaskWebThuongMai\\Dong Xuan Market Online\\wwwroot\\assets\\images\\banner\\Trangchu-3-1.png",
       "PackagePath": "staticwebassets\\assets\\images\\banner\\Trangchu-3-1.png"
     },
@@ -175,6 +179,10 @@
     {
       "Id": "D:\\DAT\\TaskWebThuongMai\\Dong Xuan Market Online\\wwwroot\\assets\\images\\banner\\Trangchu-5.jpg",
       "PackagePath": "staticwebassets\\assets\\images\\banner\\Trangchu-5.jpg"
+    },
+    {
+      "Id": "D:\\DAT\\TaskWebThuongMai\\Dong Xuan Market Online\\wwwroot\\assets\\images\\banner\\backgroud-home.jpg",
+      "PackagePath": "staticwebassets\\assets\\images\\banner\\backgroud-home.jpg"
     },
     {
       "Id": "D:\\DAT\\TaskWebThuongMai\\Dong Xuan Market Online\\wwwroot\\assets\\images\\banner\\banner-style-1-img-1.jpg",
@@ -295,6 +303,22 @@
     {
       "Id": "D:\\DAT\\TaskWebThuongMai\\Dong Xuan Market Online\\wwwroot\\assets\\images\\banner\\banner-style-9-img-1.jpg",
       "PackagePath": "staticwebassets\\assets\\images\\banner\\banner-style-9-img-1.jpg"
+    },
+    {
+      "Id": "D:\\DAT\\TaskWebThuongMai\\Dong Xuan Market Online\\wwwroot\\assets\\images\\banner\\cdn-vietbao-vn_cho-do-co-van-phuc-3-130416.jpg",
+      "PackagePath": "staticwebassets\\assets\\images\\banner\\cdn-vietbao-vn_cho-do-co-van-phuc-3-130416.jpg"
+    },
+    {
+      "Id": "D:\\DAT\\TaskWebThuongMai\\Dong Xuan Market Online\\wwwroot\\assets\\images\\banner\\cho-dong-xuan-1.jpg",
+      "PackagePath": "staticwebassets\\assets\\images\\banner\\cho-dong-xuan-1.jpg"
+    },
+    {
+      "Id": "D:\\DAT\\TaskWebThuongMai\\Dong Xuan Market Online\\wwwroot\\assets\\images\\banner\\cho-dong-xuan-7-1.jpg",
+      "PackagePath": "staticwebassets\\assets\\images\\banner\\cho-dong-xuan-7-1.jpg"
+    },
+    {
+      "Id": "D:\\DAT\\TaskWebThuongMai\\Dong Xuan Market Online\\wwwroot\\assets\\images\\banner\\cho-dong-xuan-co-gi-1125x750.jpg",
+      "PackagePath": "staticwebassets\\assets\\images\\banner\\cho-dong-xuan-co-gi-1125x750.jpg"
     },
     {
       "Id": "D:\\DAT\\TaskWebThuongMai\\Dong Xuan Market Online\\wwwroot\\assets\\images\\banner\\menu-banner.jpg",
@@ -565,12 +589,16 @@
       "PackagePath": "staticwebassets\\assets\\images\\logo\\logo_white.png"
     },
     {
-      "Id": "D:\\DAT\\TaskWebThuongMai\\Dong Xuan Market Online\\wwwroot\\assets\\images\\product\\4f1b08c3-a0b8-4506-90b8-1d75d0aa5954_quat-senko-01.jpg",
-      "PackagePath": "staticwebassets\\assets\\images\\product\\4f1b08c3-a0b8-4506-90b8-1d75d0aa5954_quat-senko-01.jpg"
+      "Id": "D:\\DAT\\TaskWebThuongMai\\Dong Xuan Market Online\\wwwroot\\assets\\images\\product\\08237b7c-be5c-47da-bf73-ab661421f3e7_quat-senko-01.jpg",
+      "PackagePath": "staticwebassets\\assets\\images\\product\\08237b7c-be5c-47da-bf73-ab661421f3e7_quat-senko-01.jpg"
     },
     {
       "Id": "D:\\DAT\\TaskWebThuongMai\\Dong Xuan Market Online\\wwwroot\\assets\\images\\product\\8dc01383-5421-487a-95d0-7e5ac7f79f0b_iphone-14-01.jpg",
       "PackagePath": "staticwebassets\\assets\\images\\product\\8dc01383-5421-487a-95d0-7e5ac7f79f0b_iphone-14-01.jpg"
+    },
+    {
+      "Id": "D:\\DAT\\TaskWebThuongMai\\Dong Xuan Market Online\\wwwroot\\assets\\images\\product\\b4b83019-6c12-4289-8233-966bd26b1c6a_samsung-s20-01.png",
+      "PackagePath": "staticwebassets\\assets\\images\\product\\b4b83019-6c12-4289-8233-966bd26b1c6a_samsung-s20-01.png"
     },
     {
       "Id": "D:\\DAT\\TaskWebThuongMai\\Dong Xuan Market Online\\wwwroot\\assets\\images\\product\\default\\home-1\\Galaxy-S22-Ultra-1.png",

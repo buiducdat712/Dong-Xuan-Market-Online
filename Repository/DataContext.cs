@@ -16,6 +16,24 @@ namespace Dong_Xuan_Market_Online.Repository
         public DbSet<CategoryModel> Categories { get; set; }
         public DbSet<OrderModel> Orders { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
-        public DbSet<UserModel> userModels { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Thiết lập quan hệ giữa Product và Seller
+            modelBuilder.Entity<ProductModel>()
+                .HasOne(p => p.Seller)  // Product có một người bán
+                .WithMany(u => u.Products)  // Người bán có nhiều sản phẩm
+                .HasForeignKey(p => p.SellerId)  // SellerId là khóa ngoại
+                .OnDelete(DeleteBehavior.Restrict);  // Quy tắc xóa
+            // Thiết lập quan hệ giữa Order và Seller
+            modelBuilder.Entity<OrderModel>()
+                .HasOne(o => o.Seller)
+                .WithMany()
+                .HasForeignKey(o => o.SellerId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+
     }
 }

@@ -31,8 +31,8 @@ public class ProductModel
     public bool Save { get; set; }
     public bool Fast { get; set; }
     public string Cate { get; set; }
-
-
+    public string SellerId { get; set; }
+    public AppUserModel Seller { get; set; }
     public CategoryModel Category { get; set; }
     public BrandModel Brand { get; set; }
 

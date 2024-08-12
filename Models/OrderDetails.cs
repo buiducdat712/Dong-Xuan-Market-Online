@@ -11,6 +11,10 @@ namespace Dong_Xuan_Market_Online.Models
         public int ProductId { get; set; }
         public decimal Price { get; set; }
         public int Quantity { get; set; }
+
+        // Thêm thuộc tính SellerId
+        public string SellerId { get; set; }
+
         [ForeignKey("ProductId")]
         public ProductModel Product { get; set; }
     }

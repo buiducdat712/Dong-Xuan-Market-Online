@@ -100,10 +100,38 @@ namespace Dong_Xuan_Market_Online.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                // Cập nhật thông tin người dùng
                 existingUser.UserName = user.UserName;
                 existingUser.Email = user.Email;
                 existingUser.PhoneNumber = user.PhoneNumber;
-                existingUser.RoleId = user.RoleId;
+
+                // Lấy vai trò hiện tại của người dùng
+                var currentRoles = await _userManager.GetRolesAsync(existingUser);
+
+                // Xóa vai trò cũ của người dùng (nếu có)
+                if (currentRoles.Any())
+                {
+                    var removeRoleResult = await _userManager.RemoveFromRolesAsync(existingUser, currentRoles);
+                    if (!removeRoleResult.Succeeded)
+                    {
+                        AddIdentityErrors(removeRoleResult);
+                        TempData["error"] = "Có lỗi xảy ra khi xóa vai trò cũ của người dùng.";
+                        return View(user);
+                    }
+                }
+
+                // Thêm vai trò mới cho người dùng
+                var role = await _roleManager.FindByIdAsync(user.RoleId);
+                if (role != null)
+                {
+                    var addRoleResult = await _userManager.AddToRoleAsync(existingUser, role.Name);
+                    if (!addRoleResult.Succeeded)
+                    {
+                        AddIdentityErrors(addRoleResult);
+                        TempData["error"] = "Có lỗi xảy ra khi thêm vai trò mới cho người dùng.";
+                        return View(user);
+                    }
+                }
 
                 var updateUserResult = await _userManager.UpdateAsync(existingUser);
                 if (updateUserResult.Succeeded)
@@ -128,6 +156,7 @@ namespace Dong_Xuan_Market_Online.Areas.Admin.Controllers
 
             return View(user);
         }
+
 
         private void AddIdentityErrors(IdentityResult identityResult)
         {

@@ -285,3 +285,4 @@ D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Microsoft.Exten
 D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll
 D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\obj\Debug\net8.0\scopedcss\Areas\Seller\Views\Shared\_Layout.cshtml.rz.scp.css
+D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\obj\Debug\net8.0\Dong Xuan Market Online.sourcelink.json

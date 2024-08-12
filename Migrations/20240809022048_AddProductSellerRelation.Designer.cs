@@ -4,6 +4,7 @@ using Dong_Xuan_Market_Online.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dong_Xuan_Market_Online.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240809022048_AddProductSellerRelation")]
+    partial class AddProductSellerRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,9 +170,6 @@ namespace Dong_Xuan_Market_Online.Migrations
                     b.Property<string>("OrderCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("OrderModelId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -179,15 +179,10 @@ namespace Dong_Xuan_Market_Online.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<string>("SellerId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrderModelId");
 
                     b.HasIndex("ProductId");
 
@@ -208,9 +203,6 @@ namespace Dong_Xuan_Market_Online.Migrations
                     b.Property<string>("OrderCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SellerId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -218,8 +210,6 @@ namespace Dong_Xuan_Market_Online.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SellerId");
 
                     b.ToTable("Orders");
                 });
@@ -437,10 +427,6 @@ namespace Dong_Xuan_Market_Online.Migrations
 
             modelBuilder.Entity("Dong_Xuan_Market_Online.Models.OrderDetails", b =>
                 {
-                    b.HasOne("Dong_Xuan_Market_Online.Models.OrderModel", null)
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("OrderModelId");
-
                     b.HasOne("ProductModel", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
@@ -448,16 +434,6 @@ namespace Dong_Xuan_Market_Online.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("Dong_Xuan_Market_Online.Models.OrderModel", b =>
-                {
-                    b.HasOne("Dong_Xuan_Market_Online.Models.AppUserModel", "Seller")
-                        .WithMany()
-                        .HasForeignKey("SellerId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Seller");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -540,11 +516,6 @@ namespace Dong_Xuan_Market_Online.Migrations
             modelBuilder.Entity("Dong_Xuan_Market_Online.Models.AppUserModel", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("Dong_Xuan_Market_Online.Models.OrderModel", b =>
-                {
-                    b.Navigation("OrderDetails");
                 });
 #pragma warning restore 612, 618
         }
