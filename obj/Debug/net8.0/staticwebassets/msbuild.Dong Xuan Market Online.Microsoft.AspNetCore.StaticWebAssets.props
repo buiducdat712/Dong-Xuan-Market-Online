@@ -2352,6 +2352,54 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\08237b7c-be5c-47da-bf73-ab661421f3e7_quat-senko-01.jpg))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\4322de6b-25bb-4d48-b36b-799663961ea3_1.jpg))">
+      <SourceType>Package</SourceType>
+      <SourceId>Dong Xuan Market Online</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/Dong Xuan Market Online</BasePath>
+      <RelativePath>assets/images/product/4322de6b-25bb-4d48-b36b-799663961ea3_1.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\4322de6b-25bb-4d48-b36b-799663961ea3_1.jpg))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\5db57024-4624-418e-8d5b-fc8a6fcd89b5_backgroud-home.jpg))">
+      <SourceType>Package</SourceType>
+      <SourceId>Dong Xuan Market Online</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/Dong Xuan Market Online</BasePath>
+      <RelativePath>assets/images/product/5db57024-4624-418e-8d5b-fc8a6fcd89b5_backgroud-home.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\5db57024-4624-418e-8d5b-fc8a6fcd89b5_backgroud-home.jpg))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\7b34454d-e630-4a54-8cfb-d4878df5eacc_trai.jpg))">
+      <SourceType>Package</SourceType>
+      <SourceId>Dong Xuan Market Online</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/Dong Xuan Market Online</BasePath>
+      <RelativePath>assets/images/product/7b34454d-e630-4a54-8cfb-d4878df5eacc_trai.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\7b34454d-e630-4a54-8cfb-d4878df5eacc_trai.jpg))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\8dc01383-5421-487a-95d0-7e5ac7f79f0b_iphone-14-01.jpg))">
       <SourceType>Package</SourceType>
       <SourceId>Dong Xuan Market Online</SourceId>
@@ -2368,6 +2416,38 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\8dc01383-5421-487a-95d0-7e5ac7f79f0b_iphone-14-01.jpg))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\95fac5f3-cbd2-4f05-aeaf-a39e9446033a_giay-nike-precision-5-nam-den-trang-01-800x800.jpg))">
+      <SourceType>Package</SourceType>
+      <SourceId>Dong Xuan Market Online</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/Dong Xuan Market Online</BasePath>
+      <RelativePath>assets/images/product/95fac5f3-cbd2-4f05-aeaf-a39e9446033a_giay-nike-precision-5-nam-den-trang-01-800x800.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\95fac5f3-cbd2-4f05-aeaf-a39e9446033a_giay-nike-precision-5-nam-den-trang-01-800x800.jpg))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\9f70f128-0c4f-4c0e-81b2-b9494ad9d291_Quan-Burberry-01.jpg))">
+      <SourceType>Package</SourceType>
+      <SourceId>Dong Xuan Market Online</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/Dong Xuan Market Online</BasePath>
+      <RelativePath>assets/images/product/9f70f128-0c4f-4c0e-81b2-b9494ad9d291_Quan-Burberry-01.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\9f70f128-0c4f-4c0e-81b2-b9494ad9d291_Quan-Burberry-01.jpg))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\b4b83019-6c12-4289-8233-966bd26b1c6a_samsung-s20-01.png))">
       <SourceType>Package</SourceType>
       <SourceId>Dong Xuan Market Online</SourceId>
@@ -2383,6 +2463,22 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\b4b83019-6c12-4289-8233-966bd26b1c6a_samsung-s20-01.png))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\c5832032-41ee-4762-8d6b-bb8eeeaa7011_house-hold.png))">
+      <SourceType>Package</SourceType>
+      <SourceId>Dong Xuan Market Online</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/Dong Xuan Market Online</BasePath>
+      <RelativePath>assets/images/product/c5832032-41ee-4762-8d6b-bb8eeeaa7011_house-hold.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\c5832032-41ee-4762-8d6b-bb8eeeaa7011_house-hold.png))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\default\home-1\default-1.jpg))">
       <SourceType>Package</SourceType>
@@ -3344,6 +3440,22 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\default\home-4\default-9.jpg))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\f72320f5-eba3-4251-97e4-18e0fd6e3e64_Dam-Nike-01.png))">
+      <SourceType>Package</SourceType>
+      <SourceId>Dong Xuan Market Online</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/Dong Xuan Market Online</BasePath>
+      <RelativePath>assets/images/product/f72320f5-eba3-4251-97e4-18e0fd6e3e64_Dam-Nike-01.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\f72320f5-eba3-4251-97e4-18e0fd6e3e64_Dam-Nike-01.png))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\fb7357d8-5938-48cc-9e8e-e4675ec3d25f_giay-nike-precision-5-nam-den-trang-01-800x800.jpg))">
       <SourceType>Package</SourceType>
       <SourceId>Dong Xuan Market Online</SourceId>
@@ -3359,6 +3471,22 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\fb7357d8-5938-48cc-9e8e-e4675ec3d25f_giay-nike-precision-5-nam-den-trang-01-800x800.jpg))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\fbecd05b-24b3-4438-ac64-c30cb1a91e73_giay-nike-precision-5-nam-den-trang-01-800x800.jpg))">
+      <SourceType>Package</SourceType>
+      <SourceId>Dong Xuan Market Online</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/Dong Xuan Market Online</BasePath>
+      <RelativePath>assets/images/product/fbecd05b-24b3-4438-ac64-c30cb1a91e73_giay-nike-precision-5-nam-den-trang-01-800x800.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\product\fbecd05b-24b3-4438-ac64-c30cb1a91e73_giay-nike-precision-5-nam-den-trang-01-800x800.jpg))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\assets\images\team\leader1.png))">
       <SourceType>Package</SourceType>

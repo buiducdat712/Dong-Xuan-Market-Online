@@ -5,10 +5,10 @@
     decimal subtotal = 0;
 }
 <div class="container-fluid">
-<h3 class="my-4">Danh Sách Đơn Hàng</h3>
+<h3 class="my-4">Chi tiết đơn hàng</h3>
 
         <div class="table-responsive">
-            <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-hover">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Order Code</th>
@@ -66,14 +66,9 @@
                     data: { status: status, ordercode: ordercode },
 
                     success: function (result) {
-                        if (result.success) {
+                        if (result) {
                             Swal.fire("Cập nhật đơn hàng thành công");
-                        } else {
-                            Swal.fire("Cập nhật đơn hàng thất bại: " + result.message);
                         }
-                    },
-                    error: function () {
-                        Swal.fire("Đã xảy ra lỗi khi cập nhật đơn hàng");
                     }
                 });
             });

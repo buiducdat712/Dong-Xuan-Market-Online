@@ -15,7 +15,7 @@ namespace Dong_Xuan_Market_Online.Models
         public string Slug { get; set; }
         public int Status { get; set; }
 
-        public string Cate { get; set; } = "noimage.jpg";
+        public string Logo { get; set; } = "noimage.jpg";
 
 
         [NotMapped]

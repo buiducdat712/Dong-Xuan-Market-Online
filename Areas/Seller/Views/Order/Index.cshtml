@@ -11,8 +11,8 @@
 }
 <div class="container-fluid">
     <div class="table-responsive">
-        <h3 class="my-4">Danh Sách Đơn Hàng</h3>
-        <table class="table table-bordered table-striped">
+        <h3 class="my-4">Danh sách đơn hàng</h3>
+        <table class="table table-bordered table-striped" id="myTable">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">Mã Đơn Hàng</th>
@@ -49,9 +49,6 @@
         </table>
     </div>
 </div>
-
-<partial name="_paging" model="@pager" />
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll('.delete-order').forEach(button => {

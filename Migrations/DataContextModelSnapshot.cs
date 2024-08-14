@@ -104,11 +104,11 @@ namespace Dong_Xuan_Market_Online.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Cate")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Logo")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -134,11 +134,11 @@ namespace Dong_Xuan_Market_Online.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Cate")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Logo")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -165,10 +165,7 @@ namespace Dong_Xuan_Market_Online.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("OrderCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("OrderModelId")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -187,7 +184,7 @@ namespace Dong_Xuan_Market_Online.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderModelId");
+                    b.HasIndex("OrderCode");
 
                     b.HasIndex("ProductId");
 
@@ -206,13 +203,17 @@ namespace Dong_Xuan_Market_Online.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("OrderCode")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("SellerId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
@@ -221,7 +222,31 @@ namespace Dong_Xuan_Market_Online.Migrations
 
                     b.HasIndex("SellerId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Dong_Xuan_Market_Online.Models.ProductImages", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -384,6 +409,9 @@ namespace Dong_Xuan_Market_Online.Migrations
                     b.Property<string>("Dimensions")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double?>("DiscountPercentage")
+                        .HasColumnType("float");
+
                     b.Property<bool>("Express")
                         .HasColumnType("bit");
 
@@ -392,6 +420,9 @@ namespace Dong_Xuan_Market_Online.Migrations
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Material")
                         .HasColumnType("nvarchar(max)");
@@ -437,15 +468,18 @@ namespace Dong_Xuan_Market_Online.Migrations
 
             modelBuilder.Entity("Dong_Xuan_Market_Online.Models.OrderDetails", b =>
                 {
-                    b.HasOne("Dong_Xuan_Market_Online.Models.OrderModel", null)
+                    b.HasOne("Dong_Xuan_Market_Online.Models.OrderModel", "Order")
                         .WithMany("OrderDetails")
-                        .HasForeignKey("OrderModelId");
+                        .HasForeignKey("OrderCode")
+                        .HasPrincipalKey("OrderCode");
 
                     b.HasOne("ProductModel", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Order");
 
                     b.Navigation("Product");
                 });
@@ -457,7 +491,24 @@ namespace Dong_Xuan_Market_Online.Migrations
                         .HasForeignKey("SellerId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("Dong_Xuan_Market_Online.Models.AppUserModel", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Seller");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Dong_Xuan_Market_Online.Models.ProductImages", b =>
+                {
+                    b.HasOne("ProductModel", "Product")
+                        .WithMany("ProductImages")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -545,6 +596,11 @@ namespace Dong_Xuan_Market_Online.Migrations
             modelBuilder.Entity("Dong_Xuan_Market_Online.Models.OrderModel", b =>
                 {
                     b.Navigation("OrderDetails");
+                });
+
+            modelBuilder.Entity("ProductModel", b =>
+                {
+                    b.Navigation("ProductImages");
                 });
 #pragma warning restore 612, 618
         }

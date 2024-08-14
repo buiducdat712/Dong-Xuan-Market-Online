@@ -97,7 +97,7 @@ namespace Dong_Xuan_Market_Online.Areas.Admin.Controllers
                         {
                             await category.ImageUpLoad.CopyToAsync(fs);
                         }
-                        category.Cate = imageName;
+                        category.Logo= imageName;
                     }
                 }
 
@@ -155,10 +155,10 @@ namespace Dong_Xuan_Market_Online.Areas.Admin.Controllers
                 if (category.ImageUpLoad != null)
                 {
                     // Xóa hình cũ nếu không phải là noimage.jpg
-                    if (!string.Equals(oldCategory.Cate, "noimage.jpg"))
+                    if (!string.Equals(oldCategory.Logo, "noimage.jpg"))
                     {
                         string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "assets/images/company-logo");
-                        string oldfileImage = Path.Combine(uploadsDir, oldCategory.Cate);
+                        string oldfileImage = Path.Combine(uploadsDir, oldCategory.Logo);
                         if (System.IO.File.Exists(oldfileImage))
                         {
                             System.IO.File.Delete(oldfileImage);
@@ -174,11 +174,11 @@ namespace Dong_Xuan_Market_Online.Areas.Admin.Controllers
                     {
                         await category.ImageUpLoad.CopyToAsync(fs);
                     }
-                    category.Cate = imageName;
+                    category.Logo= imageName;
                 }
                 else
                 {
-                    category.Cate = oldCategory.Cate; // Giữ nguyên hình cũ nếu không cập nhật hình mới
+                    category.Logo= oldCategory.Logo; // Giữ nguyên hình cũ nếu không cập nhật hình mới
                 }
 
                 _dataContext.Entry(category).State = EntityState.Modified;
@@ -208,10 +208,10 @@ namespace Dong_Xuan_Market_Online.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            if (!string.Equals(category.Cate, "noimage.jpg"))
+            if (!string.Equals(category.Logo, "noimage.jpg"))
             {
                 string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "assets/images/company-logo");
-                string oldfileImage = Path.Combine(uploadsDir, category.Cate);
+                string oldfileImage = Path.Combine(uploadsDir, category.Logo);
                 if (System.IO.File.Exists(oldfileImage))
                 {
                     System.IO.File.Delete(oldfileImage);

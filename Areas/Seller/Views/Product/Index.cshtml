@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<ProductModel>
 @{
-    ViewData["title"] = "Product List";
+    ViewData["title"] = "Danh Sách Sản Phẩm";
     Paginate pager = new Paginate();
     int pageNo = 0;
     if (ViewBag.Pager != null)
@@ -13,13 +13,15 @@
     <div class="table-responsive">
         <h3 class="my-4">Danh Sách Sản Phẩm</h3>
         <a asp-action="Create" asp-controller="Product" class="btn btn-primary mb-3">Thêm sản phẩm</a>
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped" id="myTable">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">Hình ảnh</th>
                     <th scope="col">Tên SP</th>
-                    <th scope="col">Giá</th>
-                    <th scope="col">Slug</th>
+                    <th scope="col">Giá gốc</th>
+                    <th scope="col">Giảm giá</th> <!-- Thêm cột giảm giá -->
+                    <th scope="col">Giá đã giảm</th> <!-- Thêm cột giá đã giảm -->
+                    <th scope="col">Trạng thái</th> <!-- Thêm cột trạng thái -->
                     <th scope="col">Thương hiệu</th>
                     <th scope="col">Phân loại</th>
                     <th scope="col">Size</th>
@@ -30,10 +32,8 @@
                     <th scope="col">Chất liệu</th>
                     <th scope="col">Thông số KT</th>
                     <th scope="col">Mô tả</th>
-                    <th scope="col">Hỏa tốc</th>
-                    <th scope="col">Tiết kiệm</th>
-                    <th scope="col">Nhanh</th>
                     <th scope="col">Danh mục</th>
+                    
                     <th scope="col">Hành động</th>
                 </tr>
             </thead>
@@ -43,8 +43,37 @@
                     <tr>
                         <td><img src="~/assets/images/product/@item.Image" class="img-thumbnail" /></td>
                         <td>@item.Name</td>
-                        <td>@item.Price</td>
-                        <td>@item.Slug</td>
+                        <td>@item.Price.ToString("C0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN"))</td>
+                        <td>
+                            @if (item.DiscountPercentage.HasValue)
+                            {
+                                <span>@item.DiscountPercentage.Value.ToString("0.##") %</span>
+                            }
+                            else
+                            {
+                                <span>-</span> <!-- Không có giảm giá -->
+                            }
+                        </td>
+                        <td>
+                            @if (item.DiscountPercentage.HasValue)
+                            {
+                                <span>@item.DiscountedPrice.ToString("C0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN"))</span>
+                            }
+                            else
+                            {
+                                <span>@item.Price.ToString("C0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN"))</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.IsApproved)
+                            {
+                                <span class="badge bg-success">Được duyệt</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning">Chờ duyệt</span>
+                            }
+                        </td>
                         <td>@item.Brand.Name</td>
                         <td>@item.Category.Name</td>
                         <td>@item.Size</td>
@@ -55,23 +84,18 @@
                         <td>@item.Material</td>
                         <td class="truncate-text">@Html.Raw(@item.Specifications.Substring(0, Math.Min(20, item.Specifications.Length)))</td>
                         <td class="truncate-text">@Html.Raw(@item.Description.Substring(0, Math.Min(20, item.Description.Length)))</td>
-                        <td>@item.Express</td>
-                        <td>@item.Save</td>
-                        <td>@item.Fast</td>
                         <td>@item.Cate</td>
-                        <td>
+                        
+                        <td>                           
                             <a asp-action="Edit" asp-controller="Product" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
-
                             <form asp-action="Delete" asp-controller="Product" asp-route-id="@item.Id" method="post" style="display:inline;">
                                 @Html.AntiForgeryToken()
                                 <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm @item.Name?');">Xóa</button>
                             </form>
                         </td>
-
                     </tr>
                 }
             </tbody>
         </table>
     </div>
 </div>
-<partial name="_paging" model="@pager" />

@@ -33,6 +33,19 @@ namespace Dong_Xuan_Market_Online.Repository
                 .WithMany()
                 .HasForeignKey(o => o.SellerId)
                 .OnDelete(DeleteBehavior.Restrict);
+            // Cấu hình mối quan hệ giữa OrderModel và OrderDetails
+            modelBuilder.Entity<OrderModel>()
+                .HasMany(o => o.OrderDetails)
+                .WithOne(od => od.Order)
+                .HasForeignKey(od => od.OrderCode)
+                .HasPrincipalKey(o => o.OrderCode);
+
+            modelBuilder.Entity<OrderDetails>()
+                .HasKey(od => od.Id);
+
+            modelBuilder.Entity<OrderModel>()
+                .HasKey(o => o.Id);
+
         }
 
     }

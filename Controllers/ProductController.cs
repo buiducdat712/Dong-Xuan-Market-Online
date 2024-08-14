@@ -21,9 +21,9 @@ namespace Dong_Xuan_Market_Online.Controllers
         {
             int pageSize = 12;
 
-            var totalProducts = await _dataContext.Products.CountAsync(p => p.Category.Slug == "thoi-trang");
+            var totalProducts = await _dataContext.Products.CountAsync(p => p.Category.Slug == "thoi-trang" && p.IsApproved);
             var products = await _dataContext.Products
-                .Where(p => p.Category.Slug == "thoi-trang")
+                .Where(p => p.Category.Slug == "thoi-trang" && p.IsApproved)
                 .Skip((pg - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -37,28 +37,34 @@ namespace Dong_Xuan_Market_Online.Controllers
             {
                 Products = products,
                 Paginate = paginateModel,
-                SidebarProducts = await _dataContext.Products.Where(p => p.Category.Slug == "thoi-trang").ToListAsync()
+                SidebarProducts = await _dataContext.Products.Where(p => p.Category.Slug == "thoi-trang" && p.IsApproved).ToListAsync()
             };
 
             return View(viewModel);
-        }   
+        }
         public async Task<IActionResult> IndexHouse()
         {
-            var products = await _dataContext.Products.Where(p => p.Category.Slug == "do-gia-dung").ToListAsync();
+            var products = await _dataContext.Products
+                .Where(p => p.Category.Slug == "do-gia-dung" && p.IsApproved)
+                .ToListAsync();
             return View(products);
         }
+
         public async Task<IActionResult> IndexDevice()
         {
-            var products = await _dataContext.Products.Where(p => p.Category.Slug == "do-dien-tu").ToListAsync();
+            var products = await _dataContext.Products
+                .Where(p => p.Category.Slug == "do-dien-tu" && p.IsApproved)
+                .ToListAsync();
             return View(products);
         }
+
         public async Task<IActionResult> IndexWithCate(string cate, int pg = 1)
         {
             int pageSize = 12;
 
-            var totalProducts = await _dataContext.Products.CountAsync(p => p.Cate == cate);
+            var totalProducts = await _dataContext.Products.CountAsync(p => p.Cate == cate && p.IsApproved);
             var products = await _dataContext.Products
-                .Where(p => p.Cate == cate)
+                .Where(p => p.Cate == cate && p.IsApproved)
                 .Include(p => p.Category)
                 .Skip((pg - 1) * pageSize)
                 .Take(pageSize)
@@ -73,55 +79,52 @@ namespace Dong_Xuan_Market_Online.Controllers
             {
                 Products = products,
                 Paginate = paginateModel,
-                SidebarProducts = await _dataContext.Products.Where(p => p.Cate == cate).ToListAsync(),
-                SelectedCate = cate // Cập nhật thuộc tính này
+                SidebarProducts = await _dataContext.Products.Where(p => p.Cate == cate && p.IsApproved).ToListAsync(),
+                SelectedCate = cate
             };
 
             return View(viewModel);
         }
-
-
-        public async Task<IActionResult> DetailsFashion(int id)
+        public async Task<IActionResult> Search(string searchTerm)
         {
-            var fashion = await _dataContext.Products
-                .Include(f => f.Category)
-                .Include(f => f.Brand)
-                .FirstOrDefaultAsync(f => f.Id == id);
+            var products = await _dataContext.Products
+                .Where(p=>p.Name.Contains(searchTerm) || p.Description.Contains(searchTerm))
+                .ToListAsync();
+            ViewBag.Keyword = searchTerm;
+            return View(products);
+        }
+        public async Task<IActionResult> ProductDetails(int id)
+        {
+            var product = await _dataContext.Products
+                .Include(d => d.Category)
+                .Include(d => d.Brand)
+                .FirstOrDefaultAsync(d => d.Id == id && d.IsApproved);
 
-            if (fashion == null)
+            if (product == null)
             {
                 return NotFound();
             }
 
-            return View(fashion);
-        }
-        public async Task<IActionResult> DetailsHouse(int id)
-        {
-            var house = await _dataContext.Products
-                .Include(f => f.Category)
-                .Include(f => f.Brand)
-                .FirstOrDefaultAsync(f => f.Id == id);
+            var relatedProducts = await _dataContext.Products
+                .Where(p => p.CategoryId == product.CategoryId && p.Id != product.Id && p.IsApproved)
+                .Take(4)
+                .ToListAsync();
+            ViewBag.RelatedProducts = relatedProducts;
 
-            if (house == null)
+            string actionName = product.Category?.Name switch
             {
-                return NotFound();
-            }
+                "Đồ Gia Dụng" => "IndexHouse",
+                "Thời Trang" => "IndexFashion",
+                "Đồ Điện Tử" => "IndexDevice",
+                _ => null
+            };
 
-            return View(house);
+            ViewBag.ActionName = actionName;
+
+            return View(product);
         }
-        public async Task<IActionResult> DetailsDevice(int id)
-        {
-            var device = await _dataContext.Products
-                .Include(f => f.Category)
-                .Include(f => f.Brand)
-                .FirstOrDefaultAsync(f => f.Id == id);
 
-            if (device == null)
-            {
-                return NotFound();
-            }
 
-            return View(device);
-        }
+
     }
 }

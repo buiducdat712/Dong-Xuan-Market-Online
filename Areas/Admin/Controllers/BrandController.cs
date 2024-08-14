@@ -103,7 +103,7 @@ namespace Dong_Xuan_Market_Online.Areas.Admin.Controllers
                         {
                             await brand.ImageUpLoad.CopyToAsync(fs);
                         }
-                        brand.Cate = imageName;
+                        brand.Logo = imageName;
                     }
                 }
                 _dataContext.Add(brand);
@@ -160,10 +160,10 @@ namespace Dong_Xuan_Market_Online.Areas.Admin.Controllers
                 if (brand.ImageUpLoad != null)
                 {
                     // Xóa hình cũ nếu không phải là noimage.jpg
-                    if (!string.Equals(oldBrand.Cate, "noimage.jpg"))
+                    if (!string.Equals(oldBrand.Logo, "noimage.jpg"))
                     {
                         string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "assets/images/brand-logo");
-                        string oldfileImage = Path.Combine(uploadsDir, oldBrand.Cate);
+                        string oldfileImage = Path.Combine(uploadsDir, oldBrand.Logo);
                         if (System.IO.File.Exists(oldfileImage))
                         {
                             System.IO.File.Delete(oldfileImage);
@@ -179,11 +179,11 @@ namespace Dong_Xuan_Market_Online.Areas.Admin.Controllers
                     {
                         await brand.ImageUpLoad.CopyToAsync(fs);
                     }
-                    brand.Cate = imageName;
+                    brand.Logo = imageName;
                 }
                 else
                 {
-                    brand.Cate = oldBrand.Cate; // Giữ nguyên hình cũ nếu không cập nhật hình mới
+                    brand.Logo = oldBrand.Logo; // Giữ nguyên hình cũ nếu không cập nhật hình mới
                 }
 
                 _dataContext.Entry(brand).State = EntityState.Modified;
@@ -209,10 +209,10 @@ namespace Dong_Xuan_Market_Online.Areas.Admin.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             BrandModel brand = await _dataContext.Brands.FindAsync(id);
-            if (!string.Equals(brand.Cate, "noimage.jpg"))
+            if (!string.Equals(brand.Logo, "noimage.jpg"))
             {
                 string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "assets/images/brand-logo");
-                string oldfileImage = Path.Combine(uploadsDir, brand.Cate);
+                string oldfileImage = Path.Combine(uploadsDir, brand.Logo);
                 if (System.IO.File.Exists(oldfileImage))
                 {
                     System.IO.File.Delete(oldfileImage);

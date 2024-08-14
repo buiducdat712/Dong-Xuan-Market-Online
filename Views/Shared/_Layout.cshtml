@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="~/assets/css/plugins/plugins.min.css">
     <link rel="stylesheet" href="~/assets/css/style.min.css">
     <link rel="stylesheet" href="~/assets/css/styles.css">
+     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -93,29 +94,37 @@
                             <!-- End Header Logo -->
                             <!-- Start Header Main Menu -->
                             <div class="main-menu menu-color--black menu-hover-color--golden">
-                                <div class="search-bar">
-                                    <input type="text" placeholder="Dong Xuan Market Online - Mua ngay!" />
+                                <form asp-action="Search" asp-controller="Product" method="post">
+                                    <div class="search-bar">
+                                    <input type="text" placeholder="Tìm kiếm" name="searchTerm"/>
                                     <button type="submit">
                                       <i class="fa fa-search"></i>
                                     </button>
                                   </div>
+                                </form>
+                                
                             </div>
                             <!-- End Header Main Menu Start -->
                             <!-- Start Header Action Link -->
                             <ul class="header-action-link action-color--black action-hover-color--golden">
                                 <li>
                                     <a href="#offcanvas-wishlish" class="offcanvas-toggle">
-                                        <i class="icon-heart"></i>
+                                        <i class="fa-solid fa-heart"></i>
                                         <span class="item-count">3</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a asp-action="Cart" asp-controller="Cart" >
-                                        <i class="icon-bag"></i>
+                                        <i class="fa-solid fa-cart-shopping"></i>
                                         <span class="item-count">3</span>
                                     </a>
                                 </li>
-                                
+                                <li>
+                                    <a asp-action="Index" asp-controller="Order">
+                                       <i class="fa-solid fa-clock-rotate-left"></i>
+                                        <span class="item-count">3</span>
+                                    </a>
+                                </li>
                                 <li>
                                     <a href="#offcanvas-about" class="offacnvas offside-about offcanvas-toggle">
                                         <i class="icon-menu"></i>
@@ -788,9 +797,17 @@
 
     <!-- Main JS -->
     <script src="~/assets/js/main.js"></script>
-    @await RenderSectionAsync("Scripts", required:false)
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.all.min.js"></script>
+    <script>
+        $(function () {
+            var message = '@TempData["success"];
+            if (message != '')
+                Swal.fire(message);
+        })
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
 
-    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <script src="https://kit.fontawesome.com/f458758e60.js" crossorigin="anonymous"></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         const customerReviewLink = document.getElementById('customer-review-link');

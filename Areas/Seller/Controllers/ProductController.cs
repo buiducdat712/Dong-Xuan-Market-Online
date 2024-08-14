@@ -202,6 +202,7 @@ namespace Dong_Xuan_Market_Online.Areas.Seller.Controllers
             TempData["error"] = "Lỗi nhập dữ liệu, Vui lòng kiểm tra lại";
             return View(product);
         }
+
         [Route("Delete/{id:int}")]
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -16,6 +16,21 @@ public class ProductModel
     public string Description { get; set; }
 
     public decimal Price { get; set; }
+    [NotMapped]
+    public decimal DiscountedPrice
+    {
+        get
+        {
+            if (DiscountPercentage.HasValue && DiscountPercentage.Value > 0)
+            {
+                return Price - (Price * (decimal)DiscountPercentage.Value / 100);
+            }
+            return Price;
+        }
+    }
+
+    [Range(0, 100, ErrorMessage = "Tỷ lệ giảm giá phải nằm trong khoảng từ 0 đến 100")]
+    public double? DiscountPercentage { get; set; } // Nullable
     public string Slug { get; set; }
     public int BrandId { get; set; }
     public int CategoryId { get; set; }
@@ -30,6 +45,7 @@ public class ProductModel
     public bool Express { get; set; }
     public bool Save { get; set; }
     public bool Fast { get; set; }
+    public bool IsApproved { get; set; } = false;
     public string Cate { get; set; }
     public string SellerId { get; set; }
     public AppUserModel Seller { get; set; }
@@ -39,4 +55,5 @@ public class ProductModel
     [NotMapped]
     [FileExtension]
     public IFormFile ImageUpLoad { get; set; }
+
 }

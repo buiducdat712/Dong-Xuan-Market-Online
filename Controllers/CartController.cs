@@ -33,28 +33,40 @@ namespace Dong_Xuan_Market_Online.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Add(int Id)
+        public async Task<IActionResult> Add(int Id, int quantity = 1) // Đặt giá trị mặc định là 1
         {
             ProductModel product = await _dataContext.Products.FindAsync(Id);
 
+            // Kiểm tra xem sản phẩm có tồn tại không
+            if (product == null)
+            {
+                TempData["error"] = "Sản phẩm không tồn tại.";
+                return Redirect(Request.Headers["Referer"].ToString());
+            }
+
+            // Lấy giỏ hàng từ session hoặc khởi tạo mới nếu chưa có
             List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
 
+            // Tìm sản phẩm trong giỏ hàng
             CartItemModel cartItem = cart.FirstOrDefault(c => c.ProductId == Id);
 
+            // Nếu sản phẩm chưa có trong giỏ hàng, thêm mới; nếu đã có thì cập nhật số lượng
             if (cartItem == null)
             {
-                cart.Add(new CartItemModel(product));
+                cart.Add(new CartItemModel(product) { Quantity = quantity });
             }
             else
             {
-                cartItem.Quantity += 1;
+                cartItem.Quantity += quantity;
             }
 
+            // Lưu giỏ hàng vào session
             HttpContext.Session.SetJson("Cart", cart);
 
             TempData["success"] = "Thêm vào giỏ hàng thành công";
             return Redirect(Request.Headers["Referer"].ToString());
         }
+
 
         public IActionResult Remove(int Id)
         {

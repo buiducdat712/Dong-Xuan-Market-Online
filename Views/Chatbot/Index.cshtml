@@ -1,0 +1,23 @@
+﻿<div id="chatbox">
+    <div id="messages"></div>
+    <input type="text" id="userInput" placeholder="Type a message..." />
+    <button id="sendBtn">Send</button>
+</div>
+
+<script>
+    document.getElementById('sendBtn').addEventListener('click', function () {
+        var userInput = document.getElementById('userInput').value;
+        fetch('@Url.Action("SendMessage", "Chatbot")', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: userInput })
+        }).then(response => response.json())
+            .then(data => {
+                var messagesDiv = document.getElementById('messages');
+                messagesDiv.innerHTML += '<div class="user">' + userInput + '</div>';
+                messagesDiv.innerHTML += '<div class="bot">' + data.Response + '</div>';
+            });
+    });
+</script>

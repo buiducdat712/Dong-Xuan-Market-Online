@@ -1,6 +1,7 @@
 ﻿using Dong_Xuan_Market_Online.Models;
 using Dong_Xuan_Market_Online.Models.ViewModels;
 using Dong_Xuan_Market_Online.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Security.Claims;
@@ -11,10 +12,12 @@ namespace Dong_Xuan_Market_Online.Controllers
     public class CheckoutController : Controller
     {
         private readonly DataContext _dataContext;
+        private readonly UserManager<AppUserModel> _userManager; // Thêm UserManager
 
-        public CheckoutController(DataContext context)
+        public CheckoutController(DataContext context, UserManager<AppUserModel> userManager)
         {
             _dataContext = context;
+            _userManager = userManager; // Gán UserManager
         }
 
         public async Task<IActionResult> Checkout()
@@ -24,6 +27,8 @@ namespace Dong_Xuan_Market_Online.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
+
+            var userId = _userManager.GetUserId(User); // Lấy UserId từ UserManager
 
             // Lấy danh sách sản phẩm từ giỏ hàng
             List<CartItemModel> cartItems = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
@@ -43,6 +48,7 @@ namespace Dong_Xuan_Market_Online.Controllers
                 var sellerOrder = new OrderModel
                 {
                     OrderCode = orderCode,
+                    UserId = userId, // Lưu UserId
                     UserName = userEmail,
                     CreatedDate = DateTime.Now,
                     Status = 1, // Trạng thái mặc định

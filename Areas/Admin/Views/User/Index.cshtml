@@ -16,9 +16,7 @@
             <div class="alert alert-success">@TempData["success"]</div>
         }
         <a asp-action="Create" asp-controller="User" class="btn btn-primary mb-3">Thêm người dùng</a>
-        <table class="table table-bordered table-striped">
-
-            <thead class="thead-dark">
+        <table class="table table-bordered table-striped" id="myTable">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">Id</th>
@@ -31,8 +29,8 @@
                 </tr>
             </thead>
             <tbody>
-                    @foreach (var usersWithRoles in Model)
-                    {
+                @foreach (var usersWithRoles in Model)
+                {
                     <tr>
                         <td>@usersWithRoles.User.Id</td>
                         <td>@usersWithRoles.User.UserName</td>
@@ -45,10 +43,10 @@
                             <a asp-action="Delete" asp-controller="User" asp-route-Id="@usersWithRoles.User.Id" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa người dùng này?');">Xóa</a>
                         </td>
                     </tr>
-                    }
+                }
             </tbody>
         </table>
+
     </div>
 </div>
 
-<partial name="_paging" model="@pager" />

@@ -12,6 +12,8 @@ namespace Dong_Xuan_Market_Online.Models
         public decimal Price { get; set; }
         public int Quantity { get; set; }
 
+        [ForeignKey("OrderCode")]
+        public OrderModel Order { get; set; } // Navigation property
         // Thêm thuộc tính SellerId
         public string SellerId { get; set; }
 

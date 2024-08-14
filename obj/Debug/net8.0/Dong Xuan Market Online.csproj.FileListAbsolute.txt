@@ -286,3 +286,20 @@ D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Microsoft.Exten
 D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\obj\Debug\net8.0\scopedcss\Areas\Seller\Views\Shared\_Layout.cshtml.rz.scp.css
 D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\obj\Debug\net8.0\Dong Xuan Market Online.sourcelink.json
+D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Google.Api.CommonProtos.dll
+D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Google.Api.Gax.dll
+D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Google.Api.Gax.Grpc.dll
+D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Google.Apis.dll
+D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Google.Apis.Auth.dll
+D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Google.Apis.Core.dll
+D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Google.Apis.Dialogflow.v2.dll
+D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Google.Cloud.Dialogflow.V2.dll
+D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Google.Cloud.Location.dll
+D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Google.LongRunning.dll
+D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Google.Protobuf.dll
+D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Grpc.Auth.dll
+D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Grpc.Core.Api.dll
+D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Grpc.Net.Client.dll
+D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\Grpc.Net.Common.dll
+D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\System.Management.dll
+D:\DAT\TaskWebThuongMai\Dong Xuan Market Online\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Management.dll

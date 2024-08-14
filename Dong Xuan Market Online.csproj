@@ -1603,6 +1603,8 @@
 
   <ItemGroup>
     <PackageReference Include="Diacritics" Version="3.3.29" />
+    <PackageReference Include="Google.Apis.Dialogflow.v2" Version="1.68.0.3492" />
+    <PackageReference Include="Google.Cloud.Dialogflow.V2" Version="4.21.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7">
