@@ -24,14 +24,7 @@
                     <th scope="col">Trạng thái</th> <!-- Thêm cột trạng thái -->
                     <th scope="col">Thương hiệu</th>
                     <th scope="col">Phân loại</th>
-                    <th scope="col">Size</th>
-                    <th scope="col">Màu</th>
                     <th scope="col">Tồn kho</th>
-                    <th scope="col">Kích thước</th>
-                    <th scope="col">Trọng lượng</th>
-                    <th scope="col">Chất liệu</th>
-                    <th scope="col">Thông số KT</th>
-                    <th scope="col">Mô tả</th>
                     <th scope="col">Danh mục</th>
                     
                     <th scope="col">Hành động</th>
@@ -76,14 +69,7 @@
                         </td>
                         <td>@item.Brand.Name</td>
                         <td>@item.Category.Name</td>
-                        <td>@item.Size</td>
-                        <td>@item.Color</td>
-                        <td>@item.StockQuantity</td>
-                        <td>@item.Dimensions</td>
-                        <td>@item.Weight</td>
-                        <td>@item.Material</td>
-                        <td class="truncate-text">@Html.Raw(@item.Specifications.Substring(0, Math.Min(20, item.Specifications.Length)))</td>
-                        <td class="truncate-text">@Html.Raw(@item.Description.Substring(0, Math.Min(20, item.Description.Length)))</td>
+                        <td>@item.StockQuantity</td>                      
                         <td>@item.Cate</td>
                         
                         <td>                           

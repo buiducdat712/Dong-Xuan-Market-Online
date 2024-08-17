@@ -1,0 +1,181 @@
+﻿@model Dong_Xuan_Market_Online.Models.ViewModels.ProductEditViewModel
+@{
+    ViewData["title"] = "Chi tiết sản phẩm";
+}
+<div class="container-fluid">
+    <h3 class="page-title">Chi tiết sản phẩm</h3>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Thông tin sản phẩm</h3>
+                        </div>
+                        <div class="card-header p-2">
+                            <ul class="nav nav-pills">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#activity" data-toggle="tab">Thông tin chung</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#settings" data-toggle="tab">Mô tả chi tiết</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#timeline" data-toggle="tab">Hình ảnh</a>
+                                </li>
+                            </ul>
+                        </div><!-- /.card-header -->
+
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <!-- Thông tin chung -->
+                                <div class="active tab-pane" id="activity">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <table class="table table-bordered">
+                                                <tbody>
+                                                    @foreach (var info in new[]
+                                                    {
+                                                    new { Label = "Tên sản phẩm:", Value = Model.Product.Name },
+                                                    new { Label = "Giá:", Value = $"{Model.Product.Price.ToString("N0")} VNĐ" },
+                                                    new { Label = "Giảm giá (%):", Value = $"{Model.Product.DiscountPercentage} %" },
+                                                    new { Label = "Phân loại:", Value = Model.Product.Category.Name },
+                                                    new { Label = "Thương hiệu:", Value = Model.Product.Brand.Name },
+                                                    new { Label = "Danh mục:", Value = Model.Product.Cate }
+                                                    })
+                                                    {
+                                                        <tr>
+                                                            <td><strong>@info.Label</strong></td>
+                                                            <td>@info.Value</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <table class="table table-bordered">
+                                                <tbody>
+                                                    @foreach (var info in new[] {
+                                                    new { Label = "Size:", Value = Model.Product.Size?.ToString() ?? "N/A" },
+                                                    new { Label = "Màu:", Value = Model.Product.Color?.ToString() ?? "N/A" },
+                                                    new { Label = "Kích thước:", Value = Model.Product.Dimensions?.ToString() ?? "N/A" },
+                                                    new { Label = "Trọng lượng:", Value = (Model.Product.Weight.HasValue ? $"{Model.Product.Weight.Value} Kg" : "N/A") },
+                                                    new { Label = "Chất liệu:", Value = Model.Product.Material?.ToString() ?? "N/A" },
+                                                    new { Label = "Tồn kho:", Value = Model.Product.StockQuantity.ToString() }
+                                                    })
+                                                    {
+                                                        <tr>
+                                                            <td><strong>@info.Label</strong></td>
+                                                            <td>@info.Value</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <table class="table table-bordered">
+                                                <tbody>
+                                                    @foreach (var info in new[] {
+                                                    new { Label = "Hỏa tốc:", Value = Model.Product.Express ? "Có" : "Không" },
+                                                    new { Label = "Tiết kiệm:", Value = Model.Product.Save ? "Có" : "Không" },
+                                                    new { Label = "Nhanh:", Value = Model.Product.Fast ? "Có" : "Không" }
+                                                    })
+                                                    {
+                                                        <tr>
+                                                            <td><strong>@info.Label</strong></td>
+                                                            <td>@info.Value</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Mô tả chi tiết -->
+                                <div class="tab-pane" id="settings">
+                                    <div class="form-group">
+                                        <label for="Description" class="h4">Mô tả:</label>
+                                        <div class="content-description" style="max-height: 400px; overflow-y: auto; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                            @Html.Raw(Model.Product.Description)
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="Specifications" class="h4">Thông số KT:</label>
+                                        <div class="content-specifications" style="max-height: 400px; overflow-y: auto; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                            @Html.Raw(Model.Product.Specifications)
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- Hình ảnh sản phẩm -->
+                                <div class="tab-pane" id="timeline">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="imageTable">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">Stt</th>
+                                                    <th class="text-center">Ảnh</th>
+                                                    <th class="text-center">Ảnh đại diện</th>
+                                                 
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @for (int i = 0; i < Model.ProductImages.Count; i++)
+                                                {
+                                                    <tr data-index="@i">
+                                                        <td class="text-center">@Html.Raw(i + 1)</td>
+                                                        <td class="text-center">
+                                                            <img src="~/assets/images/product/@Model.ProductImages[i].ImageUrl" class="img-thumbnail" width="100" />
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <input type="radio" name="DefaultImageIndex" value="@i" @(Model.ProductImages[i].IsDefault ? "checked" : "") disabled />
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <!-- Giả sử bạn không muốn xóa hình ảnh trong chế độ xem chỉ đọc -->
+                                                            <!-- Có thể bỏ qua nút xóa hoặc chỉ hiển thị thông tin -->
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Footer -->
+                        <div class="card-footer">
+                            <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+                        </div>
+                    </div>
+
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+
+    <script>
+        CKEDITOR.replace('Description');
+        CKEDITOR.replace('Specifications');
+    </script>
+}

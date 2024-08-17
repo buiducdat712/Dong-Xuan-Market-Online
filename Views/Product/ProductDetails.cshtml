@@ -1,5 +1,10 @@
-﻿@{
-    ViewData["Title"] = "Details Product Page";
+﻿@model ProductDetailsViewModel
+@using System.Security.Claims
+
+@{
+    ViewData["Title"] = "Product Details";
+    var sortedImages = Model.SortedImages;
+    var ratings = Model.Ratings;
     string actionName = ViewBag.ActionName;
 }
 
@@ -14,7 +19,7 @@
                         <nav aria-label="breadcrumb">
                             <ul>
                                 <li><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
-                                <li><a asp-controller="Product" asp-action="@actionName">@Model.Category.Name</a></li>
+                                <li><a asp-controller="Product" asp-action="@actionName">@Model.Product.Category.Name</a></li>
                                 <li class="active" aria-current="page">Chi tiết sản phẩm</li>
                             </ul>
                         </nav>
@@ -24,8 +29,6 @@
         </div>
     </div>
 </div>
-<!-- ...:::: End Breadcrumb Section:::... -->
-<!-- Start Product Details Section -->
 <div class="product-details-section">
     <div class="container">
         <div class="row">
@@ -34,42 +37,24 @@
                     <!-- Start Large Image -->
                     <div class="product-large-image product-large-image-vartical swiper-container ml-5">
                         <div class="swiper-wrapper">
-                            <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                <img src="~/assets/images/product/@Model.Image" alt="">
-                            </div>
-                            <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                <img src="~/assets/images/product/default/home-1/default-2.jpg" alt="">
-                            </div>
-                            <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                <img src="~/assets/images/product/default/home-1/default-3.jpg" alt="">
-                            </div>
-                            <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                <img src="~/assets/images/product/default/home-1/default-4.jpg" alt="">
-                            </div>
-                            <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                <img src="~/assets/images/product/default/home-1/default-5.jpg" alt="">
-                            </div>
-                            <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                <img src="~/assets/images/product/default/home-1/default-6.jpg" alt="">
-                            </div>
+                            @foreach (var image in sortedImages)
+                            {
+                                <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
+                                    <img src="/assets/images/product/@image.ImageUrl" alt="Product Image">
+                                </div>
+                            }
                         </div>
                     </div>
                     <!-- End Large Image -->
                     <!-- Start Thumbnail Image -->
                     <div class="product-image-thumb product-image-thumb-vartical swiper-container pos-relative">
                         <div class="swiper-wrapper">
-                            <div class="product-image-thumb-single swiper-slide">
-                                <img class="img-fluid" src="~/assets/images/product/@Model.Image" alt="">
-                            </div>
-                            <div class="product-image-thumb-single swiper-slide">
-                                <img class="img-fluid" src="~/assets/images/product/default/home-1/default-2.jpg" alt="">
-                            </div>
-                            <div class="product-image-thumb-single swiper-slide">
-                                <img class="img-fluid" src="~/assets/images/product/default/home-1/default-3.jpg" alt="">
-                            </div>
-                            <div class="product-image-thumb-single swiper-slide">
-                                <img class="img-fluid" src="~/assets/images/product/default/home-1/default-4.jpg" alt="">
-                            </div>
+                            @foreach (var image in sortedImages)
+                            {
+                                <div class="product-image-thumb-single swiper-slide">
+                                    <img class="img-fluid" src="/assets/images/product/@image.ImageUrl" alt="Product Thumbnail">
+                                </div>
+                            }
                         </div>
                     </div>
                     <!-- End Thumbnail Image -->
@@ -79,27 +64,32 @@
                 <div class="product-details-content-area product-details--golden" data-aos="fade-up" data-aos-delay="200">
                     <!-- Start  Product Details Text Area-->
                     <div class="product-details-text">
-                        <h4 class="title">@Model.Name</h4>
+                        <h4 class="title">@Model.Product.Name</h4>
+                        <h5> Người bán: @Model.Product.Seller.UserName (@Model.Product.Seller.Email)</h5>
                         <div class="d-flex align-items-center">
                             <ul class="review-star">
-                                <li class="fill"><i class="ion-android-star"></i></li>
-                                <li class="fill"><i class="ion-android-star"></i></li>
-                                <li class="fill"><i class="ion-android-star"></i></li>
-                                <li class="fill"><i class="ion-android-star"></i></li>
-                                <li class="empty"><i class="ion-android-star"></i></li>
+                                @for (int i = 0; i < Model.FullStarCount; i++)
+                                {
+                                    <li class="fill"><i class="ion-android-star"></i></li>
+                                }
+                                @for (int i = 0; i < Model.EmptyStarCount; i++)
+                                {
+                                    <li class="empty"><i class="ion-android-star"></i></li>
+                                }
                             </ul>
-                            <a href="#" class="customer-review ml-2">(customer review )</a>
+                            <a href="#" class="customer-review ml-2">(@Model.AverageRating.ToString("0.0") sao)</a>
                         </div>
+
                         <div class="price">
-                            @if (Model.Price > Model.DiscountedPrice)
+                            @if (Model.Product.Price > Model.Product.DiscountedPrice)
                             {
-                                <span class="old-price" style="text-decoration: line-through;">@Model.Price.ToString("N0") VNĐ</span>
+                                <span class="old-price" style="text-decoration: line-through;">@Model.Product.Price.ToString("N0") VNĐ</span>
                                 
-                                <span class="new-price">@Model.DiscountedPrice.ToString("N0") VNĐ</span>
+                                <span class="new-price">@Model.Product.DiscountedPrice.ToString("N0") VNĐ</span>
                             }
                             else
                             {
-                                <span>@Model.Price.ToString("N0") VNĐ</span>
+                                <span>@Model.Product.Price.ToString("N0") VNĐ</span>
                             }
                         </div>
                     </div>
@@ -109,23 +99,23 @@
                         <h4 class="title">Tùy Chọn</h4>
 
                         <!-- Product Variable Single Item -->
-                        @if (Model.StockQuantity > 0)
+                        @if (Model.Product.StockQuantity > 0)
                         {
                             <div class="variable-single-item">
                                 <div class="product-stock">
                                     <span class="product-stock-in">
                                         <i class="ion-checkmark-circled"></i>
                                     </span>
-                                    @Model.StockQuantity IN STOCK
+                                    @Model.Product.StockQuantity IN STOCK
                                 </div>
                             </div>
                         }
 
                         <!-- Product Variable Single Item -->
-                        @if (!string.IsNullOrEmpty(Model.Color))
+                        @if (!string.IsNullOrEmpty(Model.Product.Color))
                         {
                             <div class="variable-single-item">
-                                <span>Màu (@Model.Color)</span>
+                                <span>Màu (@Model.Product.Color)</span>
                                 <div class="product-variable-color">
                                     <label for="product-color-red">
                                         <input name="product-color" id="product-color-red" class="color-select" type="radio" checked>
@@ -136,10 +126,10 @@
                             </div>
                         }
 
-                        @if (!string.IsNullOrEmpty(Model.Size))
+                        @if (!string.IsNullOrEmpty(Model.Product.Size))
                         {
                             <div class="variable-single-item">
-                                <span>Size: (@Model.Size)</span>
+                                <span>Size: (@Model.Product.Size)</span>
                                 <select class="product-variable-size">
                                     <option selected value="1"> Chọn size</option>
                                     <option value="2">s</option>
@@ -151,17 +141,17 @@
                             </div>
                         }
 
-                        @if (!string.IsNullOrEmpty(Model.Material))
+                        @if (!string.IsNullOrEmpty(Model.Product.Material))
                         {
                             <div class="variable-single-item">
-                                <span>Chất liệu: @Model.Material</span>
+                                <span>Chất liệu: @Model.Product.Material</span>
                             </div>
                         }
 
-                        @if (!string.IsNullOrEmpty(Model.Dimensions))
+                        @if (!string.IsNullOrEmpty(Model.Product.Dimensions))
                         {
                             <div class="variable-single-item">
-                                <span>Kích thước: @Model.Dimensions</span>
+                                <span>Kích thước: @Model.Product.Dimensions</span>
                             </div>
                         }
 
@@ -176,7 +166,7 @@
                                 </div>
 
                                 <div class="product-add-to-cart-btn ms-3">
-                                    <input type="hidden" name="Id" value="@Model.Id" />
+                                    <input type="hidden" name="Id" value="@Model.Product.Id" />
                                     <button type="submit" class="btn btn-success btn-lg">+ Thêm vào giỏ hàng</button>
                                 </div>
                             </div>
@@ -195,8 +185,8 @@
                     <div class="product-details-catagory mb-2">
                         <span class="title">Danh mục:</span>
                         <ul>
-                            <li><a href="#">@Model.Category.Name</a></li>
-                            <li><a href="#">@Model.Brand.Name</a></li>
+                            <li><a href="#">@Model.Product.Category.Name</a></li>
+                            <li><a href="#">@Model.Product.Brand.Name</a></li>
 
                         </ul>
                     </div>
@@ -206,17 +196,17 @@
                             @{
                                 bool hasShippingOptions = false;
                             }
-                            @if (Model.Express)
+                            @if (Model.Product.Express)
                             {
                                 <li><a href="#">Hỏa tốc</a></li>
                                 hasShippingOptions = true;
                             }
-                            @if (Model.Save)
+                            @if (Model.Product.Save)
                             {
                                 <li><a href="#">Tiết kiệm</a></li>
                                 hasShippingOptions = true;
                             }
-                            @if (Model.Fast)
+                            @if (Model.Product.Fast)
                             {
                                 <li><a href="#">Nhanh</a></li>
                                 hasShippingOptions = true;
@@ -269,7 +259,7 @@
                         </li>
                         <li>
                             <a class="nav-link" data-bs-toggle="tab" href="#review">
-                                Đánh giá (1)
+                                Đánh giá (@Model.Ratings.Count())
                             </a>
                         </li>
                     </ul> <!-- End Product Details Tab Button -->
@@ -279,8 +269,9 @@
                             <!-- Start Product Details Tab Content Singel -->
                             <div class="tab-pane active show" id="description">
                                 <div class="single-tab-content-item">
-                                    @Html.Raw(@Model.Description)
-                                    @Html.Raw(@Model.Specifications)
+                                    @Html.Raw(@Model.Product.Description)
+                                    <h4>Thông số kỹ thuật</h4>
+                                    @Html.Raw(@Model.Product.Specifications)
                                 </div>
                             </div> <!-- End Product Details Tab Content Singel -->
                             <!-- Start Product Details Tab Content Singel -->
@@ -309,123 +300,81 @@
                                 <div class="single-tab-content-item">
                                     <!-- Start - Review Comment -->
                                     <ul class="comment">
-                                        <!-- Start - Review Comment list-->
-                                        <li class="comment-list">
-                                            <div class="comment-wrapper">
-                                                <div class="comment-img">
-                                                    <img src="~/assets/images/user/image-1.png" alt="">
-                                                </div>
-                                                <div class="comment-content">
-                                                    <div class="comment-content-top">
-                                                        <div class="comment-content-left">
-                                                            <h6 class="comment-name">Kaedyn Fraser</h6>
-                                                            <ul class="review-star">
-                                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                                <li class="empty"><i class="ion-android-star"></i></li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="comment-content-right">
-                                                            <a href="#"><i class="fa fa-reply"></i>Reply</a>
-                                                        </div>
+                                        @foreach (var rating in Model.Ratings ?? new List<RatingModel>())
+                                        {
+                                            <li class="comment-list">
+                                                <div class="comment-wrapper">
+                                                    <div class="comment-img">
+                                                        <img src="~/assets/images/user/image-3.png" alt="User Image">
                                                     </div>
-
-                                                    <div class="para-content">
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora inventore dolorem a unde modi iste odio amet, fugit fuga aliquam, voluptatem maiores animi dolor nulla magnam ea! Dignissimos aspernatur cumque nam quod sint provident modi alias culpa, inventore deserunt accusantium amet earum soluta consequatur quasi eum eius laboriosam, maiores praesentium explicabo enim dolores quaerat! Voluptas ad ullam quia odio sint sunt. Ipsam officia, saepe repellat. </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Start - Review Comment Reply-->
-                                            <ul class="comment-reply">
-                                                <li class="comment-reply-list">
-                                                    <div class="comment-wrapper">
-                                                        <div class="comment-img">
-                                                            <img src="~/assets/images/user/image-2.png" alt="">
-                                                        </div>
-                                                        <div class="comment-content">
-                                                            <div class="comment-content-top">
-                                                                <div class="comment-content-left">
-                                                                    <h6 class="comment-name">Oaklee Odom</h6>
-                                                                </div>
-                                                                <div class="comment-content-right">
-                                                                    <a href="#"><i class="fa fa-reply"></i>Reply</a>
-                                                                </div>
+                                                    <div class="comment-content">
+                                                        <div class="comment-content-top">
+                                                            <div class="comment-content-left">
+                                                                
+                                                                <h6 class="comment-name">@rating.User?.UserName
+                                                                   
+                                                                </h6>
+                                                                <ul class="review-star">
+                                                                    @for (int i = 0; i < rating.Rating; i++)
+                                                                    {
+                                                                        <li class="fill"><i class="ion-android-star"></i></li>
+                                                                    }
+                                                                    @for (int i = rating.Rating; i < 5; i++)
+                                                                    {
+                                                                        <li class="empty"><i class="ion-android-star"></i></li>
+                                                                    }
+                                                                </ul>
                                                             </div>
-
-                                                            <div class="para-content">
-                                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora inventore dolorem a unde modi iste odio amet, fugit fuga aliquam, voluptatem maiores animi dolor nulla magnam ea! Dignissimos aspernatur cumque nam quod sint provident modi alias culpa, inventore deserunt accusantium amet earum soluta consequatur quasi eum eius laboriosam, maiores praesentium explicabo enim dolores quaerat! Voluptas ad ullam quia odio sint sunt. Ipsam officia, saepe repellat. </p>
+                                                            <div class="comment-content-right">
+                                                                <a href="#"><i class="fa fa-reply"></i>Reply</a>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </li>
-                                            </ul> <!-- End - Review Comment Reply-->
-                                        </li> <!-- End - Review Comment list-->
-                                        <!-- Start - Review Comment list-->
-                                        <li class="comment-list">
-                                            <div class="comment-wrapper">
-                                                <div class="comment-img">
-                                                    <img src="~/assets/images/user/image-3.png" alt="">
-                                                </div>
-                                                <div class="comment-content">
-                                                    <div class="comment-content-top">
-                                                        <div class="comment-content-left">
-                                                            <h6 class="comment-name">Jaydin Jones</h6>
-                                                            <ul class="review-star">
-                                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                                <li class="empty"><i class="ion-android-star"></i></li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="comment-content-right">
-                                                            <a href="#"><i class="fa fa-reply"></i>Reply</a>
+                                                        <div class="para-content">
+                                                            <p>@rating.Comment</p>
                                                         </div>
                                                     </div>
-
-                                                    <div class="para-content">
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora inventore dolorem a unde modi iste odio amet, fugit fuga aliquam, voluptatem maiores animi dolor nulla magnam ea! Dignissimos aspernatur cumque nam quod sint provident modi alias culpa, inventore deserunt accusantium amet earum soluta consequatur quasi eum eius laboriosam, maiores praesentium explicabo enim dolores quaerat! Voluptas ad ullam quia odio sint sunt. Ipsam officia, saepe repellat. </p>
-                                                    </div>
                                                 </div>
-                                            </div>
-                                        </li> <!-- End - Review Comment list-->
+                                            </li>
+                                        }
                                     </ul> <!-- End - Review Comment -->
+                                    <!-- Form thêm đánh giá mới -->
+                                    <!-- Form thêm đánh giá mới -->
                                     <div class="review-form">
                                         <div class="review-form-text-top">
                                             <h5>ADD A REVIEW</h5>
                                             <p>Your email address will not be published. Required fields are marked *</p>
                                         </div>
 
-                                        <form action="#" method="post">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="default-form-box">
-                                                        <label for="comment-name">Your name <span>*</span></label>
-                                                        <input id="comment-name" type="text" placeholder="Enter your name" required>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="default-form-box">
-                                                        <label for="comment-email">Your Email <span>*</span></label>
-                                                        <input id="comment-email" type="email" placeholder="Enter your email" required>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12">
-                                                    <div class="default-form-box">
-                                                        <label for="comment-review-text">Your review <span>*</span></label>
-                                                        <textarea id="comment-review-text" placeholder="Write a review" required></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12">
-                                                    <button class="btn btn-md btn-black-default-hover" type="submit">Submit</button>
-                                                </div>
+                                        <form asp-action="SubmitReview" asp-route-productId="@Model.Product.Id" method="post">
+                                            <input type="hidden" asp-for="NewRating.ProductId" value="@Model.Product.Id" />
+                                            <input type="hidden" asp-for="NewRating.UserId" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
+
+
+                                            <div class="form-group">
+                                                <label asp-for="NewRating.Rating">Đánh giá</label>
+                                                <select asp-for="NewRating.Rating" class="form-control">
+                                                    <option value="">Chọn đánh giá</option>
+                                                    <option value="1">1 sao</option>
+                                                    <option value="2">2 sao</option>
+                                                    <option value="3">3 sao</option>
+                                                    <option value="4">4 sao</option>
+                                                    <option value="5">5 sao</option>
+                                                </select>
+                                                <span asp-validation-for="NewRating.Rating" class="text-danger"></span>
                                             </div>
+
+                                            <div class="form-group">
+                                                <label asp-for="NewRating.Comment">Bình luận</label>
+                                                <textarea asp-for="NewRating.Comment" class="form-control" rows="3"></textarea>
+                                                <span asp-validation-for="NewRating.Comment" class="text-danger"></span>
+                                            </div>
+
+                                            <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
                                         </form>
                                     </div>
                                 </div>
-                            </div> <!-- End Product Details Tab Content Singel -->
+                            </div>
+                            <!-- End Product Details Tab Content Singel -->
                         </div>
                     </div> <!-- End Product Details Tab Content -->
 
@@ -461,45 +410,52 @@
                         <div class="swiper-container product-default-slider-4grid-1row">
                             <!-- Additional required wrapper -->
                             <div class="swiper-wrapper">
-                                @foreach (var relatedProduct in ViewBag.RelatedProducts as IEnumerable<ProductModel>)
+                                @if (ViewBag.RelatedProducts != null)
                                 {
+                                    @foreach (var relatedProduct in ViewBag.RelatedProducts as IEnumerable<ProductModel>)
+                                    {
 
-                                    <!-- Start Product Default Single Item -->
-                                    <div class="product-default-single-item product-color--golden swiper-slide">
-                                        <div class="image-box">
-                                            <a asp-action="DetailsDevice" asp-controller="Product" asp-route-Id="@relatedProduct.Id" class="image-link">
-                                                <img src="~/assets/images/product/@relatedProduct.Image" alt="">
-                                                <img src="~/assets/images/product/@relatedProduct.Image" alt="">
-                                            </a>
-                                            <div class="action-link">
-                                                <div class="action-link-left">
-                                                    <a asp-action="Add" asp-controller="Cart" asp-route-Id="@relatedProduct.Id">Thêm vào giỏ</a>
+                                        <!-- Start Product Default Single Item -->
+                                        <div class="product-default-single-item product-color--golden swiper-slide">
+                                            <div class="image-box">
+                                                <a asp-action="DetailsDevice" asp-controller="Product" asp-route-Id="@relatedProduct.Id" class="image-link">
+                                                    <img src="~/assets/images/product/@relatedProduct.Image" alt="">
+                                                    <img src="~/assets/images/product/@relatedProduct.Image" alt="">
+                                                </a>
+                                                <div class="action-link">
+                                                    <div class="action-link-left">
+                                                        <a asp-action="Add" asp-controller="Cart" asp-route-Id="@relatedProduct.Id">Thêm vào giỏ</a>
+                                                    </div>
+                                                    <div class="action-link-right">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview"><i class="icon-magnifier"></i></a>
+                                                        <a href="wishlist.html"><i class="icon-heart"></i></a>
+                                                        <a href="compare.html"><i class="icon-shuffle"></i></a>
+                                                    </div>
                                                 </div>
-                                                <div class="action-link-right">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview"><i class="icon-magnifier"></i></a>
-                                                    <a href="wishlist.html"><i class="icon-heart"></i></a>
-                                                    <a href="compare.html"><i class="icon-shuffle"></i></a>
+                                            </div>
+                                            <div class="content">
+                                                <div class="content-left">
+                                                    <h6 class="title"><a asp-action="DetailsFashion" asp-route-id="@relatedProduct.Id">@relatedProduct.Name</a></h6>
+                                                    <ul class="review-star">
+                                                        <li class="fill"><i class="ion-android-star"></i></li>
+                                                        <li class="fill"><i class="ion-android-star"></i></li>
+                                                        <li class="fill"><i class="ion-android-star"></i></li>
+                                                        <li class="fill"><i class="ion-android-star"></i></li>
+                                                        <li class="empty"><i class="ion-android-star"></i></li>
+                                                    </ul>
                                                 </div>
+                                                <div class="content-right">
+                                                    <span class="price">@relatedProduct.Price.ToString("N0") VNĐ</span>
+                                                </div>
+
                                             </div>
                                         </div>
-                                        <div class="content">
-                                            <div class="content-left">
-                                                <h6 class="title"><a asp-action="DetailsFashion" asp-route-id="@relatedProduct.Id">@relatedProduct.Name</a></h6>
-                                                <ul class="review-star">
-                                                    <li class="fill"><i class="ion-android-star"></i></li>
-                                                    <li class="fill"><i class="ion-android-star"></i></li>
-                                                    <li class="fill"><i class="ion-android-star"></i></li>
-                                                    <li class="fill"><i class="ion-android-star"></i></li>
-                                                    <li class="empty"><i class="ion-android-star"></i></li>
-                                                </ul>
-                                            </div>
-                                            <div class="content-right">
-                                                <span class="price">@relatedProduct.Price.ToString("N0") VNĐ</span>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <!-- End Product Default Single Item -->
+                                        <!-- End Product Default Single Item -->
+                                    }
+                                }
+                                else
+                                {
+                                    <p>No related products found.</p>
                                 }
                             </div>
                         </div>

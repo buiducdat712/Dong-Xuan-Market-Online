@@ -10,13 +10,10 @@ namespace Dong_Xuan_Market_Online.Models
 
         [Required]
         public int ProductId { get; set; }
-
         [Required]
         public string ImageUrl { get; set; }
-
-        [ForeignKey("ProductId")]
+        [Required]
+        public bool IsDefault { get; set; } = false;
         public ProductModel Product { get; set; }
     }
-
-
 }

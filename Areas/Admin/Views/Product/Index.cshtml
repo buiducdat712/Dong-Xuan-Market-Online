@@ -80,7 +80,7 @@
                         <td>@item.Cate</td>
                         
                         <td>
-                            <a asp-action="Edit" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
+                            <a asp-action="Details" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-sm btn-warning">Xem</a>
                             <a asp-action="Delete" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm @item.Name?');">Xóa</a>
                         </td>
                     </tr>

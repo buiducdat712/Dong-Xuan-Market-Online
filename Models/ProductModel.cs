@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Identity;
 
 public class ProductModel
 {
+    public ProductModel()
+    {
+        this.ProductImages = new HashSet<ProductImages>();
+        
+    }
     [Key]
     public int Id { get; set; }
 
@@ -38,7 +43,7 @@ public class ProductModel
     public string Color { get; set; }
     public int StockQuantity { get; set; }
     public string Dimensions { get; set; } // Ví dụ: "30x30x30 cm"
-    public double Weight { get; set; } // Ví dụ: 2.5 kg
+    public double? Weight { get; set; } // Ví dụ: 2.5 kg
     public string Material { get; set; } // Ví dụ: "Plastic", "Metal", etc.
     public string Specifications { get; set; }
     public string Image { get; set; } = "noimage.jpg";
@@ -52,8 +57,10 @@ public class ProductModel
     public CategoryModel Category { get; set; }
     public BrandModel Brand { get; set; }
 
+    public ICollection<ProductImages> ProductImages { get; set; }
+
     [NotMapped]
     [FileExtension]
-    public IFormFile ImageUpLoad { get; set; }
-
+    public List<IFormFile> ImageUpLoads { get; set; }
+    public ICollection<RatingModel> Ratings { get; set; }
 }

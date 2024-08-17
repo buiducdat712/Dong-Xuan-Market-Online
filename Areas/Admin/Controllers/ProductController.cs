@@ -1,6 +1,7 @@
 ﻿    using Diacritics.Extensions;
     using Dong_Xuan_Market_Online.Models;
-    using Dong_Xuan_Market_Online.Repository;
+using Dong_Xuan_Market_Online.Models.ViewModels;
+using Dong_Xuan_Market_Online.Repository;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -69,7 +70,7 @@
             return View();
         }
 
-        [Route("Create")]
+        /*[Route("Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductModel product)
@@ -108,7 +109,7 @@
 
             TempData["error"] = "Lỗi nhập dữ liệu, Vui lòng kiểm tra lại";
             return View(product);
-        }
+        }*/
 
         [Route("Edit/{id:int}")]
         public async Task<IActionResult> Edit(int id)
@@ -124,70 +125,33 @@
 
             return View(product);
         }
-
-        [Route("Edit/{id:int}")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ProductModel product)
+        [HttpGet]
+        [Route("Details/{id:int}")]
+        public IActionResult Details(int id)
         {
-            ViewBag.Categories = new SelectList(_dataContext.Categories, "Id", "Name", product.CategoryId);
-            ViewBag.Brands = new SelectList(_dataContext.Brands, "Id", "Name", product.BrandId);
+            var product = _dataContext.Products
+                .Include(p => p.Category)
+                .Include(p => p.Brand)
+                .Include(p => p.ProductImages) // Đảm bảo rằng các hình ảnh được tải cùng với sản phẩm
+                .FirstOrDefault(p => p.Id == id);
 
-            if (ModelState.IsValid)
+            if (product == null)
             {
-                product.Slug = GenerateSlug(product.Name);
-
-                var existingProduct = await _dataContext.Products
-                                                        .AsNoTracking()
-                                                        .FirstOrDefaultAsync(p => p.Slug == product.Slug && p.Id != id);
-                if (existingProduct != null)
-                {
-                    ModelState.AddModelError("", "Sản phẩm đã có trong DataBase");
-                    return View(product);
-                }
-
-                var oldProduct = await _dataContext.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
-                if (oldProduct == null)
-                {
-                    return NotFound();
-                }
-
-                if (product.ImageUpLoad != null)
-                {
-                    if (!string.Equals(oldProduct.Image, "noimage.jpg"))
-                    {
-                        string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "assets/images/product");
-                        string oldfileImage = Path.Combine(uploadsDir, oldProduct.Image);
-                        if (System.IO.File.Exists(oldfileImage))
-                        {
-                            System.IO.File.Delete(oldfileImage);
-                        }
-                    }
-
-                    string newUploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "assets/images/product");
-                    string imageName = Guid.NewGuid().ToString() + "_" + product.ImageUpLoad.FileName;
-                    string filePath = Path.Combine(newUploadsDir, imageName);
-
-                    using (FileStream fs = new FileStream(filePath, FileMode.Create))
-                    {
-                        await product.ImageUpLoad.CopyToAsync(fs);
-                    }
-                    product.Image = imageName;
-                }
-                else
-                {
-                    product.Image = oldProduct.Image;
-                }
-
-                _dataContext.Update(product);
-                await _dataContext.SaveChangesAsync();
-                TempData["success"] = "Cập nhật sản phẩm thành công";
-                return RedirectToAction("Index");
+                return NotFound();
             }
 
-            TempData["error"] = "Lỗi nhập dữ liệu, Vui lòng kiểm tra lại";
-            return View(product);
+            var viewModel = new ProductEditViewModel
+            {
+                Product = product,
+                ProductImages = product.ProductImages != null ? product.ProductImages.ToList() : new List<ProductImages>()
+            };
+
+            return View(viewModel);
         }
+
+
+
+
         [Route("Delete/{id:int}")]
             public async Task<IActionResult> Delete(int id)
             {
