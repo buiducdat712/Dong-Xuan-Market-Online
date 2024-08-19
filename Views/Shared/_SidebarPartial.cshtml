@@ -1,16 +1,18 @@
 ﻿@model IEnumerable<ProductModel>
+
 <div class="menu">
     <h3>DANH MỤC</h3>
     <hr class="highlight">
     <ul class="menu-list">
-        @foreach (var product in Model.DistinctBy(p => p.Cate))  // Giả sử có thư viện để DistinctBy
+        @foreach (var categorySubName in Model.Where(p => p.CategorySub != null).Select(p => p.CategorySub.Name).Distinct())
         {
             <li>
-                <a asp-action="IndexWithCate" asp-controller="Product" asp-route-cate="@product.Cate">@product.Cate</a>
+                <a asp-action="IndexWithCate" asp-controller="Product" asp-route-cate="@categorySubName">@categorySubName</a>
             </li>
         }
     </ul>
 </div>
+
 
 <!-- Start Single Sidebar Widget -->
 <div class="sidebar-single-widget">

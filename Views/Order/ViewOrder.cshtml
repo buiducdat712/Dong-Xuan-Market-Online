@@ -41,7 +41,7 @@
                         <td>
                             @if (!string.IsNullOrEmpty(item.Product.Image))
                             {
-                                var detailUrl = Url.Action("DetailsDevice", "Product", new { cate = item.Product.Cate, id = item.Product.Id });
+                                var detailUrl = Url.Action("DetailsDevice", "Product", new { cate = item.Product.CategorySub.Name, id = item.Product.Id });
                                 <a href="@detailUrl">
                                     <img src="~/assets/images/product/@item.Product.Image" alt="Product Image" style="width: 100px; height: auto;" />
                                 </a>

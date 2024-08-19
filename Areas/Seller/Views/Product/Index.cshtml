@@ -25,7 +25,7 @@
                     <th scope="col">Thương hiệu</th>
                     <th scope="col">Phân loại</th>
                     <th scope="col">Tồn kho</th>
-                    <th scope="col">Danh mục</th>
+                    <th scope="col">Danh mục con</th>
                     
                     <th scope="col">Hành động</th>
                 </tr>
@@ -69,8 +69,18 @@
                         </td>
                         <td>@item.Brand.Name</td>
                         <td>@item.Category.Name</td>
-                        <td>@item.StockQuantity</td>                      
-                        <td>@item.Cate</td>
+                        <td>@item.StockQuantity</td>
+                        <td>
+                            @if (item.CategorySub != null)
+                            {
+                                @item.CategorySub.Name
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+
                         
                         <td>                           
                             <a asp-action="Edit" asp-controller="Product" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>

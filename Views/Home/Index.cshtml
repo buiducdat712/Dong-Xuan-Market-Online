@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<Dong_Xuan_Market_Online.Models.ViewModels.ProductDetailsViewModel>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -77,7 +79,7 @@
                 <div class="col-12">
                     <div class="section-content-gap">
                         <div class="secton-content">
-                            <h3 class="section-title">Falash Sale</h3>
+                            <h3 class="section-title">Khuyến mãi</h3>
                         </div>
                     </div>
                 </div>
@@ -95,546 +97,65 @@
                             <!-- Additional required wrapper -->
                             <div class="swiper-wrapper">
                                 <!-- Start Product Default Single Item -->
-                                <div class="product-default-single-item product-color--golden swiper-slide">
-                                    <div class="image-box">
-                                        <a asp-controller="Home" asp-action="details" class="image-link">
-                                            <img src="~/assets//images/product/default/home-1/iphone 14 pro -1.png" alt="">
-                                            <img src="~/assets//images/product/default/home-1/iphone 14 pro max -2.png" alt="">
-                                        </a>
-                                        <div class="tag">
-                                            <span>sale</span>
-                                        </div>
-                                        <div class="action-link">
-                                            <div class="action-link-left">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                            </div>
-                                            <div class="action-link-right">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalQuickview">
-                                                    <i class="icon-magnifier"></i>
+                                @foreach (var item in Model)
+                                {
+                                    @if (item.Product.DiscountPercentage > 0)
+                                    {
+                                    <div class="product-default-single-item product-color--golden swiper-slide">
+                                        <div class="product-default-single-item product-color--golden" data-aos="fade-up" data-aos-delay="0">
+                                            <div class="image-box">
+                                                <a asp-action="ProductDetails" asp-controller="Product" asp-route-Id="@item.Product.Id" class="image-link">
+                                                    <img src="~/assets/images/product/@item.Product.Image" alt="">
+                                                    <img src="~/assets/images/product/default/home-1/default-10.jpg" alt="">
                                                 </a>
-                                                <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                                <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
+                                                <div class="action-link">
+                                                    <div class="action-link-left">
+                                                        <a asp-action="Add" asp-controller="Cart" asp-route-Id="@item.Product.Id">Thêm vào giỏ</a>
+                                                    </div>
+                                                    <div class="action-link-right">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview"><i class="icon-magnifier"></i></a>
+                                                        <a href="wishlist.html"><i class="icon-heart"></i></a>
+                                                        <a href="compare.html"><i class="icon-shuffle"></i></a>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <div class="content-left">
-                                            <h6 class="title">
-                                                <a asp-action="Sanpham">
-                                                    IPHONE 14 PRO
-                                                </a>
-                                            </h6>
-                                            <ul class="review-star">
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="empty"><i class="ion-android-star"></i></li>
-                                            </ul>
-                                        </div>
-                                        <div class="content-right">
-                                            <span class="price">$</span>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <!-- End Product Default Single Item -->
-                                <!-- Start Product Default Single Item -->
-                                <div class="product-default-single-item product-color--golden swiper-slide">
-                                    <div class="image-box">
-                                        <a asp-action="Sanpham" class="image-link">
-                                            <img src="~/assets//images/product/default/home-1/Galaxy-S22-Ultra-1.png" alt="">
-                                            <img src="~/assets//images/product/default/home-1/samsung-galaxy-z-flip-3-1.png" alt="">
-                                        </a>
-                                        <div class="tag">
-                                            <span>sale</span>
-                                        </div>
-                                        <div class="action-link">
-                                            <div class="action-link-left">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                            </div>
-                                            <div class="action-link-right">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalQuickview">
-                                                    <i class="icon-magnifier"></i>
-                                                </a>
-                                                <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                                <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
+                                            <div class="content">
+                                                <div class="content-left">
+                                                    <h6 class="title"><a asp-action="ProductDetails" asp-route-id="@item.Product.Id">@item.Product.Name</a></h6>
+                                                    <div class="d-flex align-items-center">
+                                                        <ul class="review-star">
+                                                            @for (int i = 0; i < item.FullStarCount; i++)
+                                                            {
+                                                                <li class="fill"><i class="ion-android-star"></i></li>
+                                                            }
+                                                            @for (int i = 0; i < item.EmptyStarCount; i++)
+                                                            {
+                                                                <li class="empty"><i class="ion-android-star"></i></li>
+                                                            }
+                                                        </ul>
+                                                        <a href="#" class="customer-review ml-2">(@item.AverageRating.ToString("0.0") sao)</a>
+                                                    </div>
+                                                </div>
+                                                <div class="content-right">
+                                                    @if (item.Product.DiscountPercentage.HasValue && item.Product.DiscountPercentage > 0)
+                                                    {
+                                                        var discountedPrice = item.Product.Price * (1 - (decimal)item.Product.DiscountPercentage / 100);
+                                                        <span class="price">
+                                                            <span class="old-price" style="text-decoration: line-through;">@item.Product.Price.ToString("N0") VNĐ</span>
+                                                            <span class="new-price">@discountedPrice.ToString("N0") VNĐ</span>
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="price">@item.Product.Price.ToString("N0") VNĐ</span>
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="content">
-                                        <div class="content-left">
-                                            <h6 class="title">
-                                                <a asp-action="Sanpham">
-                                                    SamsungGalaxy-S22-Ultra
-                                                </a>
-                                            </h6>
-                                            <ul class="review-star">
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="empty"><i class="ion-android-star"></i></li>
-                                            </ul>
-                                        </div>
-                                        <div class="content-right">
-                                            <span class="price"><del>$</del> $</span>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <!-- End Product Default Single Item -->
-                                <!-- Start Product Default Single Item -->
-                                <div class="product-default-single-item product-color--golden swiper-slide">
-                                    <div class="image-box">
-                                        <a asp-action="Sanpham" class="image-link">
-                                            <img src="~/assets//images/product/default/home-1/oppo-a57-1.png" alt="">
-                                            <img src="~/assets//images/product/default/home-1/oppo-a96-2.png" alt="">
-                                        </a>
-                                        <div class="tag">
-                                            <span>sale</span>
-                                        </div>
-                                        <div class="action-link">
-                                            <div class="action-link-left">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                            </div>
-                                            <div class="action-link-right">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalQuickview">
-                                                    <i class="icon-magnifier"></i>
-                                                </a>
-                                                <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                                <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <div class="content-left">
-                                            <h6 class="title">
-                                                <a asp-action="Sanpham">
-                                                    OppoA57
-                                                </a>
-                                            </h6>
-                                            <ul class="review-star">
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="empty"><i class="ion-android-star"></i></li>
-                                            </ul>
-                                        </div>
-                                        <div class="content-right">
-                                            <span class="price"><del>$</del> $</span>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <!-- End Product Default Single Item -->
-                                <!-- Start Product Default Single Item -->
-                                <div class="product-default-single-item product-color--golden swiper-slide">
-                                    <div class="image-box">
-                                        <a asp-action="Sanpham" class="image-link">
-                                            <img src="~/assets//images/product/default/home-1/vivo-x80-2.png" alt="">
-                                            <img src="~/assets//images/product/default/home-1/vivo-y16-1.png" alt="">
-                                        </a>
-                                        <div class="action-link">
-                                            <div class="action-link-left">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                            </div>
-                                            <div class="action-link-right">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalQuickview">
-                                                    <i class="icon-magnifier"></i>
-                                                </a>
-                                                <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                                <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <div class="content-left">
-                                            <h6 class="title">
-                                                <a asp-action="Sanpham">
-                                                    Vivox80
-                                                </a>
-                                            </h6>
-                                            <ul class="review-star">
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="empty"><i class="ion-android-star"></i></li>
-                                            </ul>
-                                        </div>
-                                        <div class="content-right">
-                                            <span class="price">$</span>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <!-- End Product Default Single Item -->
-                                <!-- Start Product Default Single Item -->
-                                <div class="product-default-single-item product-color--golden swiper-slide">
-                                    <div class="image-box">
-                                        <a asp-action="Sanpham" class="image-link">
-                                            <img src="~/assets//images/product/default/home-1/oppo-a96-2.png" alt="">
-                                            <img src="~/assets//images/product/default/home-1/oppo-a57-1.png" alt="">
-                                        </a>
-                                        <div class="action-link">
-                                            <div class="action-link-left">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                            </div>
-                                            <div class="action-link-right">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalQuickview">
-                                                    <i class="icon-magnifier"></i>
-                                                </a>
-                                                <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                                <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <div class="content-left">
-                                            <h6 class="title">
-                                                <a asp-action="Sanpham">
-                                                    OppoA97
-                                                </a>
-                                            </h6>
-                                            <ul class="review-star">
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="empty"><i class="ion-android-star"></i></li>
-                                            </ul>
-                                        </div>
-                                        <div class="content-right">
-                                            <span class="price">$</span>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <!-- End Product Default Single Item -->
-                                <!-- Start Product Default Single Item -->
-                                <div class="product-default-single-item product-color--golden swiper-slide">
-                                    <div class="image-box">
-                                        <a asp-action="Sanpham" class="image-link">
-                                            <img src="~/assets//images/product/default/home-1/samsung-galaxy-z-flip-3-1.png" alt="">
-                                            <img src="~/assets//images/product/default/home-1/Galaxy-S22-Ultra-1.png" alt="">
-                                        </a>
-                                        <div class="action-link">
-                                            <div class="action-link-left">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                            </div>
-                                            <div class="action-link-right">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalQuickview">
-                                                    <i class="icon-magnifier"></i>
-                                                </a>
-                                                <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                                <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <div class="content-left">
-                                            <h6 class="title">
-                                                <a asp-action="Sanpham">
-                                                    Samsung-galaxy-z-flip-3
-                                                </a>
-                                            </h6>
-                                            <ul class="review-star">
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="empty"><i class="ion-android-star"></i></li>
-                                            </ul>
-                                        </div>
-                                        <div class="content-right">
-                                            <span class="price">$</span>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <!-- End Product Default Single Item --><!-- Start Product Default Single Item -->
-                                <div class="product-default-single-item product-color--golden swiper-slide">
-                                    <div class="image-box">
-                                        <a asp-action="Sanpham" class="image-link">
-                                            <img src="~/assets//images/product/default/home-1/Galaxy-S22-Ultra-1.png" alt="">
-                                            <img src="~/assets//images/product/default/home-1/samsung-galaxy-z-flip-3-1.png" alt="">
-                                        </a>
-                                        <div class="tag">
-                                            <span>sale</span>
-                                        </div>
-                                        <div class="action-link">
-                                            <div class="action-link-left">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                            </div>
-                                            <div class="action-link-right">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalQuickview">
-                                                    <i class="icon-magnifier"></i>
-                                                </a>
-                                                <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                                <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <div class="content-left">
-                                            <h6 class="title">
-                                                <a asp-action="Sanpham">
-                                                    SamsungGalaxy-S22-Ultra
-                                                </a>
-                                            </h6>
-                                            <ul class="review-star">
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="empty"><i class="ion-android-star"></i></li>
-                                            </ul>
-                                        </div>
-                                        <div class="content-right">
-                                            <span class="price"><del>$</del> $</span>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <!-- End Product Default Single Item -->
-                                <!-- Start Product Default Single Item -->
-                                <div class="product-default-single-item product-color--golden swiper-slide">
-                                    <div class="image-box">
-                                        <a asp-action="Sanpham" class="image-link">
-                                            <img src="~/assets//images/product/default/home-1/oppo-a57-1.png" alt="">
-                                            <img src="~/assets//images/product/default/home-1/oppo-a96-2.png" alt="">
-                                        </a>
-                                        <div class="tag">
-                                            <span>sale</span>
-                                        </div>
-                                        <div class="action-link">
-                                            <div class="action-link-left">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                            </div>
-                                            <div class="action-link-right">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalQuickview">
-                                                    <i class="icon-magnifier"></i>
-                                                </a>
-                                                <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                                <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <div class="content-left">
-                                            <h6 class="title">
-                                                <a asp-action="Sanpham">
-                                                    OppoA57
-                                                </a>
-                                            </h6>
-                                            <ul class="review-star">
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="empty"><i class="ion-android-star"></i></li>
-                                            </ul>
-                                        </div>
-                                        <div class="content-right">
-                                            <span class="price"><del>$</del> $</span>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <!-- End Product Default Single Item -->
-                                <!-- Start Product Default Single Item -->
-                                <div class="product-default-single-item product-color--golden swiper-slide">
-                                    <div class="image-box">
-                                        <a asp-action="Sanpham" class="image-link">
-                                            <img src="~/assets//images/product/default/home-1/vivo-x80-2.png" alt="">
-                                            <img src="~/assets//images/product/default/home-1/vivo-y16-1.png" alt="">
-                                        </a>
-                                        <div class="action-link">
-                                            <div class="action-link-left">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                            </div>
-                                            <div class="action-link-right">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalQuickview">
-                                                    <i class="icon-magnifier"></i>
-                                                </a>
-                                                <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                                <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <div class="content-left">
-                                            <h6 class="title">
-                                                <a asp-action="Sanpham">
-                                                    Vivox80
-                                                </a>
-                                            </h6>
-                                            <ul class="review-star">
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="empty"><i class="ion-android-star"></i></li>
-                                            </ul>
-                                        </div>
-                                        <div class="content-right">
-                                            <span class="price">$</span>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <!-- End Product Default Single Item -->
-                                <!-- Start Product Default Single Item -->
-                                <div class="product-default-single-item product-color--golden swiper-slide">
-                                    <div class="image-box">
-                                        <a asp-action="Sanpham" class="image-link">
-                                            <img src="~/assets//images/product/default/home-1/oppo-a96-2.png" alt="">
-                                            <img src="~/assets//images/product/default/home-1/oppo-a57-1.png" alt="">
-                                        </a>
-                                        <div class="action-link">
-                                            <div class="action-link-left">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                            </div>
-                                            <div class="action-link-right">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalQuickview">
-                                                    <i class="icon-magnifier"></i>
-                                                </a>
-                                                <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                                <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <div class="content-left">
-                                            <h6 class="title">
-                                                <a asp-action="Sanpham">
-                                                    OppoA97
-                                                </a>
-                                            </h6>
-                                            <ul class="review-star">
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="empty"><i class="ion-android-star"></i></li>
-                                            </ul>
-                                        </div>
-                                        <div class="content-right">
-                                            <span class="price">$</span>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <!-- End Product Default Single Item -->
-                                <!-- Start Product Default Single Item -->
-                                <div class="product-default-single-item product-color--golden swiper-slide">
-                                    <div class="image-box">
-                                        <a asp-action="Sanpham" class="image-link">
-                                            <img src="~/assets//images/product/default/home-1/samsung-galaxy-z-flip-3-1.png" alt="">
-                                            <img src="~/assets//images/product/default/home-1/Galaxy-S22-Ultra-1.png" alt="">
-                                        </a>
-                                        <div class="action-link">
-                                            <div class="action-link-left">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                            </div>
-                                            <div class="action-link-right">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalQuickview">
-                                                    <i class="icon-magnifier"></i>
-                                                </a>
-                                                <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                                <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <div class="content-left">
-                                            <h6 class="title">
-                                                <a asp-action="Sanpham">
-                                                    Samsung-galaxy-z-flip-3
-                                                </a>
-                                            </h6>
-                                            <ul class="review-star">
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="empty"><i class="ion-android-star"></i></li>
-                                            </ul>
-                                        </div>
-                                        <div class="content-right">
-                                            <span class="price">$</span>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <!-- End Product Default Single Item -->
-                                <!-- Start Product Default Single Item -->
-                                <div class="product-default-single-item product-color--golden swiper-slide">
-                                    <div class="image-box">
-                                        <a asp-action="Sanpham" class="image-link">
-                                            <img src="~/assets//images/product/default/home-1/samsung-galaxy-z-flip-3-1.png" alt="">
-                                            <img src="~/assets//images/product/default/home-1/Galaxy-S22-Ultra-1.png" alt="">
-                                        </a>
-                                        <div class="action-link">
-                                            <div class="action-link-left">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                            </div>
-                                            <div class="action-link-right">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#modalQuickview">
-                                                    <i class="icon-magnifier"></i>
-                                                </a>
-                                                <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                                <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <div class="content-left">
-                                            <h6 class="title">
-                                                <a asp-action="Sanpham">
-                                                    Samsung-galaxy-z-flip-3
-                                                </a>
-                                            </h6>
-                                            <ul class="review-star">
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                <li class="empty"><i class="ion-android-star"></i></li>
-                                            </ul>
-                                        </div>
-                                        <div class="content-right">
-                                            <span class="price">$</span>
-                                        </div>
-
-                                    </div>
-                                </div>
+                                    }
+                                }
+                                
                                 <!-- End Product Default Single Item -->
                             </div>
                         </div>

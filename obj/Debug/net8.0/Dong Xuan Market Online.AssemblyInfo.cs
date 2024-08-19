@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Dong Xuan Market Online")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+efc7485789cc51c8169618f974b01d9c34466ece")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+325827955816a3f6f236d20b445edd7890c7149d")]
 [assembly: System.Reflection.AssemblyProductAttribute("Dong Xuan Market Online")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Dong Xuan Market Online")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

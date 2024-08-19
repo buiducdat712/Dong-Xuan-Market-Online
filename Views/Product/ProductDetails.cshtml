@@ -65,7 +65,14 @@
                     <!-- Start  Product Details Text Area-->
                     <div class="product-details-text">
                         <h4 class="title">@Model.Product.Name</h4>
-                        <h5> Người bán: @Model.Product.Seller.UserName (@Model.Product.Seller.Email)</h5>
+                        @if (Model.Product.Seller != null)
+                        {
+                            <h5>Người bán: @Model.Product.Seller.UserName (@Model.Product.Seller.Email)</h5>
+                        }
+                        else
+                        {
+                            <h5>Người bán: Thông tin người bán không có sẵn</h5>
+                        }
                         <div class="d-flex align-items-center">
                             <ul class="review-star">
                                 @for (int i = 0; i < Model.FullStarCount; i++)
@@ -84,7 +91,6 @@
                             @if (Model.Product.Price > Model.Product.DiscountedPrice)
                             {
                                 <span class="old-price" style="text-decoration: line-through;">@Model.Product.Price.ToString("N0") VNĐ</span>
-                                
                                 <span class="new-price">@Model.Product.DiscountedPrice.ToString("N0") VNĐ</span>
                             }
                             else
@@ -93,6 +99,7 @@
                             }
                         </div>
                     </div>
+
                     <!-- End  Product Details Text Area-->
                     <!-- Start Product Variable Area -->
                     <div class="product-details-variable">
@@ -269,11 +276,16 @@
                             <!-- Start Product Details Tab Content Singel -->
                             <div class="tab-pane active show" id="description">
                                 <div class="single-tab-content-item">
-                                    @Html.Raw(@Model.Product.Description)
-                                    <h4>Thông số kỹ thuật</h4>
-                                    @Html.Raw(@Model.Product.Specifications)
+                                    @Html.Raw(Model.Product.Description)
+
+                                    @if (!string.IsNullOrEmpty(Model.Product.Specifications))
+                                    {
+                                        <h4>Thông số kỹ thuật</h4>
+                                        @Html.Raw(Model.Product.Specifications)
+                                    }
                                 </div>
-                            </div> <!-- End Product Details Tab Content Singel -->
+                            </div>
+                            <!-- End Product Details Tab Content Singel -->
                             <!-- Start Product Details Tab Content Singel -->
                             <div class="tab-pane" id="likeproduct">
                                 <div class="single-tab-content-item">

@@ -16,7 +16,7 @@ namespace Dong_Xuan_Market_Online.Models
         public int Status { get; set; }
 
         public string Logo { get; set; } = "noimage.jpg";
-
+        public ICollection<CategorySubModel> SubCategories { get; set; } = new HashSet<CategorySubModel>();
 
         [NotMapped]
         [FileExtension]

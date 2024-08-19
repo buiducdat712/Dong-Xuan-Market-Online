@@ -134,9 +134,11 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="Cate">Danh mục</label>
-                                                    <input asp-for="Cate" class="form-control" id="Cate" />
-                                                    <span asp-validation-for="Cate" class="text-danger" />
+                                                    <label for="CategorySubId">Danh mục con</label>
+                                                    <select asp-for="CategorySubId" class="form-control" id="CategoryId" asp-items="ViewBag.Categorysubs">
+                                                        <option value="">--Chọn Danh Mục--</option>
+                                                    </select>
+                                                    <span asp-validation-for="CategorySubId" class="text-danger" />
                                                 </div>
                                             </div>
                                         </div>

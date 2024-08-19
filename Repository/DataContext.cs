@@ -13,6 +13,7 @@ namespace Dong_Xuan_Market_Online.Repository
         }
         public DbSet<BrandModel> Brands { get; set; }
         public DbSet<ProductModel> Products { get; set; }
+        public DbSet<CategorySubModel> CategorySubModels { get; set; } 
         public DbSet<CategoryModel> Categories { get; set; }
         public DbSet<RatingModel> Ratings { get; set; }
         public DbSet<OrderModel> Orders { get; set; }
@@ -29,6 +30,12 @@ namespace Dong_Xuan_Market_Online.Repository
                 .WithMany(u => u.Products)  // Người bán có nhiều sản phẩm
                 .HasForeignKey(p => p.SellerId)  // SellerId là khóa ngoại
                 .OnDelete(DeleteBehavior.Restrict);  // Quy tắc xóa
+            // CategoryModel
+            modelBuilder.Entity<CategoryModel>()
+                .HasMany(c => c.SubCategories)
+                .WithOne(sc => sc.Category)
+                .HasForeignKey(sc => sc.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Thiết lập quan hệ giữa Order và Seller
             modelBuilder.Entity<OrderModel>()

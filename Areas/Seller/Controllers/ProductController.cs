@@ -60,6 +60,7 @@ namespace Dong_Xuan_Market_Online.Areas.Seller.Controllers
                                              .Where(p => p.SellerId == sellerId)
                                              .OrderByDescending(p => p.Id)
                                              .Include(p => p.Category)
+                                             .Include(p => p.CategorySub)
                                              .Include(p => p.Brand)
                                              .Skip(recSkip)
                                              .Take(pager.PageSize)
@@ -74,6 +75,7 @@ namespace Dong_Xuan_Market_Online.Areas.Seller.Controllers
         {
             ViewBag.Categories = new SelectList(_dataContext.Categories, "Id", "Name");
             ViewBag.Brands = new SelectList(_dataContext.Brands, "Id", "Name");
+            ViewBag.Categorysubs = new SelectList(_dataContext.CategorySubModels, "Id", "Name");
             return View();
         }
         [Route("Create")]
@@ -188,6 +190,7 @@ namespace Dong_Xuan_Market_Online.Areas.Seller.Controllers
             }
 
             ViewBag.Categories = new SelectList(_dataContext.Categories, "Id", "Name", product.CategoryId);
+            ViewBag.Categorysubs = new SelectList(_dataContext.CategorySubModels, "Id", "Name");
             ViewBag.Brands = new SelectList(_dataContext.Brands, "Id", "Name", product.BrandId);
 
             // Chuyển danh sách hình ảnh đến View
@@ -214,6 +217,7 @@ namespace Dong_Xuan_Market_Online.Areas.Seller.Controllers
             }
 
             ViewBag.Categories = new SelectList(_dataContext.Categories, "Id", "Name", product.CategoryId);
+            ViewBag.Categorysubs = new SelectList(_dataContext.CategorySubModels, "Id", "Name");
             ViewBag.Brands = new SelectList(_dataContext.Brands, "Id", "Name", product.BrandId);
 
             if (ModelState.IsValid)
@@ -235,7 +239,8 @@ namespace Dong_Xuan_Market_Online.Areas.Seller.Controllers
                 productToUpdate.Express = product.Express;
                 productToUpdate.Save = product.Save;
                 productToUpdate.Fast = product.Fast;
-                productToUpdate.Cate = product.Cate;
+                //productToUpdate.Cate = product.Cate;
+                productToUpdate.CategorySubId = product.CategorySubId;
                 productToUpdate.Slug = GenerateSlug(product.Name);
 
                 // Kiểm tra trùng lặp slug

@@ -51,13 +51,15 @@ public class ProductModel
     public bool Save { get; set; }
     public bool Fast { get; set; }
     public bool IsApproved { get; set; } = false;
-    public string Cate { get; set; }
+    //public string Cate { get; set; }
+    public int? CategorySubId { get; set; }
+    public CategorySubModel CategorySub { get; set; }
     public string SellerId { get; set; }
     public AppUserModel Seller { get; set; }
     public CategoryModel Category { get; set; }
     public BrandModel Brand { get; set; }
 
-    public ICollection<ProductImages> ProductImages { get; set; }
+    public ICollection<ProductImages> ProductImages { get; set; } 
 
     [NotMapped]
     [FileExtension]

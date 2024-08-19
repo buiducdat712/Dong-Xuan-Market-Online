@@ -67,9 +67,9 @@ namespace Dong_Xuan_Market_Online.Controllers
         {
             int pageSize = 12;
 
-            var totalProducts = await _dataContext.Products.CountAsync(p => p.Cate == cate && p.IsApproved);
+            var totalProducts = await _dataContext.Products.CountAsync(p => p.CategorySub.Name == cate && p.IsApproved);
             var products = await _dataContext.Products
-                .Where(p => p.Cate == cate && p.IsApproved)
+                .Where(p => p.CategorySub.Name == cate && p.IsApproved)
                 .Include(p => p.Category)
                 .Skip((pg - 1) * pageSize)
                 .Take(pageSize)
@@ -84,7 +84,7 @@ namespace Dong_Xuan_Market_Online.Controllers
             {
                 Products = products,
                 Paginate = paginateModel,
-                SidebarProducts = await _dataContext.Products.Where(p => p.Cate == cate && p.IsApproved).ToListAsync(),
+                SidebarProducts = await _dataContext.Products.Where(p => p.CategorySub.Name == cate && p.IsApproved).ToListAsync(),
                 SelectedCate = cate
             };
 
@@ -103,6 +103,7 @@ namespace Dong_Xuan_Market_Online.Controllers
             var product = await _dataContext.Products
                 .Include(p => p.ProductImages)
                 .Include(p => p.Category)
+                .Include(p => p.Seller)
                 .Include(p => p.Brand)
                 .Include(p => p.Ratings) // Bao gồm Ratings
                     .ThenInclude(r => r.User) // Bao gồm User để có thể truy cập Email
