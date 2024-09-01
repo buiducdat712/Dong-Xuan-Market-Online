@@ -96,9 +96,14 @@
                     <div class="coupon_code left" data-aos="fade-up" data-aos-delay="200">
                         <h3>Phiếu mua hàng</h3>
                         <div class="coupon_inner">
-                            <p>Nhập mã phiếu giảm giá của bạn nếu bạn có.</p>
-                            <input class="mb-2" placeholder="Mã giảm giá" type="text">
-                            <button type="submit" class="btn btn-md btn-golden">Áp dụng phiếu giảm giá</button>
+                            <p>Chọn mã giảm giá hoặc nhập mã của bạn.</p>
+                            <button type="button" class="btn btn-md btn-golden" data-bs-toggle="modal" data-bs-target="#voucherModal">
+                                Chọn Voucher
+                            </button>
+                            <form asp-controller="Cart" asp-action="ApplyVoucher" method="post" class="mt-3">
+                                <input class="mb-2" placeholder="Mã giảm giá" type="text" name="voucherCode">
+                                <button type="submit" class="btn btn-md btn-golden">Áp dụng phiếu giảm giá</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -108,31 +113,46 @@
                         <div class="coupon_inner">
                             <div class="cart_subtotal">
                                 <p>Tạm Tính</p>
-                                @String.Format("{0:#,##0} VNĐ", Model.GrandTotal)
+                                <p class="cart_amount">@String.Format("{0:#,##0} VNĐ", Model.CartItems.Sum(x => x.Quantity * x.Price))</p>
                             </div>
-                            <div class="cart_subtotal ">
-                                <p>Phí Ship</p>
-                                <p class="cart_amount">0 VNĐ</p>
-                            </div>
-                            <div class="cart_subtotal ">
-                                <p>Giảm giá</p>
-                                <p class="cart_amount">0 VNĐ</p>
-                            </div>
-                            <a></a>
-
+                            @if (!string.IsNullOrEmpty(Model.AppliedVoucherCode))
+                            {
+                                <div class="cart_subtotal">
+                                    <p>Mã giảm giá (@Model.AppliedVoucherCode)</p>
+                                    <p class="cart_amount">- @String.Format("{0:#,##0} VNĐ", Model.DiscountAmount)</p>
+                                </div>
+                                <div class="cart_subtotal">
+                                    <a asp-controller="Cart" asp-action="RemoveVoucher" class="btn btn-sm btn-danger">Gỡ mã giảm giá</a>
+                                </div>
+                            }
                             <div class="cart_subtotal">
                                 <p>Tổng cộng</p>
-                                 @String.Format("{0:#,##0} VNĐ", Model.GrandTotal)
+                                <p class="cart_amount">@String.Format("{0:#,##0} VNĐ", Model.GrandTotal)</p>
                             </div>
-                            @if(User.Identity?.IsAuthenticated ?? false){
+                            @if (User.Identity?.IsAuthenticated ?? false)
+                            {
                                 <div class="checkout_btn">
                                     <a asp-action="Checkout" asp-controller="Checkout" class="btn btn-md btn-golden">Checkout</a>
                                 </div>
                             }
-                            
                         </div>
                     </div>
                 </div>
+                <!-- Voucher Modal -->
+                <div class="modal fade" id="voucherModal" tabindex="-1" aria-labelledby="voucherModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="voucherModalLabel">Chọn Voucher</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Danh sách voucher sẽ được thêm vào đây bằng JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div> <!-- End Coupon Start -->
@@ -141,4 +161,5 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script src="~/backend/js/voucher-selection.js"></script>
 }

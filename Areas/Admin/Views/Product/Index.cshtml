@@ -12,7 +12,6 @@
 <div class="container-fluid">
     <div class="table-responsive">
         <h3 class="my-4">Danh Sách Sản Phẩm</h3>
-        <a asp-action="Create" asp-controller="Product" class="btn btn-primary mb-3">Thêm sản phẩm</a>
         <table class="table table-bordered table-striped" id="myTable">
             <thead class="thead-dark">
                 <tr>
@@ -77,7 +76,17 @@
 
                         <td>@item.Brand.Name</td>
                         <td>@item.Category.Name</td>
-                        <td>@item.CategorySub.Name</td>
+                        <td>
+                            @if (item.CategorySub != null)
+                            {
+                                @item.CategorySub.Name
+                            }
+                            else
+                            {
+                                <span>-</span> <!-- Hiển thị một giá trị mặc định nếu không có CategorySub -->
+                            }
+                        </td>
+
                         
                         <td>
                             <a asp-action="Details" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-sm btn-warning">Xem</a>

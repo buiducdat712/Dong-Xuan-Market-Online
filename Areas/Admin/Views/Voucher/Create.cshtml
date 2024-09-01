@@ -1,0 +1,45 @@
+﻿@model Dong_Xuan_Market_Online.Models.ViewModels.VoucherViewModel
+
+<h2>Tạo Voucher Mới</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label for="Code">Mã Voucher:</label>
+        <input type="text" class="form-control" id="Code" name="Code" asp-for="Code" />
+        <span asp-validation-for="Code" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="DiscountPercentage">Phần trăm giảm giá (%):</label>
+        <input type="number" class="form-control" id="DiscountPercentage" name="DiscountPercentage" asp-for="DiscountPercentage" />
+        <span asp-validation-for="DiscountPercentage" class="text-danger"></span>
+    </div>
+    @* <div class="form-group">
+        <label for="Description">Mô tả:</label>
+        <input type="text" class="form-control" id="Code" name="Code" asp-for="Code" />
+        <span asp-validation-for="Code" class="text-danger"></span>
+    </div> *@
+    <div class="form-group">
+        <label for="DiscountAmount">Số tiền giảm giá (VNĐ):</label>
+        <input type="number" class="form-control" id="DiscountAmount" name="DiscountAmount" asp-for="DiscountAmount" />
+        <span asp-validation-for="DiscountAmount" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="ExpiryDate">Ngày hết hạn:</label>
+        <input type="date" class="form-control" id="ExpiryDate" name="ExpiryDate" asp-for="ExpiryDate" />
+        <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="IsActive">Hoạt động:</label>
+        <input type="checkbox" id="IsActive" name="IsActive" asp-for="IsActive" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Tạo Voucher</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

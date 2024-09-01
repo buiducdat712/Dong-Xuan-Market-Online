@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace Dong_Xuan_Market_Online.Controllers
 {
@@ -12,28 +14,64 @@ namespace Dong_Xuan_Market_Online.Controllers
     {
         private readonly DataContext _dataContext;
         private readonly ILogger<ProductController> _logger;
-
-        public HomeController(DataContext dataContext, ILogger<ProductController> logger)
+        private readonly UserManager<AppUserModel> _userManager;
+        public HomeController(DataContext dataContext, ILogger<ProductController> logger, UserManager<AppUserModel> userManager)
         {
             _dataContext = dataContext;
             _logger = logger;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            List<AppUserModel> friends = new List<AppUserModel>();
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                var user = await _userManager.FindByIdAsync(userId);
+                friends = await GetFriendsList(user);
+            }
+
+            ViewBag.FriendsList = friends;
+
             var products = await _dataContext.Products
                 .Include(p => p.Ratings)
                 .ToListAsync();
 
-            var viewModel = products.Select(product => new ProductDetailsViewModel
+            var productDetailsList = products.Select(product => new ProductDetailsViewModel
             {
-                Product =product,
+                Product = product,
                 Ratings = product.Ratings?.ToList() ?? new List<RatingModel>(),
 
             }).ToList();
 
+            var homeImages = await _dataContext.HomeImages.ToListAsync();
+
+            var viewModel = new IndexViewModel
+            {
+                ProductDetails = productDetailsList,
+                SliderImages = await _dataContext.Sliders.ToListAsync() ?? new List<SliderModel>(),
+                HomeImages = homeImages
+            };
+
             return View(viewModel);
         }
+
+        private async Task<List<AppUserModel>> GetFriendsList(AppUserModel user)
+        {
+            if (user == null)
+            {
+                return new List<AppUserModel>();
+            }
+
+            return await _dataContext.Friendships
+                .Where(f => f.UserId == user.Id)
+                .Select(f => f.Friend)
+                .ToListAsync();
+        }
+
         public IActionResult details()
         {
             return View();

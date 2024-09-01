@@ -30,6 +30,15 @@ namespace Dong_Xuan_Market_Online.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AvatarUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("BirthDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -181,7 +190,86 @@ namespace Dong_Xuan_Market_Online.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("CategorySubs");
+                    b.ToTable("CategorySubModels");
+                });
+
+            modelBuilder.Entity("Dong_Xuan_Market_Online.Models.FriendshipModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FriendId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FriendId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Friendships");
+                });
+
+            modelBuilder.Entity("Dong_Xuan_Market_Online.Models.HomeImageModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HomeImages");
+                });
+
+            modelBuilder.Entity("Dong_Xuan_Market_Online.Models.MessageModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReceiverId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SenderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("SentAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Dong_Xuan_Market_Online.Models.OrderDetails", b =>
@@ -230,6 +318,12 @@ namespace Dong_Xuan_Market_Online.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("DiscountAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("GrandTotal")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("OrderCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -240,10 +334,16 @@ namespace Dong_Xuan_Market_Online.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("Subtotal")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VoucherCode")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -309,6 +409,68 @@ namespace Dong_Xuan_Market_Online.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Ratings");
+                });
+
+            modelBuilder.Entity("Dong_Xuan_Market_Online.Models.SliderModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Sliders");
+                });
+
+            modelBuilder.Entity("Dong_Xuan_Market_Online.Models.VoucherModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("DiscountAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<double?>("DiscountPercentage")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Vouchers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -455,9 +617,6 @@ namespace Dong_Xuan_Market_Online.Migrations
                     b.Property<int>("BrandId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Cate")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -511,10 +670,16 @@ namespace Dong_Xuan_Market_Online.Migrations
                     b.Property<string>("Slug")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SoldQuantity")
+                        .HasColumnType("int");
+
                     b.Property<string>("Specifications")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StockQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("VoucherId")
                         .HasColumnType("int");
 
                     b.Property<double?>("Weight")
@@ -530,6 +695,10 @@ namespace Dong_Xuan_Market_Online.Migrations
 
                     b.HasIndex("SellerId");
 
+                    b.HasIndex("VoucherId")
+                        .IsUnique()
+                        .HasFilter("[VoucherId] IS NOT NULL");
+
                     b.ToTable("Products");
                 });
 
@@ -542,6 +711,40 @@ namespace Dong_Xuan_Market_Online.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Dong_Xuan_Market_Online.Models.FriendshipModel", b =>
+                {
+                    b.HasOne("Dong_Xuan_Market_Online.Models.AppUserModel", "Friend")
+                        .WithMany()
+                        .HasForeignKey("FriendId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Dong_Xuan_Market_Online.Models.AppUserModel", "User")
+                        .WithMany("Friendships")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Friend");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Dong_Xuan_Market_Online.Models.MessageModel", b =>
+                {
+                    b.HasOne("Dong_Xuan_Market_Online.Models.AppUserModel", "Receiver")
+                        .WithMany("ReceivedMessages")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Dong_Xuan_Market_Online.Models.AppUserModel", "Sender")
+                        .WithMany("SentMessages")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("Dong_Xuan_Market_Online.Models.OrderDetails", b =>
@@ -682,6 +885,10 @@ namespace Dong_Xuan_Market_Online.Migrations
                         .HasForeignKey("SellerId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("Dong_Xuan_Market_Online.Models.VoucherModel", "Voucher")
+                        .WithOne("Product")
+                        .HasForeignKey("ProductModel", "VoucherId");
+
                     b.Navigation("Brand");
 
                     b.Navigation("Category");
@@ -689,11 +896,19 @@ namespace Dong_Xuan_Market_Online.Migrations
                     b.Navigation("CategorySub");
 
                     b.Navigation("Seller");
+
+                    b.Navigation("Voucher");
                 });
 
             modelBuilder.Entity("Dong_Xuan_Market_Online.Models.AppUserModel", b =>
                 {
+                    b.Navigation("Friendships");
+
                     b.Navigation("Products");
+
+                    b.Navigation("ReceivedMessages");
+
+                    b.Navigation("SentMessages");
                 });
 
             modelBuilder.Entity("Dong_Xuan_Market_Online.Models.CategoryModel", b =>
@@ -709,6 +924,11 @@ namespace Dong_Xuan_Market_Online.Migrations
             modelBuilder.Entity("Dong_Xuan_Market_Online.Models.OrderModel", b =>
                 {
                     b.Navigation("OrderDetails");
+                });
+
+            modelBuilder.Entity("Dong_Xuan_Market_Online.Models.VoucherModel", b =>
+                {
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("ProductModel", b =>

@@ -1,33 +1,36 @@
-﻿@model IEnumerable<Dong_Xuan_Market_Online.Models.OrderDetails>
+﻿@model Dong_Xuan_Market_Online.Models.OrderModel
+
 @{
-    ViewData["Title"] = "Product Order Details";
+    ViewData["Title"] = "Chi tiết đơn hàng";
     decimal total = 0;
     decimal subtotal = 0;
 }
-<div class="container-fluid">
-<h3 class="my-4">Chi tiết đơn hàng</h3>
 
-        <div class="table-responsive">
+<div class="container-fluid">
+    <h3 class="my-4">Chi tiết đơn hàng</h3>
+
+    <div class="table-responsive">
         <table class="table table-bordered table-hover">
-                <thead class="thead-dark">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Order Code</th>
+                    <th scope="col">Tên người bán</th>
+                    <th scope="col">ProductId</th>
+                    <th scope="col">Chi tiết sản phẩm</th>
+                    <th scope="col">Số lượng</th>
+                    <th scope="col">Đơn giá</th>
+                    <th scope="col">Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.OrderDetails)
+                {
+                    subtotal = (item.Quantity * item.Price) - (Model.DiscountAmount / Model.OrderDetails.Count());
+                    total += subtotal;
+                    
                     <tr>
-                        <th scope="col">Order Code</th>
-                        <th scope="col">Tên người bán</th>
-                        <th scope="col">ProductId</th>
-                        <th scope="col">Chi tiết sản phẩm</th>
-                        <th scope="col">Số lượng</th>
-                        <th scope="col">Đơn giá</th>
-                        <th scope="col">Thành tiền</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        subtotal = item.Quantity * item.Price;
-                        total += subtotal;
-                        <tr>
-                            <input type="hidden" asp-for="@item.OrderCode" class="getId" />
-                            <td>@item.OrderCode</td>
+                        <input type="hidden" asp-for="@item.OrderCode" class="getId" />
+                        <td>@item.OrderCode</td>
                         <td>
                             @if (item.Product.Seller != null)
                             {
@@ -41,7 +44,8 @@
                         <td>
                             @if (!string.IsNullOrEmpty(item.Product.Image))
                             {
-                                var detailUrl = Url.Action("DetailsDevice", "Product", new { cate = item.Product.CategorySub.Name, id = item.Product.Id });
+                                var categoryName = item.Product.CategorySub?.Name ?? "Chưa có danh mục";
+                                var detailUrl = Url.Action("ProductDetails", "Product", new { cate = categoryName, id = item.Product.Id });
                                 <a href="@detailUrl">
                                     <img src="~/assets/images/product/@item.Product.Image" alt="Product Image" style="width: 100px; height: auto;" />
                                 </a>
@@ -51,41 +55,20 @@
                                 <p>Chưa có hình ảnh</p>
                             }
                         </td>
-
-                            <td>@item.Product.Name</td>
-                            <td>@item.Quantity</td>
-                            <td>@String.Format("{0:N0} VNĐ", item.Price)</td>
-                            <td>@String.Format("{0:N0} VNĐ", subtotal)</td>
-                        </tr>
-                    }
-                    <tr class="font-weight-bold">
-                        <th colspan="6" class="text-right">Tổng cộng:</th>
-                        <td>@String.Format("{0:N0} VNĐ", total)</td>
+                        <td>@item.Product.Name</td>
+                        <td>@item.Quantity</td>
+                        <td>@String.Format("{0:N0} VNĐ", item.Price)</td>
+                        <td>@String.Format("{0:N0} VNĐ", subtotal)</td>
                     </tr>
-                </tbody>
-            </table>
-        </div>
-    
+                }
+                <tr class="font-weight-bold">
+                    <th colspan="6" class="text-right">Giảm giá: @String.Format("{0:N0} VNĐ", Model.DiscountAmount) | Tổng cộng:</th>
+                    <td>@String.Format("{0:N0} VNĐ", total)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-4">
+        <a asp-action="Index" class="btn btn-secondary mt-3">Trở về </a>
+    </div>
 </div>
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            $('.select-update-order').change(function () {
-                var status = $(this).val();
-                var ordercode = $('.getId').val();
-
-                $.ajax({
-                    type: "POST",
-                    url: "@Url.Action("UpdateOrder")",
-                    data: { status: status, ordercode: ordercode },
-
-                    success: function (result) {
-                        if (result) {
-                            Swal.fire("Cập nhật đơn hàng thành công");
-                        }
-                    }
-                });
-            });
-        });
-    </script>
-}

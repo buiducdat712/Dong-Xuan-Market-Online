@@ -22,10 +22,12 @@ namespace Dong_Xuan_Market_Online.Controllers
             _logger = logger;
         }
 
-        public async Task<IActionResult> IndexFashion(int pg = 1)
+        public async Task<IActionResult> IndexFashion(string slug, int pg = 1)
         {
             int pageSize = 12;
-
+            // Retrieve the category based on slug
+            var category = await _dataContext.Categories
+                .FirstOrDefaultAsync(c => c.Slug == slug);
             var totalProducts = await _dataContext.Products.CountAsync(p => p.Category.Slug == "thoi-trang" && p.IsApproved);
             var products = await _dataContext.Products
                 .Where(p => p.Category.Slug == "thoi-trang" && p.IsApproved)
@@ -54,42 +56,58 @@ namespace Dong_Xuan_Market_Online.Controllers
                 .ToListAsync();
             return View(products);
         }
-
         public async Task<IActionResult> IndexDevice()
         {
+            var slug = "do-dien-tu"; // Define the slug for "do-dien-tu" category
             var products = await _dataContext.Products
-                .Where(p => p.Category.Slug == "do-dien-tu" && p.IsApproved)
+                .Where(p => p.Category.Slug == slug && p.IsApproved)
                 .ToListAsync();
+
             return View(products);
         }
 
-        public async Task<IActionResult> IndexWithCate(string cate, int pg = 1)
+        public async Task<IActionResult> IndexWithCate(string slug, int pg = 1)
         {
             int pageSize = 12;
 
-            var totalProducts = await _dataContext.Products.CountAsync(p => p.CategorySub.Name == cate && p.IsApproved);
+            // Lấy danh mục phụ dựa trên slug
+            var categorySub = await _dataContext.CategorySubModels
+                .FirstOrDefaultAsync(c => c.Slug == slug);
+
+            if (categorySub == null)
+            {
+                // Xử lý trường hợp không tìm thấy categorySub
+                return NotFound();
+            }
+
+            // Lấy tổng số sản phẩm cho categorySub
+            var totalProducts = await _dataContext.Products.CountAsync(p => p.CategorySubId == categorySub.Id && p.IsApproved);
+
+            // Lấy danh sách sản phẩm cho categorySub
             var products = await _dataContext.Products
-                .Where(p => p.CategorySub.Name == cate && p.IsApproved)
-                .Include(p => p.Category)
+                .Where(p => p.CategorySubId == categorySub.Id && p.IsApproved)
                 .Skip((pg - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
+            // Tạo model phân trang
             var paginateModel = new Paginate(totalProducts, pg, pageSize)
             {
                 ActionName = "IndexWithCate"
             };
 
+            // Tạo view model
             var viewModel = new ProductPaginateViewModel
             {
                 Products = products,
                 Paginate = paginateModel,
-                SidebarProducts = await _dataContext.Products.Where(p => p.CategorySub.Name == cate && p.IsApproved).ToListAsync(),
-                SelectedCate = cate
+                SidebarProducts = await _dataContext.Products.Where(p => p.CategorySubId == categorySub.Id && p.IsApproved).ToListAsync(),
+                SelectedCate = categorySub.Name
             };
 
             return View(viewModel);
         }
+
         public async Task<IActionResult> Search(string searchTerm)
         {
             var products = await _dataContext.Products
@@ -98,7 +116,7 @@ namespace Dong_Xuan_Market_Online.Controllers
             ViewBag.Keyword = searchTerm;
             return View(products);
         }
-        public async Task<IActionResult> ProductDetails(int id)
+        public async Task<IActionResult> ProductDetails(string slug)
         {
             var product = await _dataContext.Products
                 .Include(p => p.ProductImages)
@@ -107,7 +125,7 @@ namespace Dong_Xuan_Market_Online.Controllers
                 .Include(p => p.Brand)
                 .Include(p => p.Ratings) // Bao gồm Ratings
                     .ThenInclude(r => r.User) // Bao gồm User để có thể truy cập Email
-                .FirstOrDefaultAsync(p => p.Id == id);
+                 .FirstOrDefaultAsync(p => p.Slug == slug);
 
             if (product == null)
             {
@@ -142,30 +160,55 @@ namespace Dong_Xuan_Market_Online.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> SubmitReview(ProductDetailsViewModel viewModel, int productId)
+        public async Task<IActionResult> SubmitReview(ProductDetailsViewModel viewModel, string slug)
         {
-            _logger.LogInformation($"Received review submission for product {productId}");
+            _logger.LogInformation($"Received review submission for product with slug {slug}");
 
-            if (productId <= 0)
+            if (string.IsNullOrEmpty(slug))
             {
-                _logger.LogWarning($"Invalid product ID: {productId}");
-                return BadRequest("Invalid product ID");
+                _logger.LogWarning("Invalid product slug");
+                return BadRequest("Invalid product slug");
+            }
+
+            var product = await _dataContext.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.Category)
+                .Include(p => p.Brand)
+                .FirstOrDefaultAsync(p => p.Slug == slug);
+
+            if (product == null)
+            {
+                _logger.LogWarning($"Product not found for slug: {slug}");
+                return NotFound();
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                _logger.LogWarning("User not authenticated");
+                return Unauthorized("User not authenticated");
+            }
+
+            // Kiểm tra nếu người dùng đã mua sản phẩm này
+            var hasPurchased = await _dataContext.Orders
+                .AnyAsync(o => o.UserId == userId && o.OrderDetails.Any(oi => oi.ProductId == product.Id));
+
+            if (!hasPurchased)
+            {
+                _logger.LogWarning("User has not purchased this product");
+                TempData["error"] = "Bạn chỉ có thể đánh giá sản phẩm mà bạn đã mua.";
+                return RedirectToAction("ProductDetails", new { slug = product.Slug });
             }
 
             var ratingModel = viewModel.NewRating;
-            ratingModel.ProductId = productId;
-            ratingModel.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ratingModel.ProductId = product.Id;
+            ratingModel.UserId = userId;
 
             // Xóa lỗi UserId nếu có
             ModelState.Remove("NewRating.UserId");
 
             _logger.LogInformation($"Rating details: ProductId={ratingModel.ProductId}, UserId={ratingModel.UserId}, Rating={ratingModel.Rating}, Comment={ratingModel.Comment}");
-
-            if (string.IsNullOrEmpty(ratingModel.UserId))
-            {
-                _logger.LogWarning("User not authenticated");
-                ModelState.AddModelError("", "User not authenticated");
-            }
 
             if (ModelState.IsValid)
             {
@@ -178,8 +221,8 @@ namespace Dong_Xuan_Market_Online.Controllers
                     if (result > 0)
                     {
                         _logger.LogInformation("Rating added successfully");
-                        TempData["SuccessMessage"] = "Đánh giá của bạn đã được gửi thành công!";
-                        return RedirectToAction("ProductDetails", new { id = ratingModel.ProductId });
+                        TempData["success"] = "Đánh giá của bạn đã được gửi thành công!";
+                        return RedirectToAction("ProductDetails", new { slug = product.Slug });
                     }
                     else
                     {
@@ -205,23 +248,10 @@ namespace Dong_Xuan_Market_Online.Controllers
                 }
             }
 
-
-            // Nếu có lỗi, lấy lại thông tin sản phẩm và trả về view
-            var product = await _dataContext.Products
-                .Include(p => p.ProductImages)
-                .Include(p => p.Category)
-                .Include(p => p.Brand)
-                .FirstOrDefaultAsync(p => p.Id == productId);
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
             viewModel.Product = product;
             viewModel.SortedImages = product.ProductImages?.OrderByDescending(img => img.IsDefault).ToList() ?? new List<ProductImages>();
             viewModel.RelatedProducts = await _dataContext.Products
-                .Where(p => p.CategoryId == product.CategoryId && p.Id != productId && p.IsApproved)
+                .Where(p => p.CategoryId == product.CategoryId && p.Id != product.Id && p.IsApproved)
                 .OrderBy(p => p.Id)
                 .Take(4)
                 .ToListAsync();
@@ -233,7 +263,7 @@ namespace Dong_Xuan_Market_Online.Controllers
                 _ => "Index"
             };
             viewModel.Ratings = await _dataContext.Ratings
-                .Where(r => r.ProductId == productId)
+                .Where(r => r.ProductId == product.Id)
                 .Include(r => r.User)
                 .ToListAsync();
 

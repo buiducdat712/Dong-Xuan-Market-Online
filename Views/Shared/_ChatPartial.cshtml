@@ -1,0 +1,12 @@
+﻿@using System.Security.Claims
+@model Dong_Xuan_Market_Online.Models.ViewModels.ChatViewModel
+
+<div class="chat-body">
+    @foreach (var message in Model.Messages)
+    {
+        <div class="message @(message.SenderId == User.FindFirstValue(ClaimTypes.NameIdentifier) ? "sent" : "received")">
+            <p>@message.Content</p>
+            <span>@message.SentAt.ToString("HH:mm:ss")</span>
+        </div>
+    }
+</div>

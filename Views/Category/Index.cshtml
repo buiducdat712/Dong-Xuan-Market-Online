@@ -42,7 +42,7 @@
                 <div class="siderbar-section" data-aos="fade-up" data-aos-delay="0">
 
                     <!-- Start Single Sidebar Widget -->
-                    @Html.Partial("_SidebarPartial")
+                    @await Html.PartialAsync("_SidebarPartial", Model)
                     <!-- End Single Sidebar Widget -->
                     <!-- Start Single Sidebar Widget -->
                     <div class="sidebar-single-widget">
@@ -231,44 +231,58 @@
                                 <div class="tab-content tab-animate-zoom">
                                     <div class="tab-pane active show sort-layout-single" id="layout-3-grid">
                                         <div class="row">
-                                            @foreach (var item in Model)
+                                            @if (!Model.Any())
                                             {
-                                                <div class="col-xl-4 col-sm-6 col-12">
-                                                    <div class="product-default-single-item product-color--golden" data-aos="fade-up" data-aos-delay="0">
-                                                        <div class="image-box">
-                                                            <a asp-action="DetailsFashion" asp-controller="Product" asp-route-Id="@item.Id" class="image-link">
-                                                                <img src="~/assets/images/product/@item.Image" alt="">
-                                                                <img src="~/assets/images/product/default/home-1/default-10.jpg" alt="">
-                                                            </a>
-                                                            <div class="action-link">
-                                                                <div class="action-link-left">
-                                                                    <a asp-action="Add" asp-controller="Cart" asp-route-Id="@item.Id">Thêm vào giỏ</a>
-
-                                                                </div>
-                                                                <div class="action-link-right">
-                                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview"><i class="icon-magnifier"></i></a>
-                                                                    <a href="wishlist.html"><i class="icon-heart"></i></a>
-                                                                    <a href="compare.html"><i class="icon-shuffle"></i></a>
+                                                <p>Không có sản phẩm nào trong danh mục này.</p>
+                                            }
+                                            else
+                                            {
+                                                @foreach (var item in Model)
+                                                {
+                                                    <div class="col-xl-4 col-sm-6 col-12">
+                                                        <div class="product-default-single-item product-color--golden" data-aos="fade-up" data-aos-delay="0">
+                                                            <div class="image-box">
+                                                                <a asp-action="DetailsFashion" asp-controller="Product" asp-route-Slug="@item.Slug" class="image-link">
+                                                                    <img src="~/assets/images/product/@item.Image" alt="@item.Name - Image 1">
+                                                                    <img src="~/assets/images/product/default/home-1/default-10.jpg" alt="Default Image">
+                                                                </a>
+                                                                <div class="action-link">
+                                                                    <div class="action-link-left">
+                                                                        <a asp-action="Add" asp-controller="Cart" asp-route-Slug="@item.Slug">Thêm vào giỏ</a>
+                                                                    </div>
+                                                                    <div class="action-link-right">
+                                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview">
+                                                                            <i class="icon-magnifier"></i>
+                                                                        </a>
+                                                                        <a href="wishlist.html">
+                                                                            <i class="icon-heart"></i>
+                                                                        </a>
+                                                                        <a href="compare.html">
+                                                                            <i class="icon-shuffle"></i>
+                                                                        </a>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="content">
-                                                            <div class="content-left">
-                                                                <h6 class="title"><a asp-action="DetailsFashion" asp-route-id="@item.Id">@item.Name</a></h6>
-                                                                <ul class="review-star">
-                                                                    <li class="fill"><i class="ion-android-star"></i></li>
-                                                                    <li class="fill"><i class="ion-android-star"></i></li>
-                                                                    <li class="fill"><i class="ion-android-star"></i></li>
-                                                                    <li class="fill"><i class="ion-android-star"></i></li>
-                                                                    <li class="empty"><i class="ion-android-star"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                            <div class="content-right">
-                                                                <span class="price">@item.Price.ToString("N0") VNĐ</span>
+                                                            <div class="content">
+                                                                <div class="content-left">
+                                                                    <h6 class="title">
+                                                                        <a asp-action="DetailsFashion" asp-route-Slug="@item.Slug">@item.Name</a>
+                                                                    </h6>
+                                                                    <ul class="review-star">
+                                                                        <li class="fill"><i class="ion-android-star"></i></li>
+                                                                        <li class="fill"><i class="ion-android-star"></i></li>
+                                                                        <li class="fill"><i class="ion-android-star"></i></li>
+                                                                        <li class="fill"><i class="ion-android-star"></i></li>
+                                                                        <li class="empty"><i class="ion-android-star"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                                <div class="content-right">
+                                                                    <span class="price">@item.Price.ToString("N0") VNĐ</span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                }
                                             }
                                         </div>
 
@@ -282,12 +296,12 @@
                                                 @foreach (var item in Model)
                                                 {
                                                     <div class="product-list-single product-color--golden">
-                                                        <a asp-action="DetailsFashion" asp-route-Id="@item.Id" class="product-list-img-link">
+                                                        <a asp-action="DetailsFashion" asp-route-Slug="@item.Slug" class="product-list-img-link">
                                                             <img class="img-fluid" src="~/assets/images/product/@item.Image" alt="">
                                                             <img class="img-fluid" src="~/assets/images/product/default/home-1/default-2.jpg" alt="">
                                                         </a>
                                                         <div class="product-list-content">
-                                                            <h5 class="product-list-link"><a asp-action="DetailsFashion" asp-route-Id="@item.Id">@item.Name</a></h5>
+                                                            <h5 class="product-list-link"><a asp-action="DetailsFashion" asp-route-Slug="@item.Slug">@item.Name</a></h5>
                                                             <ul class="review-star">
                                                                 <li class="fill"><i class="ion-android-star"></i></li>
                                                                 <li class="fill"><i class="ion-android-star"></i></li>
@@ -298,7 +312,7 @@
                                                             <span class="product-list-price"><del>$30.12</del> @item.Price.ToString("N0") VNĐ</span>
                                                             <p>@item.Description</p>
                                                             <div class="product-action-icon-link-list">
-                                                                <a asp-action="Add" asp-controller="Cart" asp-route-Id="@item.Id">Thêm vào giỏ</a>
+                                                                <a asp-action="Add" asp-controller="Cart" asp-route-Slug="@item.Slug">Thêm vào giỏ</a>
                                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview" class="btn btn-lg btn-black-default-hover"><i class="icon-magnifier"></i></a>
                                                                 <a href="wishlist.html" class="btn btn-lg btn-black-default-hover"><i class="icon-heart"></i></a>
                                                                 <a href="compare.html" class="btn btn-lg btn-black-default-hover"><i class="icon-shuffle"></i></a>

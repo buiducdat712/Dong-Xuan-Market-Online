@@ -67,37 +67,40 @@
                         <h4 class="title">@Model.Product.Name</h4>
                         @if (Model.Product.Seller != null)
                         {
-                            <h5>Người bán: @Model.Product.Seller.UserName (@Model.Product.Seller.Email)</h5>
+                            <h6>Người bán: @Model.Product.Seller.UserName (@Model.Product.Seller.Email)</h6>
                         }
                         else
                         {
                             <h5>Người bán: Thông tin người bán không có sẵn</h5>
                         }
                         <div class="d-flex align-items-center">
-                            <ul class="review-star">
+                            <ul class="review-star" style="list-style: none; margin: 0; padding: 0; display: flex; align-items: center;">
                                 @for (int i = 0; i < Model.FullStarCount; i++)
                                 {
-                                    <li class="fill"><i class="ion-android-star"></i></li>
+                                    <li class="fill" style="margin-right: 2px;"><i class="ion-android-star"></i></li>
                                 }
                                 @for (int i = 0; i < Model.EmptyStarCount; i++)
                                 {
-                                    <li class="empty"><i class="ion-android-star"></i></li>
+                                    <li class="empty" style="margin-right: 2px;"><i class="ion-android-star"></i></li>
                                 }
                             </ul>
-                            <a href="#" class="customer-review ml-2">(@Model.AverageRating.ToString("0.0") sao)</a>
+                            <a href="#" class="customer-review ml-2" style="margin-left: 10px;">(@Model.AverageRating.ToString("0.0") sao)</a>
                         </div>
 
-                        <div class="price">
+
+                        <div class="title mb-3">
                             @if (Model.Product.Price > Model.Product.DiscountedPrice)
                             {
-                                <span class="old-price" style="text-decoration: line-through;">@Model.Product.Price.ToString("N0") VNĐ</span>
-                                <span class="new-price">@Model.Product.DiscountedPrice.ToString("N0") VNĐ</span>
+                                <span style="font-size: 20px; font-weight: bold; color: #d9534f;">Giá: @Model.Product.DiscountedPrice.ToString("N0") VNĐ </span>
+                                <span style="font-size: 14px; color: #6c757d; text-decoration: line-through; margin-left: 10px;">Giá cũ: @Model.Product.Price.ToString("N0") VNĐ</span>
+                                <span style="font-size: 14px; color: margin-left: 10px;">(Giảm giá: @Model.Product.DiscountPercentage%)</span>
                             }
                             else
                             {
-                                <span>@Model.Product.Price.ToString("N0") VNĐ</span>
+                                <span style="font-size: 20px; font-weight: bold; color: #5bc0de;">Giá: @Model.Product.Price.ToString("N0") VNĐ</span>
                             }
                         </div>
+
                     </div>
 
                     <!-- End  Product Details Text Area-->
@@ -190,15 +193,14 @@
                     <!-- End Product Variable Area -->
                     <!-- Start  Product Details Catagories Area-->
                     <div class="product-details-catagory mb-2">
-                        <span class="title">Danh mục:</span>
+                        <span class="title mb-3">Danh mục:</span>
                         <ul>
                             <li><a href="#">@Model.Product.Category.Name</a></li>
                             <li><a href="#">@Model.Product.Brand.Name</a></li>
-
                         </ul>
                     </div>
                     <div class="product-details-catagory mb-2">
-                        <span class="title">Đơn vị vận chuyển:</span>
+                        <span class="title mb-3">Đơn vị vận chuyển:</span>
                         <ul>
                             @{
                                 bool hasShippingOptions = false;
@@ -228,7 +230,7 @@
                     <!-- End  Product Details Catagories Area-->
                     <!-- Start  Product Details Social Area-->
                     <div class="product-details-social">
-                        <span class="title">CHIA SẺ SẢN PHẨM NÀY:</span>
+                        <span class="title mb-3">CHIA SẺ SẢN PHẨM NÀY:</span>
                         <ul>
                             <li><a href="#"><i class="fa fa-facebook"></i></a></li>
                             <li><a href="#"><i class="fa fa-twitter"></i></a></li>
@@ -357,7 +359,7 @@
                                             <p>Your email address will not be published. Required fields are marked *</p>
                                         </div>
 
-                                        <form asp-action="SubmitReview" asp-route-productId="@Model.Product.Id" method="post">
+                                        <form asp-action="SubmitReview" asp-route-Slug="@Model.Product.Slug" method="post">
                                             <input type="hidden" asp-for="NewRating.ProductId" value="@Model.Product.Id" />
                                             <input type="hidden" asp-for="NewRating.UserId" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
 
@@ -430,13 +432,13 @@
                                         <!-- Start Product Default Single Item -->
                                         <div class="product-default-single-item product-color--golden swiper-slide">
                                             <div class="image-box">
-                                                <a asp-action="DetailsDevice" asp-controller="Product" asp-route-Id="@relatedProduct.Id" class="image-link">
+                                                <a asp-action="DetailsDevice" asp-controller="Product" asp-route-Slug="@relatedProduct.Slug" class="image-link">
                                                     <img src="~/assets/images/product/@relatedProduct.Image" alt="">
                                                     <img src="~/assets/images/product/@relatedProduct.Image" alt="">
                                                 </a>
                                                 <div class="action-link">
                                                     <div class="action-link-left">
-                                                        <a asp-action="Add" asp-controller="Cart" asp-route-Id="@relatedProduct.Id">Thêm vào giỏ</a>
+                                                        <a asp-action="Add" asp-controller="Cart" asp-route-Slug="@relatedProduct.Slug">Thêm vào giỏ</a>
                                                     </div>
                                                     <div class="action-link-right">
                                                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview"><i class="icon-magnifier"></i></a>
@@ -447,7 +449,7 @@
                                             </div>
                                             <div class="content">
                                                 <div class="content-left">
-                                                    <h6 class="title"><a asp-action="DetailsFashion" asp-route-id="@relatedProduct.Id">@relatedProduct.Name</a></h6>
+                                                    <h6 class="title"><a asp-action="DetailsFashion" asp-route-Slug="@relatedProduct.Slug">@relatedProduct.Name</a></h6>
                                                     <ul class="review-star">
                                                         <li class="fill"><i class="ion-android-star"></i></li>
                                                         <li class="fill"><i class="ion-android-star"></i></li>
@@ -505,4 +507,5 @@
                 });
         });
     });
+
 </script>

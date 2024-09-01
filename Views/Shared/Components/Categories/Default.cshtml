@@ -42,13 +42,12 @@
                         actionName = "IndexDevice";
                         break;
                 }
-            
-            
+          
             <!-- Bắt đầu mục logo công ty -->
             <div class="company-logo-single-item swiper-slide">
-                <a asp-action="@actionName" asp-controller="@controllerName">
+                <a asp-action="@actionName" asp-controller="@controllerName" asp-route-slug="@item.Slug">
                     <div class="image">
-                        <img class="img-fluid" src="~/assets/images/company-logo/@item.Logo" alt="@item.Name">
+                        <img class="img-fluid" src="~/assets/images/company-logo/@item.Logo" alt="@item.Name" >
                     </div>
                     <span>@item.Name</span>
                 </a>

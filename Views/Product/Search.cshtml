@@ -42,7 +42,7 @@
                 <div class="siderbar-section" data-aos="fade-up" data-aos-delay="0">
 
                     <!-- Start Single Sidebar Widget -->
-                    @Html.Partial("_SidebarPartial")
+                    @await Html.PartialAsync("_SidebarPartial", Model)
                     <!-- End Single Sidebar Widget -->
                     <!-- Start Single Sidebar Widget -->
                     <div class="sidebar-single-widget">
@@ -233,15 +233,22 @@
                                                 <div class="col-xl-4 col-sm-6 col-12">
                                                     <div class="product-default-single-item product-color--golden" data-aos="fade-up" data-aos-delay="0">
                                                         <div class="image-box">
-                                                            <a asp-action="ProductDetails" asp-controller="Product" asp-route-Id="@item.Id" class="image-link">
+                                                            <a asp-action="ProductDetails" asp-controller="Product" asp-route-Slug="@item.Slug" class="image-link">
                                                                 <img src="~/assets/images/product/@item.Image" alt="">
                                                                 <img src="~/assets/images/product/default/home-1/default-10.jpg" alt="">
+
+                                                                @if (item.DiscountPercentage > 0)
+                                                                {
+                                                                    <div class="tag">
+                                                                        <span>Sale: @item.DiscountPercentage%</span>
+                                                                    </div>
+                                                                }
                                                             </a>
                                                             <div class="action-link">
                                                                 <div class="action-link-left">
                                                                     <a asp-action="Add" asp-controller="Cart" asp-route-Id="@item.Id">Thêm vào giỏ</a>
-
                                                                 </div>
+
                                                                 <div class="action-link-right">
                                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview"><i class="icon-magnifier"></i></a>
                                                                     <a href="wishlist.html"><i class="icon-heart"></i></a>
@@ -251,7 +258,12 @@
                                                         </div>
                                                         <div class="content">
                                                             <div class="content-left">
-                                                                <h6 class="title"><a asp-action="ProductDetails" asp-route-id="@item.Id">@item.Name</a></h6>
+                                                                <h6 class="title">
+                                                                    <a asp-action="ProductDetails" asp-route-Slug="@item.Slug">
+                                                                        @Html.Raw(item.Name.Length > 25 ? $"{item.Name.Substring(0, 25)}..." : item.Name)
+                                                                    </a>
+                                                                </h6>
+
                                                                 <ul class="review-star">
                                                                     <li class="fill"><i class="ion-android-star"></i></li>
                                                                     <li class="fill"><i class="ion-android-star"></i></li>
@@ -260,8 +272,27 @@
                                                                     <li class="empty"><i class="ion-android-star"></i></li>
                                                                 </ul>
                                                             </div>
-                                                            <div class="content-right">
-                                                                <span class="price">@item.Price.ToString("N0") VNĐ</span>
+                                                            <div class="content-right mb-3">
+                                                                @if (item.DiscountPercentage.HasValue && item.DiscountPercentage > 0)
+                                                                {
+                                                                    var discountedPrice = item.Price * (1 - (decimal)item.DiscountPercentage / 100);
+                                                                    <div class="mb-4">
+                                                                        <!-- Thêm lớp mb-3 cho khoảng cách dưới giá -->
+                                                                        <span class="price">
+                                                                            <span class="new-price">@discountedPrice.ToString("N0")đ</span>
+                                                                        </span>
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="mb-4">
+                                                                        <!-- Thêm lớp mb-3 cho khoảng cách dưới giá -->
+                                                                        <span class="price">@item.Price.ToString("N0")đ</span>
+                                                                    </div>
+                                                                }
+                                                                <div>
+                                                                    <span style="font-size: 12px;">Đã bán: @item.SoldQuantity</span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -279,12 +310,12 @@
                                                 @foreach (var item in Model)
                                                 {
                                                     <div class="product-list-single product-color--golden">
-                                                        <a asp-action="ProductDetails" asp-route-Id="@item.Id" class="product-list-img-link">
+                                                        <a asp-action="ProductDetails" asp-route-Slug="@item.Slug" class="product-list-img-link">
                                                             <img class="img-fluid" src="~/assets/images/product/@item.Image" alt="">
                                                             <img class="img-fluid" src="~/assets/images/product/default/home-1/default-2.jpg" alt="">
                                                         </a>
                                                         <div class="product-list-content">
-                                                            <h5 class="product-list-link"><a asp-action="ProductDetails" asp-route-Id="@item.Id">@item.Name</a></h5>
+                                                            <h5 class="product-list-link"><a asp-action="ProductDetails" asp-route-Slug="@item.Slug">@item.Name</a></h5>
                                                             <ul class="review-star">
                                                                 <li class="fill"><i class="ion-android-star"></i></li>
                                                                 <li class="fill"><i class="ion-android-star"></i></li>
@@ -292,10 +323,24 @@
                                                                 <li class="fill"><i class="ion-android-star"></i></li>
                                                                 <li class="empty"><i class="ion-android-star"></i></li>
                                                             </ul>
-                                                            <span class="product-list-price"><del>$30.12</del> @item.Price.ToString("N0") VNĐ</span>
-                                                            <p>@item.Description</p>
+                                                            @if (item.DiscountPercentage.HasValue && item.DiscountPercentage > 0)
+                                                            {
+                                                                var discountedPrice = item.Price * (1 - (decimal)item.DiscountPercentage / 100);
+                                                                <span class="price">
+                                                                    <span class="old-price" style="text-decoration: line-through;">@item.Price.ToString("N0") VNĐ</span>
+                                                                    <span class="new-price">@discountedPrice.ToString("N0") VNĐ</span>
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="price">@item.Price.ToString("N0") VNĐ</span>
+                                                            }
+
                                                             <div class="product-action-icon-link-list">
-                                                                <a asp-action="Add" asp-controller="Cart" asp-route-Id="@item.Id">Thêm vào giỏ</a>
+                                                                <div class="product-add-to-cart-btn ms-3">
+                                                                    <input type="hidden" name="Id" value="@item.Id" />
+                                                                    <button type="submit" class="btn btn-success btn-lg">+ Thêm vào giỏ hàng</button>
+                                                                </div>
                                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview" class="btn btn-lg btn-black-default-hover"><i class="icon-magnifier"></i></a>
                                                                 <a href="wishlist.html" class="btn btn-lg btn-black-default-hover"><i class="icon-heart"></i></a>
                                                                 <a href="compare.html" class="btn btn-lg btn-black-default-hover"><i class="icon-shuffle"></i></a>

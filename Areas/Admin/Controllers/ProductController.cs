@@ -51,6 +51,7 @@ using Dong_Xuan_Market_Online.Repository;
                 var products = await _dataContext.Products
                                                  .OrderByDescending(p => p.Id)
                                                  .Include(p => p.Category)
+                                                 .Include(p => p.CategorySub)
                                                  .Include(p => p.Brand)
                                                  .Skip(recSkip) // Bỏ qua các bản ghi trước đó
                                                  .Take(pager.PageSize) // Lấy số bản ghi cần thiết
@@ -66,6 +67,7 @@ using Dong_Xuan_Market_Online.Repository;
         public IActionResult Create()
         {
             ViewBag.Categories = new SelectList(_dataContext.Categories, "Id", "Name");
+            ViewBag.Categorysubs = new SelectList(_dataContext.CategorySubModels, "Id", "Name");
             ViewBag.Brands = new SelectList(_dataContext.Brands, "Id", "Name");
             return View();
         }
@@ -121,6 +123,7 @@ using Dong_Xuan_Market_Online.Repository;
             }
 
             ViewBag.Categories = new SelectList(_dataContext.Categories, "Id", "Name", product.CategoryId);
+            ViewBag.Categorysubs = new SelectList(_dataContext.CategorySubModels, "Id", "Name");
             ViewBag.Brands = new SelectList(_dataContext.Brands, "Id", "Name", product.BrandId);
 
             return View(product);
@@ -132,7 +135,7 @@ using Dong_Xuan_Market_Online.Repository;
             var product = _dataContext.Products
                 .Include(p => p.Category)
                 .Include(p => p.Brand)
-                .Include(p => p.ProductImages) // Đảm bảo rằng các hình ảnh được tải cùng với sản phẩm
+                .Include(p => p.CategorySub)
                 .FirstOrDefault(p => p.Id == id);
 
             if (product == null)
@@ -148,9 +151,6 @@ using Dong_Xuan_Market_Online.Repository;
 
             return View(viewModel);
         }
-
-
-
 
         [Route("Delete/{id:int}")]
             public async Task<IActionResult> Delete(int id)

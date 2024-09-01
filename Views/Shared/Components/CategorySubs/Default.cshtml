@@ -1,0 +1,17 @@
+﻿@model IEnumerable<Dong_Xuan_Market_Online.Models.CategorySubModel>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">DANH MỤC</h5>
+    </div>
+    <ul class="list-group list-group-flush">
+        @foreach (var subCategory in Model)
+        {
+            <li class="list-group-item">
+                <a href="@Url.Action("IndexWithCate", "Product", new { slug = subCategory.Slug })" class="text-decoration-none">
+                    @subCategory.Name
+                </a>
+            </li>
+        }
+    </ul>
+</div>

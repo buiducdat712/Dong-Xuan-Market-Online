@@ -8,54 +8,348 @@
         pager = ViewBag.Pager;
         pageNo = pager.CurrentPage;
     }
-}
-<div class="container-fluid">
-    <div class="table-responsive">
-        <h3 class="my-4">Lịch sử mua hàng</h3>
-        <table class="table table-bordered table-striped" id="myTable">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Mã Đơn Hàng</th>
-                    <th scope="col">Tên Người Đặt</th>
-                    <th scope="col">Ngày Đặt</th>
-                    <th scope="col">Trạng Thái</th>
-                    <th scope="col">Hành Động</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model != null && Model.Any())
-                {
-                    foreach (var item in Model)
-                    {
-                        <tr id="order-row-@item.OrderCode">
-                            <td>@item.OrderCode</td>
-                            <td>@item.UserName</td>
-                            <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
-                            <td>
-                                @if (item.Status == 1)
-                                {
-                                    <p>Đơn hàng mới</p>
-                                }
-                                else
-                                {
-                                    <p>Đã xử lý</p>
-                                }
-                            </td>
-                            <td>
-                                <a asp-action="ViewOrder" asp-controller="Order" asp-route-ordercode="@item.OrderCode" class="btn btn-sm btn-warning">Xem Đơn</a>
-                                <button class="btn btn-sm btn-danger delete-order" data-ordercode="@item.OrderCode">Xóa</button>
-                            </td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="5">Không có đơn hàng nào.</td>
-                    </tr>
-                }
 
-            </tbody>
-        </table>
-    </div>
-</div>
+    var allOrders = Model;
+    var waitDeliveryOrders = Model.Where(o => o.Status == 1);
+    var deliveredOrders = Model.Where(o => o.Status == 0);
+    var canceledOrders = Model.Where(o => o.Status == 2);
+    var returnedOrders = Model.Where(o => o.Status == 3);
+    var acceptOrders = Model.Where(o => o.Status == 4);
+}
+
+<body>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header p-2">
+                            <ul class="nav nav-pills" id="order-tabs">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#allorders" data-toggle="tab">Tất cả</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#waitdelivery" data-toggle="tab">Đơn hàng mới</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#accept" data-toggle="tab">Đã xác nhận</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#delivered" data-toggle="tab">Đã giao</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#canceledorder" data-toggle="tab">Đã Hủy đơn</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#return" data-toggle="tab">Trả hàng</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="active tab-pane" id="allorders">
+                                    <h3>Tất cả</h3>
+                                    <table class="table table-bordered table-striped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">Mã đơn hàng</th>
+                                                <th scope="col">Giá đơn hàng</th>
+                                                <th scope="col">Ngày Đặt</th>
+                                                <th scope="col">Trạng Thái</th>
+                                                <th scope="col">Hành Động</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (allOrders != null && allOrders.Any())
+                                            {
+                                                foreach (var item in allOrders)
+                                                {
+                                                    <tr id="order-row-@item.OrderCode">
+                                                        <td>@item.OrderCode</td>
+                                                        <td>@item.GrandTotal.ToString("N0")đ</td>
+                                                        <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
+                                                        <td>
+                                                            @if (item.Status == 1)
+                                                            {
+                                                                <p>Đơn hàng mới</p>
+                                                            }
+                                                            else if (item.Status == 2)
+                                                            {
+                                                                <p>Đơn bị hủy</p>
+                                                            }
+                                                            else if (item.Status == 3)
+                                                            {
+                                                                <p>Trả hàng</p>
+                                                            }
+                                                            else if (item.Status == 4)
+                                                            {
+                                                                <p>Đã xác nhận</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p>Đã giao</p>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            <a asp-action="ViewOrder" asp-controller="Order" asp-route-ordercode="@item.OrderCode" class="btn btn-sm btn-warning">Xem Đơn</a>
+                                                            <button class="btn btn-sm btn-danger delete-order" data-ordercode="@item.OrderCode">Xóa</button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td colspan="5">Không có đơn hàng nào.</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="waitdelivery">
+                                    <h3>Đơn hàng mới</h3>
+                                    <table class="table table-bordered table-striped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">Mã đơn hàng</th>
+                                                <th scope="col">Tên Người Đặt</th>
+                                                <th scope="col">Ngày Đặt</th>
+                                                <th scope="col">Trạng Thái</th>
+                                                <th scope="col">Hành Động</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (waitDeliveryOrders != null && waitDeliveryOrders.Any())
+                                            {
+                                                foreach (var item in waitDeliveryOrders)
+                                                {
+                                                    <tr id="order-row-@item.OrderCode">
+                                                        <td>@item.OrderCode</td>
+                                                        <td>@item.UserName</td>
+                                                        <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
+                                                        <td>
+                                                            <p>Đơn hàng mới</p>
+                                                        </td>
+                                                        <td>
+                                                            <a asp-action="ViewOrder" asp-controller="Order" asp-route-ordercode="@item.OrderCode" class="btn btn-sm btn-warning">Xem Đơn</a>
+                                                            <button class="btn btn-sm btn-danger delete-order" data-ordercode="@item.OrderCode">Xóa</button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td colspan="5">Không có đơn hàng nào.</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="accept">
+                                    <h3>Đã xác nhận</h3>
+                                    <table class="table table-bordered table-striped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">Mã đơn hàng</th>
+                                                <th scope="col">Tên Người Đặt</th>
+                                                <th scope="col">Ngày Đặt</th>
+                                                <th scope="col">Trạng Thái</th>
+                                                <th scope="col">Hành Động</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (acceptOrders != null && acceptOrders.Any())
+                                            {
+                                                foreach (var item in acceptOrders)
+                                                {
+                                                    <tr id="order-row-@item.OrderCode">
+                                                        <td>@item.OrderCode</td>
+                                                        <td>@item.UserName</td>
+                                                        <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
+                                                        <td>
+                                                            <p>Đã xác nhận</p>
+                                                        </td>
+                                                        <td>
+                                                            <a asp-action="ViewOrder" asp-controller="Order" asp-route-ordercode="@item.OrderCode" class="btn btn-sm btn-warning">Xem Đơn</a>
+                                                            <button class="btn btn-sm btn-danger delete-order" data-ordercode="@item.OrderCode">Xóa</button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td colspan="5">Không có đơn hàng nào.</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="delivered">
+                                    <h3>Đã giao</h3>
+                                    <table class="table table-bordered table-striped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">Mã đơn hàng</th>
+                                                <th scope="col">Tên Người Đặt</th>
+                                                <th scope="col">Ngày Đặt</th>
+                                                <th scope="col">Trạng Thái</th>
+                                                <th scope="col">Hành Động</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (deliveredOrders != null && deliveredOrders.Any())
+                                            {
+                                                foreach (var item in deliveredOrders)
+                                                {
+                                                    <tr id="order-row-@item.OrderCode">
+                                                        <td>@item.OrderCode</td>
+                                                        <td>@item.UserName</td>
+                                                        <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
+                                                        <td>
+                                                            <p>Đã giao</p>
+                                                        </td>
+                                                        <td>
+                                                            <a asp-action="ViewOrder" asp-controller="Order" asp-route-ordercode="@item.OrderCode" class="btn btn-sm btn-warning">Xem Đơn</a>
+                                                            <button class="btn btn-sm btn-danger delete-order" data-ordercode="@item.OrderCode">Xóa</button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td colspan="5">Không có đơn hàng nào.</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="canceledorder">
+                                    <h3>Đã Hủy đơn</h3>
+                                    <table class="table table-bordered table-striped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">Mã đơn hàng</th>
+                                                <th scope="col">Tên Người Đặt</th>
+                                                <th scope="col">Ngày Đặt</th>
+                                                <th scope="col">Trạng Thái</th>
+                                                <th scope="col">Hành Động</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (canceledOrders != null && canceledOrders.Any())
+                                            {
+                                                foreach (var item in canceledOrders)
+                                                {
+                                                    <tr id="order-row-@item.OrderCode">
+                                                        <td>@item.OrderCode</td>
+                                                        <td>@item.UserName</td>
+                                                        <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
+                                                        <td>
+                                                            <p>Đơn bị hủy</p>
+                                                        </td>
+                                                        <td>
+                                                            <a asp-action="ViewOrder" asp-controller="Order" asp-route-ordercode="@item.OrderCode" class="btn btn-sm btn-warning">Xem Đơn</a>
+                                                            <button class="btn btn-sm btn-danger delete-order" data-ordercode="@item.OrderCode">Xóa</button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td colspan="5">Không có đơn hàng nào.</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="return">
+                                    <h3>Trả hàng</h3>
+                                    <table class="table table-bordered table-striped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">Mã đơn hàng</th>
+                                                <th scope="col">Tên Người Đặt</th>
+                                                <th scope="col">Ngày Đặt</th>
+                                                <th scope="col">Trạng Thái</th>
+                                                <th scope="col">Hành Động</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (returnedOrders != null && returnedOrders.Any())
+                                            {
+                                                foreach (var item in returnedOrders)
+                                                {
+                                                    <tr id="order-row-@item.OrderCode">
+                                                        <td>@item.OrderCode</td>
+                                                        <td>@item.UserName</td>
+                                                        <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
+                                                        <td>
+                                                            <p>Đơn đã trả</p>
+                                                        </td>
+                                                        <td>
+                                                            <a asp-action="ViewOrder" asp-controller="Order" asp-route-ordercode="@item.OrderCode" class="btn btn-sm btn-warning">Xem Đơn</a>
+                                                            <button class="btn btn-sm btn-danger delete-order" data-ordercode="@item.OrderCode">Xóa</button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td colspan="5">Không có đơn hàng nào.</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        $(document).ready(function () {
+            $('#order-tabs a').on('click', function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll('.delete-order').forEach(button => {
+                button.addEventListener('click', function () {
+                    const orderCode = this.getAttribute('data-ordercode');
+                    if (confirm('Bạn có chắc chắn muốn xóa đơn hàng này?')) {
+                        fetch(`/Seller/Order/DeleteOrder`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: new URLSearchParams({ ordercode: orderCode })
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    alert(data.message);
+                                    document.getElementById(`order-row-${orderCode}`).remove(); 
+                                } else {
+                                    alert(data.message);
+                                }
+                            })
+                            .catch(error => {
+                                alert('Đã xảy ra lỗi: ' + error.message);
+                            });
+                    }
+                });
+            });
+        });
+    </script>
+</body>

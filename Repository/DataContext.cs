@@ -12,17 +12,23 @@ namespace Dong_Xuan_Market_Online.Repository
 
         }
         public DbSet<BrandModel> Brands { get; set; }
+        public DbSet<HomeImageModel> HomeImages  { get; set; }
+        public DbSet<SliderModel> Sliders { get; set; }
         public DbSet<ProductModel> Products { get; set; }
         public DbSet<CategorySubModel> CategorySubModels { get; set; } 
         public DbSet<CategoryModel> Categories { get; set; }
         public DbSet<RatingModel> Ratings { get; set; }
         public DbSet<OrderModel> Orders { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
-        public DbSet<ProductImages> ProductImages { get; set; }  // Add this line
+        public DbSet<ProductImages> ProductImages { get; set; } 
+        public DbSet<FriendshipModel> Friendships { get; set; }
+        public DbSet<MessageModel> Messages { get; set; }
+        public DbSet<VoucherModel> Vouchers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
 
             // Thiết lập quan hệ giữa Product và Seller
             modelBuilder.Entity<ProductModel>()
@@ -79,6 +85,51 @@ namespace Dong_Xuan_Market_Online.Repository
                 .WithMany()  // User không cần truy cập các đánh giá
                 .HasForeignKey(r => r.UserId);
 
+            // Cấu hình quan hệ nhiều-nhiều giữa AppUserModel và FriendshipModel
+            modelBuilder.Entity<FriendshipModel>()
+                .HasOne(f => f.User)
+                .WithMany(u => u.Friendships)
+                .HasForeignKey(f => f.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<FriendshipModel>()
+                .HasOne(f => f.Friend)
+                .WithMany()
+                .HasForeignKey(f => f.FriendId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<MessageModel>()
+            .HasOne(m => m.Sender)
+            .WithMany(u => u.SentMessages)
+            .HasForeignKey(m => m.SenderId)
+            .OnDelete(DeleteBehavior.Restrict); 
+
+            modelBuilder.Entity<MessageModel>()
+                .HasOne(m => m.Receiver)
+                .WithMany(u => u.ReceivedMessages)
+                .HasForeignKey(m => m.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Cấu hình các thuộc tính cho VoucherModel
+            modelBuilder.Entity<VoucherModel>()
+                .Property(v => v.Code)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            // Không đặt giá trị mặc định cho thuộc tính nullable
+            modelBuilder.Entity<VoucherModel>()
+                .Property(v => v.DiscountPercentage);
+
+            modelBuilder.Entity<VoucherModel>()
+                .Property(v => v.DiscountAmount);
+
+            modelBuilder.Entity<VoucherModel>()
+                .Property(v => v.IsActive)
+                .HasDefaultValue(true);
+
+            modelBuilder.Entity<VoucherModel>()
+                .Property(v => v.ExpiryDate)
+                .IsRequired();
         }
     }
 }

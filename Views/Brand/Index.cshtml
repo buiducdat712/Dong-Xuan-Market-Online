@@ -19,12 +19,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <h3 class="breadcrumb-title">Thời trang</h3>
+                    <h3 class="breadcrumb-title">Thương hiệu</h3>
                     <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
                         <nav aria-label="breadcrumb">
                             <ul>
                                 <li><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
-                                <li class="active" aria-current="page">Thời trang</li>
+                                
                             </ul>
                         </nav>
                     </div>
@@ -42,7 +42,7 @@
                 <div class="siderbar-section" data-aos="fade-up" data-aos-delay="0">
 
                     <!-- Start Single Sidebar Widget -->
-                    @Html.Partial("_SidebarPartial")
+                    @Html.Partial("_SidebarPartial", Model)
                     <!-- End Single Sidebar Widget -->
                     <!-- Start Single Sidebar Widget -->
                     <div class="sidebar-single-widget">
@@ -255,7 +255,7 @@
                                                         </div>
                                                         <div class="content">
                                                             <div class="content-left">
-                                                                <h6 class="title"><a asp-action="Details" asp-route-id="@item.Id">@item.Name</a></h6>
+                                                                <h6 class="title"><a asp-action="Details" asp-route-Slug="@item.Slug">@item.Name</a></h6>
                                                                 <ul class="review-star">
                                                                     <li class="fill"><i class="ion-android-star"></i></li>
                                                                     <li class="fill"><i class="ion-android-star"></i></li>

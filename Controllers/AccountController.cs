@@ -20,8 +20,11 @@ namespace Dong_Xuan_Market_Online.Controllers
         }
         public IActionResult Login(string returnUrl)
         {
-            return View(new LoginViewModel { ReturnUrl = returnUrl});
+            // Nếu ReturnUrl là null hoặc trống, thiết lập một giá trị mặc định
+            returnUrl = returnUrl ?? "/";
+            return View(new LoginViewModel { ReturnUrl = returnUrl });
         }
+
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginVM)
         {
@@ -64,8 +67,95 @@ namespace Dong_Xuan_Market_Online.Controllers
             }
             return View(user);
         }
-        
 
+        [HttpGet]
+        public async Task<IActionResult> Profile()
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var roleId = user.RoleId;
+            var role = await _dataContext.Roles.FirstOrDefaultAsync(r => r.Id == roleId);
+            var roleName = role?.Name ?? "Không có vai trò";
+
+            var model = new UserProfileViewModel
+            {
+                UserName = user.UserName,
+                FullName = user.FullName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Occupation = roleName,
+                AvatarUrl = user.AvatarUrl,
+                BirthDate = user.BirthDate,
+                Address = user.Address
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Profile(UserProfileViewModel model, IFormFile Avatar)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                user.FullName = model.FullName;
+                user.Email = model.Email;
+                user.PhoneNumber = model.PhoneNumber;
+                user.Occupation = model.Occupation;
+                user.Address = model.Address;
+                user.BirthDate = model.BirthDate;
+
+                // Handle avatar upload
+                if (Avatar != null && Avatar.Length > 0)
+                {
+                    // Delete old avatar if it exists
+                    if (!string.IsNullOrEmpty(user.AvatarUrl))
+                    {
+                        var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", user.AvatarUrl.TrimStart('/'));
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+                        }
+                    }
+
+                    // Upload new avatar
+                    var fileName = Path.GetFileName(Avatar.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/assets/images/user", fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await Avatar.CopyToAsync(stream);
+                    }
+
+                    user.AvatarUrl = $"/images/user/{fileName}";
+                }
+
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    TempData["SuccessMessage"] = "Cập nhật hồ sơ thành công!";
+                    return RedirectToAction("Profile");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            return View(model);
+        }
 
         public async Task<IActionResult> Logout(string returnUrl ="/")
         {

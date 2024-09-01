@@ -1,4 +1,5 @@
 ﻿using Dong_Xuan_Market_Online.Models;
+using Dong_Xuan_Market_Online.Models.ViewModels;
 using Dong_Xuan_Market_Online.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,5 +24,7 @@ namespace Dong_Xuan_Market_Online.Controllers
 
             return View(await fashionsByCategory.OrderByDescending(p => p.Id).ToListAsync());
         }
+        
+
     }
 }

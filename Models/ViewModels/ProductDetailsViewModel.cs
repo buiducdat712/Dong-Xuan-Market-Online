@@ -6,6 +6,7 @@ namespace Dong_Xuan_Market_Online.Models.ViewModels
     {
         public ProductModel Product { get; set; }
         public RatingModel RatingModel { get; set; }
+        public List<HomeImageModel> HomeImages { get; set; }
         public List<ProductImages> SortedImages { get; set; }
         public List<ProductModel> RelatedProducts { get; set; }
         public string ActionName { get; set; }

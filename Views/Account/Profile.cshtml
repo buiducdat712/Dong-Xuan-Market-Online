@@ -1,0 +1,216 @@
+﻿@model UserProfileViewModel
+@{
+    ViewData["Title-1"] = "HỒ SƠ CỦA TÔI";
+    ViewData["Title-2"] = "THÔNG BÁO";
+    ViewData["Title-3"] = "KHO VAUCHER";
+    ViewData["Title-4"] = "NGÂN HÀNG";
+    ViewData["Title-5"] = "ĐỔI MẬT KHẨU";
+}
+<head>
+
+
+</head>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successMessage" class="alert alert-success">
+        <i class="fa fa-check-circle"></i> @TempData["SuccessMessage"]
+    </div>
+}
+<div class="mx-4 ">
+    <form asp-action="Profile" method="post" enctype="multipart/form-data" class="mt-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="text-center">
+                    @if (Model.AvatarUrl != null)
+                    {
+                        <img src="/assets/@Model.AvatarUrl" alt="Avatar" class="rounded-circle mb-3" style="width: 150px;">
+                        <div>@Model.FullName</div>
+                    }
+                    else
+                    {
+                        <p>Chưa có ảnh đại diện.</p>
+                    }
+                </div>
+                <ul class="nav nav-pills nav-sidebar flex-column mt-3" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item menu-open">
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link active" data-target="profiles">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    <p>Hồ sơ của tôi</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-target="notifications">
+                                    <i class="fa-regular fa-envelope"></i>
+                                    <p>Thông báo</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-target="voucher">
+                                    <i class="fa-solid fa-money-bill"></i>
+                                    <p>Kho Voucher</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-target="banks">
+                                    <i class="fa-solid fa-building-columns"></i>
+                                    <p>Ngân hàng</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-target="changepassword">
+                                    <i class="fa-solid fa-key"></i>
+                                    <p>Đổi mật khẩu</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div id="contentSection" class="col-md-9">
+                <div id="profilesSection" class="content-section">
+                    <h3>@ViewData["Title-1"]</h3>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group row">
+                                <label asp-for="UserName" class="col-sm-3 col-form-label">Tên đăng nhập</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="UserName" class="form-control" readonly />
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="FullName" class="col-sm-3 col-form-label">Họ và tên</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="FullName" class="form-control" />
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="Email" class="col-sm-3 col-form-label">Email</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="Email" class="form-control" />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="PhoneNumber" class="col-sm-3 col-form-label">Số điện thoại</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="PhoneNumber" class="form-control" />
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="Occupation" class="col-sm-3 col-form-label">Vai trò</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="Occupation" class="form-control" readonly />
+                                    <span asp-validation-for="Occupation" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="BirthDate" class="col-sm-3 col-form-label">Ngày sinh</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="BirthDate" class="form-control" type="date" />
+                                    <span asp-validation-for="BirthDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="Address" class="col-sm-3 col-form-label">Địa chỉ</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="Address" class="form-control" />
+                                    <span asp-validation-for="Address" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="col-form-label">Tải lên ảnh đại diện mới</label>
+                                <input type="file" id="avatarUpload" name="Avatar" class="form-control-file" />
+                                <small class="form-text text-muted">Dụng lượng file tối đa 1 MB, định dạng: JPEG, PNG</small>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label class="col-form-label">Ảnh đại diện mới</label>
+                                <img id="newAvatarPreview" alt="New Avatar Preview" class="rounded-circle" style="width: 150px; display: none;">
+                            </div>
+                            <div class="form-group mt-4">
+                                <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-save"></i> Cập nhật hồ sơ</button>
+                            </div>
+                            <div class="mt-3">
+                                <a asp-action="Index" asp-controller="Home" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Trở về trang chính</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="notificationsSection" class="content-section" style="display: none;">
+                    <h3>@ViewData["Title-2"]</h3>
+                    <!-- Nội dung phần Thông báo -->
+                </div>
+                <div id="voucherSection" class="content-section" style="display: none;">
+                    <h3>@ViewData["Title-3"]</h3>
+                    <!-- Nội dung phần Voucher -->
+                </div>
+                <div id="banksSection" class="content-section" style="display: none;">
+                    <h3>@ViewData["Title-4"]</h3>
+                    <!-- Nội dung phần Ngân hàng -->
+                </div>
+                <div id="changepasswordSection" class="content-section" style="display: none;">
+                    <h3>@ViewData["Title-5"]</h3>
+                    <!-- Nội dung phần Đổi mật khẩu -->
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+@section Scripts {
+    <script>
+
+        document.querySelectorAll('.nav-link').forEach(function (link) {
+            link.addEventListener('click', function (event) {
+                event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+                // Xóa lớp 'active' khỏi tất cả liên kết
+                document.querySelectorAll('.nav-link').forEach(function (link) {
+                    link.classList.remove('active');
+                });
+
+                // Thêm lớp 'active' vào liên kết đã nhấp
+                this.classList.add('active');
+
+                // Ẩn tất cả các phần nội dung
+                document.querySelectorAll('.content-section').forEach(function (section) {
+                    section.style.display = 'none';
+                });
+
+                // Hiển thị phần nội dung được chọn dựa trên thuộc tính data-target
+                var targetId = this.getAttribute('data-target');
+                var targetSection = document.getElementById(targetId + 'Section');
+                if (targetSection) {
+                    targetSection.style.display = 'block';
+                }
+            });
+        });
+
+        document.getElementById('avatarUpload').addEventListener('change', function (event) {
+            var file = event.target.files[0];
+            var preview = document.getElementById('newAvatarPreview');
+
+            if (file) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+
+    </script>
+}

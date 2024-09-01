@@ -1,67 +1,35 @@
-﻿@model List<Dong_Xuan_Market_Online.Models.ViewModels.ProductDetailsViewModel>
-
+﻿@* @model List<Dong_Xuan_Market_Online.Models.ViewModels.ProductDetailsViewModel> *@
+@model Dong_Xuan_Market_Online.Models.ViewModels.IndexViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
-
 <div class="banner-section section-top-gap-100 section-fluid">
     <div class="banner-wrapper">
         <div class="container-fluid">
             <div class="row mb-n6">
-
                 <div class="col-lg-6 col-12 mb-6">
                     <!-- Start Banner Single Item -->
                     <div class="banner-single-item banner-style-1 banner-animation img-responsive" data-aos="fade-up" data-aos-delay="0">
                         <div class="image">
-                            <img src="assets/images/banner/cho-dong-xuan-1.jpg" alt="">
+                            <img src="~/assets/images/banner/@Model.HomeImages[0].Image" alt="Banner Image" />
                         </div>
-                        
                     </div>
                     <!-- End Banner Single Item -->
                 </div>
-
                 <div class="col-lg-6 col-12 mb-6">
                     <div class="row mb-n6">
-                        <!-- Start Banner Single Item -->
-                        <div class="col-lg-6 col-sm-6 mb-6">
-                            <div class="banner-single-item banner-style-2 banner-animation img-responsive" data-aos="fade-up" data-aos-delay="0">
-                                <div class="image">
-                                    <img src="assets/images/banner/backgroud-home.jpg" alt="">
+                        @for (int i = 1; i <= 4; i++)
+                        {
+                            <div class="col-lg-6 col-sm-6 mb-6">
+                                <!-- Start Banner Single Item -->
+                                <div class="banner-single-item banner-style-2 banner-animation img-responsive" data-aos="fade-up" data-aos-delay="@(i * 200)">
+                                    <div class="image">
+                                        <img src="~/assets/images/banner/@Model.HomeImages[i].Image" alt="Banner Image" />
+                                    </div>
                                 </div>
-                                
+                                <!-- End Banner Single Item -->
                             </div>
-                        </div>
-                        <!-- End Banner Single Item -->
-                        <!-- Start Banner Single Item -->
-                        <div class="col-lg-6 col-sm-6 mb-6">
-                            <div class="banner-single-item banner-style-2 banner-animation img-responsive" data-aos="fade-up" data-aos-delay="200">
-                                <div class="image">
-                                    <img src="assets/images/banner/cdn-vietbao-vn_cho-do-co-van-phuc-3-130416.jpg" alt="">
-                                </div>
-                                
-                            </div>
-                        </div>
-                        <!-- End Banner Single Item -->
-                        <!-- Start Banner Single Item -->
-                        <div class="col-lg-6 col-sm-6 mb-6">
-                            <div class="banner-single-item banner-style-2 banner-animation img-responsive" data-aos="fade-up" data-aos-delay="0">
-                                <div class="image">
-                                    <img src="assets/images/banner/Cho-Dem-Dong-Xuan-e1508152299678.png" alt="">
-                                </div>
-                                
-                            </div>
-                        </div>
-                        <!-- End Banner Single Item -->
-                        <!-- Start Banner Single Item -->
-                        <div class="col-lg-6 col-sm-6 mb-6">
-                            <div class="banner-single-item banner-style-2 banner-animation img-responsive" data-aos="fade-up" data-aos-delay="200">
-                                <div class="image">
-                                    <img src="assets/images/banner/cho-dong-xuan-co-gi-1125x750.jpg" alt="">
-                                </div>
-                                
-                            </div>
-                        </div>
-                        <!-- End Banner Single Item -->
+                        }
                     </div>
                 </div>
             </div>
@@ -97,16 +65,19 @@
                             <!-- Additional required wrapper -->
                             <div class="swiper-wrapper">
                                 <!-- Start Product Default Single Item -->
-                                @foreach (var item in Model)
+                                @foreach (var item in Model.ProductDetails)
                                 {
                                     @if (item.Product.DiscountPercentage > 0)
                                     {
                                     <div class="product-default-single-item product-color--golden swiper-slide">
                                         <div class="product-default-single-item product-color--golden" data-aos="fade-up" data-aos-delay="0">
                                             <div class="image-box">
-                                                <a asp-action="ProductDetails" asp-controller="Product" asp-route-Id="@item.Product.Id" class="image-link">
+                                                <a asp-action="ProductDetails" asp-controller="Product" asp-route-Slug="@item.Product.Slug" class="image-link">
                                                     <img src="~/assets/images/product/@item.Product.Image" alt="">
                                                     <img src="~/assets/images/product/default/home-1/default-10.jpg" alt="">
+                                                        <div class="tag">
+                                                            <span>Sale: @item.Product.DiscountPercentage%</span>
+                                                        </div>
                                                 </a>
                                                 <div class="action-link">
                                                     <div class="action-link-left">
@@ -121,7 +92,11 @@
                                             </div>
                                             <div class="content">
                                                 <div class="content-left">
-                                                    <h6 class="title"><a asp-action="ProductDetails" asp-route-id="@item.Product.Id">@item.Product.Name</a></h6>
+                                                        <h6 class="title">
+                                                            <a asp-action="ProductDetails" asp-route-Slug="@item.Product.Slug">
+                                                                @Html.Raw(item.Product.Name.Length > 25 ? $"{item.Product.Name.Substring(0, 25)}..." : item.Product.Name)
+                                                            </a>
+                                                        </h6>
                                                     <div class="d-flex align-items-center">
                                                         <ul class="review-star">
                                                             @for (int i = 0; i < item.FullStarCount; i++)
@@ -133,23 +108,31 @@
                                                                 <li class="empty"><i class="ion-android-star"></i></li>
                                                             }
                                                         </ul>
-                                                        <a href="#" class="customer-review ml-2">(@item.AverageRating.ToString("0.0") sao)</a>
+                                                       
                                                     </div>
                                                 </div>
-                                                <div class="content-right">
-                                                    @if (item.Product.DiscountPercentage.HasValue && item.Product.DiscountPercentage > 0)
-                                                    {
-                                                        var discountedPrice = item.Product.Price * (1 - (decimal)item.Product.DiscountPercentage / 100);
-                                                        <span class="price">
-                                                            <span class="old-price" style="text-decoration: line-through;">@item.Product.Price.ToString("N0") VNĐ</span>
-                                                            <span class="new-price">@discountedPrice.ToString("N0") VNĐ</span>
-                                                        </span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="price">@item.Product.Price.ToString("N0") VNĐ</span>
-                                                    }
-                                                </div>
+                                                    <div class="content-right mb-3">
+                                                        @if (item.Product.DiscountPercentage.HasValue && item.Product.DiscountPercentage > 0)
+                                                        {
+                                                            var discountedPrice = item.Product.Price * (1 - (decimal)item.Product.DiscountPercentage / 100);
+                                                            <div class="mb-4">
+                                                                <!-- Thêm lớp mb-3 cho khoảng cách dưới giá -->
+                                                                <span class="price">
+                                                                    <span class="new-price">@discountedPrice.ToString("N0")đ</span>
+                                                                </span>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="mb-4">
+                                                                <!-- Thêm lớp mb-3 cho khoảng cách dưới giá -->
+                                                                <span class="price">@item.Product.Price.ToString("N0")đ</span>
+                                                            </div>
+                                                        }
+                                                        <div>
+                                                            <span style="font-size: 12px;">Đã bán: @item.Product.SoldQuantity</span>
+                                                        </div>
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
@@ -172,27 +155,34 @@
 
 <!-- End Product Default Slider Section -->
 <!-- Start Banner Section -->
-<div class="banner-section section-top-gap-100">
-    <div class="banner-wrapper clearfix">
-        <!-- Start Banner Single Item -->
-        <a href="product-details-default.html">
-            <div class="banner-single-item banner-style-8 banner-animation banner-color--green float-left" data-aos="fade-up" data-aos-delay="0">
-                <div class="image">
-                    <img class="img-fluid" src="assets/images/banner/banner-style-8-img-1.jpg" alt="">
-                </div>
+<div id="bannerCarousel" class="carousel slide" data-ride="carousel" style="max-width: 85%; margin: 0 auto; height: 400px;">
+    <ol class="carousel-indicators">
+        @for (int i = 0; i < Model.SliderImages.Count; i++)
+        {
+            <li data-target="#bannerCarousel" data-slide-to="@i" @(i == 0 ? "class='active'" : "")></li>
+        }
+    </ol>
+    <div class="carousel-inner" style="height: 100%;">
+        @for (int i = 0; i < Model.SliderImages.Count; i++)
+        {
+            var sliderImage = Model.SliderImages[i];
+            <div class="carousel-item @(i == 0 ? "active" : "")">
+                <a href="product-details-default.html">
+                    <div class="banner-single-item" style="height: 100%;">
+                        <img class="d-block w-100" src="~/assets/images/banner/@sliderImage.Image" style="height: 100%; object-fit: cover;">
+                    </div>
+                </a>
             </div>
-        </a>
-        <!-- End Banner Single Item -->
-        <!-- Start Banner Single Item -->
-        <a href="product-details-default.html">
-            <div class="banner-single-item banner-style-8 banner-animation banner-color--green float-left" data-aos="fade-up" data-aos-delay="200">
-                <div class="image">
-                    <img class="img-fluid" src="assets/images/banner/banner-style-8-img-2.jpg" alt="">
-                </div>
-            </div>
-        </a>
-        <!-- End Banner Single Item -->
+        }
     </div>
+    <a class="carousel-control-prev" href="#bannerCarousel" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#bannerCarousel" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
 </div>
 <!-- End Banner Section -->
 <!-- Start Product List View Slider Section -->
@@ -204,7 +194,7 @@
                 <div class="col-12">
                     <div class="section-content-gap">
                         <div class="secton-content">
-                            <h3 class="section-title">San pham ban chay</h3>
+                            <h3 class="section-title">SẢN PHẨM BÁN CHẠY</h3>
                         </div>
                     </div>
                 </div>
@@ -222,320 +212,53 @@
                             <!-- Additional required wrapper -->
                             <div class="swiper-wrapper">
                                 <!-- Start Product ListView Single Item -->
-                                <div class="product-listview-single-item product-color--green swiper-slide">
-                                    <div class="image-box">
-                                        <a href="product-details-default.html" class="image-link">
-                                            <img src="assets/images/product/default/home-2/default-1.jpg" alt="">
-                                            <img src="assets/images/product/default/home-2/default-2.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="content">
-                                        <h6 class="title"><a href="product-details-default.html">Consequuntur magni</a></h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                        <span class="price"> <del>$89.00</del> $80.00</span>
-                                    </div>
-                                </div>
-                                <!-- End Product ListView Single Item -->
-                                <!-- Start Product ListView Single Item -->
-                                <div class="product-listview-single-item product-color--green swiper-slide">
-                                    <div class="image-box">
-                                        <a href="product-details-default.html" class="image-link">
-                                            <img src="assets/images/product/default/home-2/default-3.jpg" alt="">
-                                            <img src="assets/images/product/default/home-2/default-4.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="content">
-                                        <h6 class="title"><a href="product-details-default.html">Pellentesque posuere</a></h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                        <span class="price">$45.00</span>
-                                    </div>
-                                </div>
-                                <!-- End Product ListView Single Item -->
-                                <!-- Start Product ListView Single Item -->
-                                <div class="product-listview-single-item product-color--green swiper-slide">
-                                    <div class="image-box">
-                                        <a href="product-details-default.html" class="image-link">
-                                            <img src="assets/images/product/default/home-2/default-5.jpg" alt="">
-                                            <img src="assets/images/product/default/home-2/default-6.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="content">
-                                        <h6 class="title"><a href="product-details-default.html">Kaoreet lobortis sagit</a></h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                        <span class="price">$95.00</span>
-                                    </div>
-                                </div>
-                                <!-- End Product ListView Single Item -->
-                                <!-- Start Product ListView Single Item -->
-                                <div class="product-listview-single-item product-color--green swiper-slide">
-                                    <div class="image-box">
-                                        <a href="product-details-default.html" class="image-link">
-                                            <img src="assets/images/product/default/home-2/default-7.jpg" alt="">
-                                            <img src="assets/images/product/default/home-2/default-8.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="content">
-                                        <h6 class="title"><a href="product-details-default.html">Phasellus vel hendreri</a></h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                        <span class="price">$55.00</span>
-                                    </div>
-                                </div>
-                                <!-- End Product ListView Single Item -->
-                                <!-- Start Product ListView Single Item -->
-                                <div class="product-listview-single-item product-color--green swiper-slide">
-                                    <div class="image-box">
-                                        <a href="product-details-default.html" class="image-link">
-                                            <img src="assets/images/product/default/home-2/default-9.jpg" alt="">
-                                            <img src="assets/images/product/default/home-2/default-10.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="content">
-                                        <h6 class="title"><a href="product-details-default.html">Duis pulvinar obortis</a></h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                        <span class="price"><del>$84.00</del> $79.00</span>
-                                    </div>
-                                </div>
-                                <!-- End Product ListView Single Item -->
-                                <!-- Start Product ListView Single Item -->
-                                <div class="product-listview-single-item product-color--green swiper-slide">
-                                    <div class="image-box">
-                                        <a href="product-details-default.html" class="image-link">
-                                            <img src="assets/images/product/default/home-2/default-11.jpg" alt="">
-                                            <img src="assets/images/product/default/home-2/default-12.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="content">
-                                        <h6 class="title"><a href="product-details-default.html">Cras neque metus</a></h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                        <span class="price"><del>$70.00</del> $60.00</span>
-                                    </div>
-                                </div>
-                                <!-- End Product ListView Single Item -->
-                                <!-- Start Product ListView Single Item -->
-                                <div class="product-listview-single-item product-color--green swiper-slide">
-                                    <div class="image-box">
-                                        <a href="product-details-default.html" class="image-link">
-                                            <img src="assets/images/product/default/home-2/default-13.jpg" alt="">
-                                            <img src="assets/images/product/default/home-2/default-14.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="content">
-                                        <h6 class="title"><a href="product-details-default.html">Officiis debitis varius</a></h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                        <span class="price">$90.00</span>
-                                    </div>
-                                </div>
-                                <!-- End Product ListView Single Item -->
-                                <!-- Start Product ListView Single Item -->
-                                <div class="product-listview-single-item product-color--green swiper-slide">
-                                    <div class="image-box">
-                                        <a href="product-details-default.html" class="image-link">
-                                            <img src="assets/images/product/default/home-2/default-15.jpg" alt="">
-                                            <img src="assets/images/product/default/home-2/default-16.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="content">
-                                        <h6 class="title"><a href="product-details-default.html">Ornare sed consequat</a></h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                        <span class="price">$110.00</span>
-                                    </div>
-                                </div>
-                                <!-- End Product ListView Single Item -->
-                                <!-- Start Product ListView Single Item -->
-                                <div class="product-listview-single-item product-color--green swiper-slide">
-                                    <div class="image-box">
-                                        <a href="product-details-default.html" class="image-link">
-                                            <img src="assets/images/product/default/home-2/default-17.jpg" alt="">
-                                            <img src="assets/images/product/default/home-2/default-18.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="content">
-                                        <h6 class="title"><a href="product-details-default.html">Convallis quam sit</a></h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                        <span class="price">$45.00 - $95.00</span>
-                                    </div>
-                                </div>
-                                <!-- End Product ListView Single Item -->
-                                <!-- Start Product ListView Single Item -->
-                                <div class="product-listview-single-item product-color--green swiper-slide">
-                                    <div class="image-box">
-                                        <a href="product-details-default.html" class="image-link">
-                                            <img src="assets/images/product/default/home-2/default-2.jpg" alt="">
-                                            <img src="assets/images/product/default/home-2/default-1.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="content">
-                                        <h6 class="title"><a href="product-details-default.html">Donec eu libero ac</a></h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                        <span class="price">$74.00</span>
-                                    </div>
-                                </div>
-                                <!-- End Product ListView Single Item -->
-                                <!-- Start Product ListView Single Item -->
-                                <div class="product-listview-single-item product-color--green swiper-slide">
-                                    <div class="image-box">
-                                        <a href="product-details-default.html" class="image-link">
-                                            <img src="assets/images/product/default/home-2/default-4.jpg" alt="">
-                                            <img src="assets/images/product/default/home-2/default-3.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="content">
-                                        <h6 class="title"><a href="product-details-default.html">Dolorum fuga eget</a></h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                        <span class="price">$71.00</span>
-                                    </div>
-                                </div>
-                                <!-- End Product ListView Single Item -->
-                                <!-- Start Product ListView Single Item -->
-                                <div class="product-listview-single-item product-color--green swiper-slide">
-                                    <div class="image-box">
-                                        <a href="product-details-default.html" class="image-link">
-                                            <img src="assets/images/product/default/home-2/default-6.jpg" alt="">
-                                            <img src="assets/images/product/default/home-2/default-5.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="content">
-                                        <h6 class="title"><a href="product-details-default.html">Nostrum exercitation</a></h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                        <span class="price">$86.00</span>
-                                    </div>
-                                </div>
-                                <!-- End Product ListView Single Item -->
-                                <!-- Start Product ListView Single Item -->
-                                <div class="product-listview-single-item product-color--green swiper-slide">
-                                    <div class="image-box">
-                                        <a href="product-details-default.html" class="image-link">
-                                            <img src="assets/images/product/default/home-2/default-8.jpg" alt="">
-                                            <img src="assets/images/product/default/home-2/default-7.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="content">
-                                        <h6 class="title"><a href="product-details-default.html">Epicuri per lobortis</a></h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                        <span class="price">$68.00</span>
-                                    </div>
-                                </div>
-                                <!-- End Product ListView Single Item -->
-                                <!-- Start Product ListView Single Item -->
-                                <div class="product-listview-single-item product-color--green swiper-slide">
-                                    <div class="image-box">
-                                        <a href="product-details-default.html" class="image-link">
-                                            <img src="assets/images/product/default/home-2/default-10.jpg" alt="">
-                                            <img src="assets/images/product/default/home-2/default-9.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="content">
-                                        <h6 class="title"><a href="product-details-default.html">Condimentum posuere</a></h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                        <span class="price">$115.00</span>
-                                    </div>
-                                </div>
-                                <!-- End Product ListView Single Item -->
-                                <!-- Start Product ListView Single Item -->
-                                <div class="product-listview-single-item product-color--green swiper-slide">
-                                    <div class="image-box">
-                                        <a href="product-details-default.html" class="image-link">
-                                            <img src="assets/images/product/default/home-2/default-12.jpg" alt="">
-                                            <img src="assets/images/product/default/home-2/default-11.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="content">
-                                        <h6 class="title"><a href="product-details-default.html">Laudantium enim fringi</a></h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                        <span class="price">$86.00</span>
-                                    </div>
-                                </div>
-                                <!-- End Product ListView Single Item -->
+                                @foreach (var item in Model.ProductDetails)
+                                {
+                                    @if (item.Product.SoldQuantity.HasValue && item.Product.SoldQuantity >= 10)
+                                    {
+                                        <div class="product-listview-single-item product-color--green swiper-slide">
+                                            <div class="image-box">
+                                                <a asp-action="ProductDetails" asp-controller="Product" asp-route-Slug="@item.Product.Slug" class="image-link">
+                                                    <img src="~/assets/images/product/@item.Product.Image" alt="">
+                                                </a>
+                                            </div>
+                                            <div class="content">
+                                                <a asp-action="ProductDetails" asp-route-Slug="@item.Product.Slug">
+                                                    @Html.Raw(item.Product.Name.Length > 25 ? $"{item.Product.Name.Substring(0, 25)}..." : item.Product.Name)
+                                                </a>
+                                                <div class="d-flex align-items-center">
+                                                    <ul class="review-star">
+                                                        @for (int i = 0; i < item.FullStarCount; i++)
+                                                        {
+                                                            <li class="fill"><i class="ion-android-star"></i></li>
+                                                        }
+                                                        @for (int i = 0; i < item.EmptyStarCount; i++)
+                                                        {
+                                                            <li class="empty"><i class="ion-android-star"></i></li>
+                                                        }
+                                                    </ul>
+                                                </div>
+                                                @if (item.Product.DiscountPercentage.HasValue && item.Product.DiscountPercentage > 0)
+                                                {
+                                                    var discountedPrice = item.Product.Price * (1 - (decimal)item.Product.DiscountPercentage / 100);
+                                                    <div class="mb-4">
+                                                        <span class="price">
+                                                            <span class="new-price">@discountedPrice.ToString("N0")đ</span>
+                                                        </span>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="mb-4">
+                                                        <span class="price">@item.Product.Price.ToString("N0")đ</span>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                                <!-- End Product ListView Single Item -->                                
                             </div>
                         </div>
                         <!-- If we need navigation buttons -->
@@ -556,7 +279,7 @@
             <div class="col-12">
                 <div class="section-content-gap">
                     <div class="secton-content">
-                        <h3 class="section-title">Danh cho ban</h3>
+                        <h3 class="section-title">SẢN PHẨM ĐÁNH GIÁ CAO</h3>
                     </div>
                 </div>
             </div>
@@ -568,429 +291,86 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                 <div class="container">
-                     <div class="row">
-                         <div class="col-3">
-                            <!-- Start Product Default Single Item -->
-                            <div class="product-default-single-item product-color--golden swiper-slide">
-                                <div class="image-box">
-                                    <a asp-action="Sanpham" class="image-link">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro -1.png" alt="">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro max -2.png" alt="">
-                                    </a>
-                                    <div class="tag">
-                                        <span>sale</span>
-                                    </div>
-                                    <div class="action-link">
-                                        <div class="action-link-left">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalAddcart">Thêm vào giỏ</a>
+                    <div class="product-slider-default-2rows default-slider-nav-arrow">
+                        <!-- Slider main container -->
+                        <div class="swiper-container product-default-slider-4grid-2row">
+                            <!-- Additional required wrapper -->
+                            <div class="swiper-wrapper">
+                            @foreach (var item in Model.ProductDetails)
+                            {
+                                @if (item.AverageRating >= 4)
+                                {
+                                    <div class="product-default-single-item product-color--golden swiper-slide">
+                                        <div class="product-default-single-item product-color--golden" data-aos="fade-up" data-aos-delay="0">
+                                            <div class="image-box">
+                                                <a asp-action="ProductDetails" asp-controller="Product" asp-route-Slug="@item.Product.Slug" class="image-link">
+                                                    <img src="~/assets/images/product/@item.Product.Image" alt="">
+                                                    <img src="~/assets/images/product/default/home-1/default-10.jpg" alt="">
+                                                    <div class="tag">
+                                                        <span>Sale: @item.Product.DiscountPercentage%</span>
+                                                    </div>
+                                                </a>
+                                                <div class="action-link">
+                                                    <div class="action-link-left">
+                                                        <a asp-action="Add" asp-controller="Cart" asp-route-Slug="@item.Product.Slug">Thêm vào giỏ</a>
+                                                    </div>
+                                                    <div class="action-link-right">
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview"><i class="icon-magnifier"></i></a>
+                                                        <a href="wishlist.html"><i class="icon-heart"></i></a>
+                                                        <a href="compare.html"><i class="icon-shuffle"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="content">
+                                                <div class="content-left">
+                                                    <h6 class="title">
+                                                        <a asp-action="ProductDetails" asp-route-Slug="@item.Product.Slug">
+                                                            @Html.Raw(item.Product.Name.Length > 25 ? $"{item.Product.Name.Substring(0, 25)}..." : item.Product.Name)
+                                                        </a>
+                                                    </h6>
+                                                    <div class="d-flex align-items-center">
+                                                        <ul class="review-star">
+                                                            @for (int i = 0; i < item.FullStarCount; i++)
+                                                            {
+                                                                <li class="fill"><i class="ion-android-star"></i></li>
+                                                            }
+                                                            @for (int i = 0; i < item.EmptyStarCount; i++)
+                                                            {
+                                                                <li class="empty"><i class="ion-android-star"></i></li>
+                                                            }
+                                                        </ul>
+
+                                                    </div>
+                                                </div>
+                                                <div class="content-right mb-3">
+                                                    @if (item.Product.DiscountPercentage.HasValue && item.Product.DiscountPercentage > 0)
+                                                    {
+                                                        var discountedPrice = item.Product.Price * (1 - (decimal)item.Product.DiscountPercentage / 100);
+                                                        <div class="mb-4">
+                                                            <!-- Thêm lớp mb-3 cho khoảng cách dưới giá -->
+                                                            <span class="price">
+                                                                <span class="new-price">@discountedPrice.ToString("N0")đ</span>
+                                                            </span>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="mb-4">
+                                                            <!-- Thêm lớp mb-3 cho khoảng cách dưới giá -->
+                                                            <span class="price">@item.Product.Price.ToString("N0")đ</span>
+                                                        </div>
+                                                    }
+                                                    <div>
+                                                        <span style="font-size: 12px;">Đã bán: @item.Product.SoldQuantity</span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="action-link-right">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview">
-                                                <i class="icon-magnifier"></i>
-                                            </a>
-                                            <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                            <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                        </div>
                                     </div>
-                                </div>
-                                <div class="content">
-                                    <div class="content-left">
-                                        <h6 class="title"> <a asp-action="Sanpham">  IPHONE 14 PRO </a> </h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                    </div>
-                                    <div class="content-right">
-                                        <span class="price">$</span>
-                                    </div>
-                                </div>
+                                }
+                            }
                             </div>
-                            <!-- End Product Default Single Item -->
-                         </div>
-                         <div class="col-3">
-                            <!-- Start Product Default Single Item -->
-                            <div class="product-default-single-item product-color--golden swiper-slide">
-                                <div class="image-box">
-                                    <a asp-action="Sanpham" class="image-link">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro -1.png" alt="">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro max -2.png" alt="">
-                                    </a>
-                                    <div class="tag">
-                                        <span>sale</span>
-                                    </div>
-                                    <div class="action-link">
-                                        <div class="action-link-left">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                        </div>
-                                        <div class="action-link-right">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview">
-                                                <i class="icon-magnifier"></i>
-                                            </a>
-                                            <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                            <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="content">
-                                    <div class="content-left">
-                                        <h6 class="title"> <a asp-action="Sanpham">  IPHONE 14 PRO </a> </h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                    </div>
-                                    <div class="content-right">
-                                        <span class="price">$</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Product Default Single Item -->
-                         </div>
-                         <div class="col-3">
-                            <!-- Start Product Default Single Item -->
-                            <div class="product-default-single-item product-color--golden swiper-slide">
-                                <div class="image-box">
-                                    <a asp-action="Sanpham" class="image-link">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro -1.png" alt="">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro max -2.png" alt="">
-                                    </a>
-                                    <div class="tag">
-                                        <span>sale</span>
-                                    </div>
-                                    <div class="action-link">
-                                        <div class="action-link-left">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                        </div>
-                                        <div class="action-link-right">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview">
-                                                <i class="icon-magnifier"></i>
-                                            </a>
-                                            <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                            <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="content">
-                                    <div class="content-left">
-                                        <h6 class="title"> <a asp-action="Sanpham">  IPHONE 14 PRO </a> </h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                    </div>
-                                    <div class="content-right">
-                                        <span class="price">$</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Product Default Single Item -->
-                         </div>
-                         <div class="col-3">
-                            <!-- Start Product Default Single Item -->
-                            <div class="product-default-single-item product-color--golden swiper-slide">
-                                <div class="image-box">
-                                    <a asp-action="Sanpham" class="image-link">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro -1.png" alt="">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro max -2.png" alt="">
-                                    </a>
-                                    <div class="tag">
-                                        <span>sale</span>
-                                    </div>
-                                    <div class="action-link">
-                                        <div class="action-link-left">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                        </div>
-                                        <div class="action-link-right">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview">
-                                                <i class="icon-magnifier"></i>
-                                            </a>
-                                            <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                            <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="content">
-                                    <div class="content-left">
-                                        <h6 class="title"> <a asp-action="Sanpham">  IPHONE 14 PRO </a> </h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                    </div>
-                                    <div class="content-right">
-                                        <span class="price">$</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Product Default Single Item -->
-                         </div>
-                         <div class="col-3">
-                            <!-- Start Product Default Single Item -->
-                            <div class="product-default-single-item product-color--golden swiper-slide">
-                                <div class="image-box">
-                                    <a asp-action="Sanpham" class="image-link">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro -1.png" alt="">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro max -2.png" alt="">
-                                    </a>
-                                    <div class="tag">
-                                        <span>sale</span>
-                                    </div>
-                                    <div class="action-link">
-                                        <div class="action-link-left">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                        </div>
-                                        <div class="action-link-right">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview">
-                                                <i class="icon-magnifier"></i>
-                                            </a>
-                                            <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                            <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="content">
-                                    <div class="content-left">
-                                        <h6 class="title"> <a asp-action="Sanpham">  IPHONE 14 PRO </a> </h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                    </div>
-                                    <div class="content-right">
-                                        <span class="price">$</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Product Default Single Item -->
-                         </div>
-                         <div class="col-3">
-                            <!-- Start Product Default Single Item -->
-                            <div class="product-default-single-item product-color--golden swiper-slide">
-                                <div class="image-box">
-                                    <a asp-action="Sanpham" class="image-link">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro -1.png" alt="">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro max -2.png" alt="">
-                                    </a>
-                                    <div class="tag">
-                                        <span>sale</span>
-                                    </div>
-                                    <div class="action-link">
-                                        <div class="action-link-left">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                        </div>
-                                        <div class="action-link-right">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview">
-                                                <i class="icon-magnifier"></i>
-                                            </a>
-                                            <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                            <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="content">
-                                    <div class="content-left">
-                                        <h6 class="title"> <a asp-action="Sanpham">  IPHONE 14 PRO </a> </h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                    </div>
-                                    <div class="content-right">
-                                        <span class="price">$</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Product Default Single Item -->
-                         </div>
-                         <div class="col-3">
-                            <!-- Start Product Default Single Item -->
-                            <div class="product-default-single-item product-color--golden swiper-slide">
-                                <div class="image-box">
-                                    <a asp-action="Sanpham" class="image-link">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro -1.png" alt="">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro max -2.png" alt="">
-                                    </a>
-                                    <div class="tag">
-                                        <span>sale</span>
-                                    </div>
-                                    <div class="action-link">
-                                        <div class="action-link-left">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                        </div>
-                                        <div class="action-link-right">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview">
-                                                <i class="icon-magnifier"></i>
-                                            </a>
-                                            <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                            <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="content">
-                                    <div class="content-left">
-                                        <h6 class="title"> <a asp-action="Sanpham">  IPHONE 14 PRO </a> </h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                    </div>
-                                    <div class="content-right">
-                                        <span class="price">$</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Product Default Single Item -->
-                         </div>
-                         <div class="col-3">
-                            <!-- Start Product Default Single Item -->
-                            <div class="product-default-single-item product-color--golden swiper-slide">
-                                <div class="image-box">
-                                    <a asp-action="Sanpham" class="image-link">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro -1.png" alt="">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro max -2.png" alt="">
-                                    </a>
-                                    <div class="tag">
-                                        <span>sale</span>
-                                    </div>
-                                    <div class="action-link">
-                                        <div class="action-link-left">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                        </div>
-                                        <div class="action-link-right">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview">
-                                                <i class="icon-magnifier"></i>
-                                            </a>
-                                            <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                            <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="content">
-                                    <div class="content-left">
-                                        <h6 class="title"> <a asp-action="Sanpham">  IPHONE 14 PRO </a> </h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                    </div>
-                                    <div class="content-right">
-                                        <span class="price">$</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Product Default Single Item -->
-                         </div>
-                         <div class="col-3">
-                            <!-- Start Product Default Single Item -->
-                            <div class="product-default-single-item product-color--golden swiper-slide">
-                                <div class="image-box">
-                                    <a asp-action="Sanpham" class="image-link">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro -1.png" alt="">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro max -2.png" alt="">
-                                    </a>
-                                    <div class="tag">
-                                        <span>sale</span>
-                                    </div>
-                                    <div class="action-link">
-                                        <div class="action-link-left">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                        </div>
-                                        <div class="action-link-right">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview">
-                                                <i class="icon-magnifier"></i>
-                                            </a>
-                                            <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                            <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="content">
-                                    <div class="content-left">
-                                        <h6 class="title"> <a asp-action="Sanpham">  IPHONE 14 PRO </a> </h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                    </div>
-                                    <div class="content-right">
-                                        <span class="price">$</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Product Default Single Item -->
-                         </div>
-                         <div class="col-3">
-                            <!-- Start Product Default Single Item -->
-                            <div class="product-default-single-item product-color--golden swiper-slide">
-                                <div class="image-box">
-                                    <a asp-action="Sanpham" class="image-link">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro -1.png" alt="">
-                                        <img src="~/assets//images/product/default/home-1/iphone 14 pro max -2.png" alt="">
-                                    </a>
-                                    <div class="tag">
-                                        <span>sale</span>
-                                    </div>
-                                    <div class="action-link">
-                                        <div class="action-link-left">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalAddcart">Thêm vào giỏ</a>
-                                        </div>
-                                        <div class="action-link-right">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview">
-                                                <i class="icon-magnifier"></i>
-                                            </a>
-                                            <a asp-action="Thichsanpham"><i class="icon-heart"></i></a>
-                                            <a asp-action="Sosanh"><i class="icon-shuffle"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="content">
-                                    <div class="content-left">
-                                        <h6 class="title"> <a asp-action="Sanpham">  IPHONE 14 PRO </a> </h6>
-                                        <ul class="review-star">
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="fill"><i class="ion-android-star"></i></li>
-                                            <li class="empty"><i class="ion-android-star"></i></li>
-                                        </ul>
-                                    </div>
-                                    <div class="content-right">
-                                        <span class="price">$</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Product Default Single Item -->
-                         </div>
-                     </div>
+                        </div>
                  </div>
                   <!-- Start Pagination -->
                  <div class="page-pagination text-center" data-aos="fade-up"  data-aos-delay="0">
@@ -1242,3 +622,4 @@
     </div>
 </div>
 <!-- End Blog Slider Section -->
+

@@ -239,7 +239,6 @@ namespace Dong_Xuan_Market_Online.Areas.Seller.Controllers
                 productToUpdate.Express = product.Express;
                 productToUpdate.Save = product.Save;
                 productToUpdate.Fast = product.Fast;
-                //productToUpdate.Cate = product.Cate;
                 productToUpdate.CategorySubId = product.CategorySubId;
                 productToUpdate.Slug = GenerateSlug(product.Name);
 
@@ -251,12 +250,6 @@ namespace Dong_Xuan_Market_Online.Areas.Seller.Controllers
                     return View("Edit", product);
                 }
 
-                // Xử lý xóa ảnh
-                /*if (!string.IsNullOrEmpty(RemovedImageIds))
-                {
-                    var removedIds = RemovedImageIds.Split(',').Select(int.Parse).ToList();
-                    await RemoveImagesAsync(removedIds, productToUpdate.Id);
-                }*/
 
                 // Xử lý thêm ảnh mới
                 string defaultImage = productToUpdate.Image;
@@ -306,26 +299,7 @@ namespace Dong_Xuan_Market_Online.Areas.Seller.Controllers
             return View("Edit", product);
         }
 
-        /*private async Task RemoveImagesAsync(List<int> removedIds, int productId)
-        {
-            var imagesToRemove = await _dataContext.ProductImages
-                .Where(pi => removedIds.Contains(pi.Id) && pi.ProductId == productId)
-                .ToListAsync();
-
-            foreach (var image in imagesToRemove)
-            {
-                _dataContext.ProductImages.Remove(image);
-
-                // Xóa file ảnh từ server
-                var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "assets/images/product", image.ImageUrl);
-                if (System.IO.File.Exists(imagePath))
-                {
-                    System.IO.File.Delete(imagePath);
-                }
-            }
-
-            await _dataContext.SaveChangesAsync(); // Đảm bảo lưu thay đổi vào cơ sở dữ liệu
-        }*/
+       
         [HttpPost]
         public async Task<IActionResult> DeleteImage(int id)
         {

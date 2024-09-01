@@ -33,6 +33,28 @@ public class ProductModel
             return Price;
         }
     }
+    [NotMapped]
+    public decimal FinalPrice
+    {
+        get
+        {
+            decimal finalPrice = DiscountedPrice;
+
+            if (Voucher != null && Voucher.IsActive && Voucher.ExpiryDate >= DateTime.Now)
+            {
+                if (Voucher.DiscountPercentage.HasValue)
+                {
+                    finalPrice -= finalPrice * (decimal)Voucher.DiscountPercentage.Value / 100;
+                }
+                else if (Voucher.DiscountAmount.HasValue)
+                {
+                    finalPrice -= Voucher.DiscountAmount.Value;
+                }
+            }
+
+            return finalPrice < 0 ? 0 : finalPrice; // Giá cuối cùng không được nhỏ hơn 0
+        }
+    }
 
     [Range(0, 100, ErrorMessage = "Tỷ lệ giảm giá phải nằm trong khoảng từ 0 đến 100")]
     public double? DiscountPercentage { get; set; } // Nullable
@@ -58,6 +80,8 @@ public class ProductModel
     public AppUserModel Seller { get; set; }
     public CategoryModel Category { get; set; }
     public BrandModel Brand { get; set; }
+    public int? VoucherId { get; set; }
+    public VoucherModel Voucher { get; set; }
 
     public ICollection<ProductImages> ProductImages { get; set; } 
 
@@ -65,4 +89,5 @@ public class ProductModel
     [FileExtension]
     public List<IFormFile> ImageUpLoads { get; set; }
     public ICollection<RatingModel> Ratings { get; set; }
+    public int? SoldQuantity { get; set; } // Số lượng đã bán
 }

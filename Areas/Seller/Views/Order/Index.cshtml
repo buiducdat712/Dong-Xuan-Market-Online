@@ -34,11 +34,24 @@
                             {
                                 <p>Đơn hàng mới</p>
                             }
+                            else if (item.Status == 2)
+                            {
+                                <p>Đơn bị hủy</p>
+                            }
+                            else if (item.Status == 3)
+                            {
+                                <p>Trả hàng</p>
+                            }
+                            else if (item.Status == 4)
+                            {
+                                <p>Đã xác nhận</p>
+                            }
                             else
                             {
                                 <p>Đã xử lý</p>
                             }
                         </td>
+
                         <td>
                             <a asp-action="ViewOrder" asp-controller="Order" asp-route-ordercode="@item.OrderCode" class="btn btn-sm btn-warning">Xem Đơn</a>
                             <button class="btn btn-sm btn-danger delete-order" data-ordercode="@item.OrderCode">Xóa</button>

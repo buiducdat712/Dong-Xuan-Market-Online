@@ -1605,6 +1605,7 @@
     <PackageReference Include="Diacritics" Version="3.3.29" />
     <PackageReference Include="Google.Apis.Dialogflow.v2" Version="1.68.0.3492" />
     <PackageReference Include="Google.Cloud.Dialogflow.V2" Version="4.21.0" />
+    <PackageReference Include="Microsoft.AspNet.SignalR" Version="2.4.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7">
@@ -1628,6 +1629,7 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Seller\Models\" />
     <Folder Include="wwwroot\assets\images\brand-logo\" />
+    <Folder Include="wwwroot\assets\images\user\" />
     <Folder Include="wwwroot\backend\image\" />
   </ItemGroup>
 

@@ -5,7 +5,8 @@
         public IEnumerable<ProductModel> Products { get; set; }
         public Paginate Paginate { get; set; }
         public IEnumerable<ProductModel> SidebarProducts { get; set; }
-
         public string SelectedCate { get; set; } // Thêm thuộc tính này
+        public int? CategoryId { get; set; } // Thêm CategoryId
+
     }
 }

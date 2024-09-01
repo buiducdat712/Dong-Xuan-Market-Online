@@ -1,5 +1,8 @@
-﻿using Dong_Xuan_Market_Online.Models;
+﻿using Dong_Xuan_Market_Online.Controllers;
+using Dong_Xuan_Market_Online.Hubs;
+using Dong_Xuan_Market_Online.Models;
 using Dong_Xuan_Market_Online.Repository;
+using Dong_Xuan_Market_Online.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,8 +16,12 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectedDb"));
 });
 
+// Add SignalR
+builder.Services.AddSignalR();
+
 // Add services to the container
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 // Add logging
 builder.Services.AddLogging();
@@ -75,12 +82,12 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "category",
-    pattern: "/category/{Slug?}",
-    defaults: new {controller = "Category", action ="Index"});
+    pattern: "category/{slug?}",
+    defaults: new { controller = "Category", action = "Index" });
 
 app.MapControllerRoute(
     name: "brand",
-    pattern: "/brand/{Slug?}",
+    pattern: "brand/{slug?}",
     defaults: new { controller = "Brand", action = "Index" });
 
 app.MapControllerRoute(
@@ -88,7 +95,10 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
-    name: "Areas",
+    name: "areas",
     pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}");
+
+// Định tuyến cho SignalR Hub
+app.MapHub<ChatHub>("/chatHub");
 
 app.Run();

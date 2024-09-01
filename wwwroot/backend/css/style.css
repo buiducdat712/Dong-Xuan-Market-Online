@@ -1,1 +1,61 @@
 ﻿
+/* Kiểm tra xem có bất kỳ quy tắc CSS nào ghi đè không */
+.message {
+    position: relative;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 80%;
+    word-break: break-word;
+    display: flex;
+    flex-direction: column;
+}
+
+.my-message {
+    background-color: #d1e7dd;
+    align-self: flex-end;
+    margin-left: auto;
+    text-align: right;
+}
+
+.received {
+    background-color: #f8d7da;
+    align-self: flex-start;
+    margin-right: auto;
+    text-align: left;
+}
+
+.message-content {
+    font-size: 1em;
+}
+
+.message-time {
+    font-size: 0.75em;
+    color: gray;
+    margin-top: 5px;
+}
+
+
+/* Thời gian tin nhắn của mình nằm bên phải */
+.my-message .message-time {
+    align-self: flex-start;
+}
+
+/* Thời gian tin nhắn nhận được nằm bên trái */
+.received .message-time {
+    align-self: flex-end;
+}
+.user-result {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+    .user-result:hover {
+        background-color: #f1f1f1;
+    }
+
+    .user-result button {
+        margin-left: 10px;
+    }
